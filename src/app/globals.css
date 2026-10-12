@@ -88,9 +88,14 @@
   --viz-eixo: #c3c2b7;
   --viz-mudo: #898781;
   --viz-bom: #0ca30c;
+  /* Design system (docs/design-system.md): estados de hábito. Só ícones/marcas no claro (~3:1). */
+  --sequencia: #d97706;
+  --concluido: #059669;
 }
 
 .dark {
+  --sequencia: #f59e0b;
+  --concluido: #10b981;
   --viz-efetiva: #3987e5;
   --viz-bruta: #184f95;
   --viz-grade: #2c2c2a;

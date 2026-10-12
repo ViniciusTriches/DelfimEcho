@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
-import { HomeIcon, LayersIcon, type LucideIcon, PlusCircleIcon, SettingsIcon } from "lucide-react";
+import { HomeIcon, LayersIcon, ListChecksIcon, type LucideIcon, PlusCircleIcon, SettingsIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // `tambem`: outras rotas que destacam o item (ex.: habilidades ficam em "Áreas").
 const ITENS: { href: string; nome: string; icone: LucideIcon; tambem?: string[] }[] = [
   { href: "/", nome: "Início", icone: HomeIcon },
   { href: "/registrar", nome: "Registrar", icone: PlusCircleIcon, tambem: ["/timer"] },
+  { href: "/habitos", nome: "Hábitos", icone: ListChecksIcon },
   { href: "/areas", nome: "Áreas", icone: LayersIcon, tambem: ["/habilidades"] },
   { href: "/configuracoes", nome: "Ajustes", icone: SettingsIcon },
 ];

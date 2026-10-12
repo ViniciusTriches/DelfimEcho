@@ -9,7 +9,7 @@ type Cliente = Awaited<ReturnType<typeof createClient>>;
  */
 export async function mover(
   supabase: Cliente,
-  tabela: "areas" | "skills",
+  tabela: "areas" | "skills" | "habits",
   ids: string[],
   id: string,
   direcao: "cima" | "baixo",

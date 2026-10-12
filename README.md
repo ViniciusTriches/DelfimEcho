@@ -26,7 +26,16 @@ Produção: https://delfimecho.vercel.app
   - **periódica**: progresso da semana/mês atual e em quantos períodos anteriores a meta foi batida;
   - gráficos de horas por semana (e por mês, se houver meta mensal), qualidade média por semana e histórico de autoavaliações (com aviso para se reavaliar a cada 30 dias);
   - sessões com as reflexões, para reler o que aprendeu.
+- **Hábitos** (`/habitos`):
+  - checklist do dia com marcação otimista (toque e já aparece), navegação para dias anteriores, progresso do dia, sequência atual (chama) e mini semana por hábito;
+  - cumprimento da semana e do mês (geral e por hábito) e sequência atual/melhor; só contam dias previstos desde a data "acompanhar desde", e hoje entra quando for feito;
+  - histórico em calendário mensal (todos os hábitos ou um só);
+  - gerenciar (`/habitos/gerenciar`): criar, editar (todos os dias ou dias específicos, área, acompanhar desde), reordenar, pausar/retomar e excluir.
 - **Configurações** (`/configuracoes`): fatores de qualidade (e as descrições das notas) e fator da prática passiva. Mudar um fator recalcula as horas efetivas de todas as sessões.
+
+## Design
+
+As telas seguem o design system em [docs/design-system.md](docs/design-system.md) (gerado com o plugin ui-ux-pro-max). A troca global de paleta e fontes acontece numa fase de revisão de design antes do PWA.
 
 ## Variáveis de ambiente
 

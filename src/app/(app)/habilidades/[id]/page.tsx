@@ -29,6 +29,7 @@ import {
   seriesMensais,
   seriesSemanais,
 } from "@/lib/progresso";
+import { todasAsLinhas } from "@/lib/supabase/paginar";
 import { createClient } from "@/lib/supabase/server";
 import { NOMES_PERIODO, type Periodo } from "@/lib/tipos";
 import { cn } from "@/lib/utils";
@@ -55,21 +56,26 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
   const todasSessoes = (await searchParams).sessoes === "todas";
 
   const supabase = await createClient();
-  const [{ data: habilidade }, { data: niveis }, { data: metas }, { data: linhas }, { data: avaliacoes }] =
+  const [{ data: habilidade }, { data: niveis }, { data: metas }, linhas, { data: avaliacoes }] =
     await Promise.all([
       supabase.from("skills").select("*, areas(nome, cor)").eq("id", id).maybeSingle(),
       supabase.from("skill_levels").select("nome_nivel, horas_acumuladas_alvo").eq("skill_id", id).order("ordem"),
       supabase.from("periodic_targets").select("horas_alvo, periodo").eq("skill_id", id),
-      supabase
-        .from("practice_sessions_horas")
-        .select("data_local, duracao_minutos, horas_brutas, horas_efetivas, nota_qualidade")
-        .eq("skill_id", id),
+      todasAsLinhas((de, ate) =>
+        supabase
+          .from("practice_sessions_horas")
+          .select("data_local, duracao_minutos, horas_brutas, horas_efetivas, nota_qualidade")
+          .eq("skill_id", id)
+          .order("inicio")
+          .order("id")
+          .range(de, ate),
+      ),
       supabase.from("skill_assessments").select("*").eq("skill_id", id).order("data", { ascending: true }),
     ]);
   if (!habilidade) notFound();
 
   const hoje = hojeSP();
-  const sessoes: SessaoHoras[] = (linhas ?? []).map((s) => ({
+  const sessoes: SessaoHoras[] = linhas.map((s) => ({
     data_local: s.data_local!,
     duracao_minutos: s.duracao_minutos!,
     horas_brutas: Number(s.horas_brutas),

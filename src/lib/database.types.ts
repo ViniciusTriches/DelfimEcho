@@ -184,6 +184,7 @@ export type Database = {
           dias_semana: number[] | null
           frequencia: string
           id: string
+          inicio: string
           nome: string
           ordem: number
           user_id: string
@@ -194,6 +195,7 @@ export type Database = {
           dias_semana?: number[] | null
           frequencia?: string
           id?: string
+          inicio?: string
           nome: string
           ordem?: number
           user_id?: string
@@ -204,6 +206,7 @@ export type Database = {
           dias_semana?: number[] | null
           frequencia?: string
           id?: string
+          inicio?: string
           nome?: string
           ordem?: number
           user_id?: string

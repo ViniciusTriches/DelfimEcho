@@ -102,6 +102,9 @@ const MES_ANO = new Intl.DateTimeFormat("pt-BR", { timeZone: "UTC", month: "long
 export const formatarDiaMes = (dia: string) => DIA_MES.format(paraUtc(dia));
 /** "AAAA-MM-DD" → "12 de out. de 2026" */
 export const formatarDia = (dia: string) => DIA_EXTENSO.format(paraUtc(dia));
+const DIA_SEMANA = new Intl.DateTimeFormat("pt-BR", { timeZone: "UTC", weekday: "short", day: "numeric", month: "short" });
+/** "AAAA-MM-DD" → "qua., 14 de out." */
+export const formatarDiaSemana = (dia: string) => DIA_SEMANA.format(paraUtc(dia));
 /** "AAAA-MM" → "out." */
 export const formatarMesCurto = (mes: string) => MES_CURTO.format(paraUtc(`${mes}-01`));
 /** "AAAA-MM-DD" → "março de 2027" */
