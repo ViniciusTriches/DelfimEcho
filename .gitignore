@@ -30,9 +30,16 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files — só o .env.example (sem valores reais) é versionado
 .env*
 !.env.example
+*.pem
+*.key
+supabase/.env*
+supabase/signing_keys.json
+
+# configurações locais do Claude Code
+.claude/settings.local.json
 
 # vercel
 .vercel

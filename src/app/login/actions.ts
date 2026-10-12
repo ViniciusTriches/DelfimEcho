@@ -20,11 +20,12 @@ export async function enviarMagicLink(
     return { ok: true, mensagem: "Se este e-mail tiver acesso, o link chegará em instantes." };
   }
 
+  // O link volta para onde o login foi pedido (localhost em dev, domínio da Vercel
+  // em produção). Essa URL precisa estar em Redirect URLs no Supabase.
   const h = await headers();
   const origem =
-    process.env.NEXT_PUBLIC_SITE_URL ??
     h.get("origin") ??
-    `${h.get("x-forwarded-proto") ?? "http"}://${h.get("host")}`;
+    `${h.get("x-forwarded-proto") ?? "http"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({

@@ -32,7 +32,8 @@ export default async function DashboardPage() {
 
       {areas && areas.length === 0 && (
         <p className="text-sm text-muted-foreground">
-          Nenhuma área ainda. Rode <code>npm run seed</code> para criar os dados iniciais.
+          Nenhuma área ainda. Rode <code>supabase/seed.sql</code> no SQL Editor do Supabase para
+          criar os dados iniciais.
         </p>
       )}
 

@@ -66,7 +66,8 @@ schema_paths = []
 
 [db.seed]
 # If enabled, seeds the database after migrations during a db reset.
-# Echo: o seed é feito por `npm run seed` (precisa do usuário em auth.users).
+# Echo: desligado. O seed.sql precisa do usuário já criado em auth.users;
+# rode-o manualmente no Studio (SQL Editor) depois de criar o usuário.
 enabled = false
 # Specifies an ordered list of seed files to load during db reset.
 # Supports glob patterns relative to supabase directory: "./seeds/*.sql"

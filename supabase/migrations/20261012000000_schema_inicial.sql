@@ -1,4 +1,6 @@
 -- Echo — schema inicial
+-- Pode ser colada inteira no SQL Editor do Supabase (não depende do CLI).
+-- Rode uma vez só, num projeto vazio.
 -- Convenções:
 --   * Todas as tabelas têm user_id (default auth.uid()) e RLS "user_id = auth.uid()".
 --     Tabelas filhas (ex.: skill_levels) também guardam user_id, para que a política
@@ -257,6 +259,11 @@ select
 from public.practice_sessions s
 left join public.quality_factors q
   on q.user_id = s.user_id and q.nota = s.nota_qualidade;
+
+-- Acesso pela API para usuários logados (o RLS acima decide quais linhas).
+-- Explícito para não depender da opção "expor novas tabelas" do painel.
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on all tables in schema public to authenticated;
 
 -- ---------------------------------------------------------------------------
 -- Fatores de qualidade padrão para todo novo usuário
