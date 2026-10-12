@@ -27,9 +27,19 @@ Feito uma vez só, no projeto do Supabase:
 3. **URLs** — *Authentication → URL Configuration*:
    - *Site URL*: `https://delfimecho.vercel.app`
    - *Redirect URLs*: `http://localhost:3000/**` e `https://delfimecho.vercel.app/**`
-4. **Template do e-mail** — *Authentication → Emails → Magic Link*: substitua o corpo pelo conteúdo de [supabase/templates/magic_link.html](supabase/templates/magic_link.html). Com ele o link funciona mesmo abrindo em outro aparelho ou navegador (pedir no PC, abrir no celular). Com o template padrão também funciona, mas só no mesmo navegador em que o link foi pedido.
-5. **Migration** — *SQL Editor → New query*: cole o conteúdo de [supabase/migrations/20261012000000_schema_inicial.sql](supabase/migrations/20261012000000_schema_inicial.sql) e clique em *Run*. Rode uma vez só. Migrations futuras ficarão na mesma pasta e devem ser rodadas em ordem de nome.
-6. **Seed** — *SQL Editor → New query*: cole o conteúdo de [supabase/seed.sql](supabase/seed.sql), troque `seu-email@exemplo.com` pelo seu e-mail na linha marcada no topo e clique em *Run*. O resultado mostra as contagens (6 áreas, 11 habilidades, 47 níveis, 2 metas periódicas, 5 métricas, 5 hábitos, 5 fatores). O seed é idempotente: rodar de novo só recria o que estiver faltando, comparando pelo nome.
+4. **Migration inicial** — *SQL Editor → New query*: cole o conteúdo de [supabase/migrations/20261012000000_schema_inicial.sql](supabase/migrations/20261012000000_schema_inicial.sql) e clique em *Run*. Rode uma vez só. As migrations seguintes são aplicadas pelo CLI (veja [Migrations](#migrations-supabase-cli)).
+5. **Seed** — *SQL Editor → New query*: cole o conteúdo de [supabase/seed.sql](supabase/seed.sql), troque `seu-email@exemplo.com` pelo seu e-mail na linha marcada no topo e clique em *Run*. O resultado mostra as contagens (6 áreas, 11 habilidades, 47 níveis, 2 metas periódicas, 5 métricas, 5 hábitos, 5 fatores). O seed é idempotente: rodar de novo só recria o que estiver faltando, comparando pelo nome.
+
+O e-mail usa o **template padrão** do Supabase (editar templates exige SMTP próprio).
+
+## Login (magic link)
+
+1. Em `/login`, informe o `ALLOWED_EMAIL` e clique em *Enviar link de acesso*.
+2. O link do e-mail passa pelo Supabase e volta para `/auth/confirm?code=…` no mesmo endereço em que o login foi pedido (localhost ou Vercel). Essa rota troca o `code` pela sessão (fluxo PKCE).
+3. **Abra o link no mesmo navegador em que o pediu.** A troca usa um cookie gravado quando o link foi pedido; outro navegador (ou o navegador interno do app de e-mail, no celular) não tem esse cookie. Para entrar no celular, peça o link pelo navegador do celular e abra o e-mail ali (no app de e-mail, use "abrir no navegador" se necessário).
+4. Se falhar, a tela de login mostra o motivo e o código do erro (ex.: `otp_expired` = link expirado ou já usado; `pkce_code_verifier_not_found` = aberto em outro navegador). Cada link vale uma vez só, e só o último pedido é válido.
+
+Se uma variável de ambiente estiver faltando, o site mostra uma página "configuração incompleta" com o nome dela, em vez de um erro 500.
 
 ## Rodando localmente
 
@@ -62,6 +72,9 @@ No Supabase, as URLs do passo 3 acima precisam incluir `https://delfimecho.verce
 | `npm run build` | Build de produção |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | Gera os tipos de rotas do Next e roda o `tsc` |
+| `npm run db:status` | Migrations locais × aplicadas no projeto remoto |
+| `npm run db:new -- <nome>` | Cria um arquivo de migration novo |
+| `npm run db:push` | Aplica no projeto remoto as migrations pendentes |
 
 ## Modelo de dados (resumo)
 
@@ -71,19 +84,30 @@ No Supabase, as URLs do passo 3 acima precisam incluir `https://delfimecho.verce
 - `skills.destaque_dashboard`: mostra as horas da semana da habilidade no dashboard (ex.: Padel).
 - `habits.dias_semana`: 1 = segunda … 7 = domingo.
 
-## Opcional: Supabase CLI
+## Migrations (Supabase CLI)
 
-Não é necessário para usar o Echo. Se quiser aplicar migrations pelo terminal ou rodar o Supabase localmente (requer Docker):
+A migration inicial foi aplicada pelo SQL Editor; as seguintes são aplicadas pelo CLI. Os scripts usam `npx supabase@2.120.0` (não precisa instalar nada).
+
+**Uma vez por máquina:**
 
 ```bash
-# Projeto na nuvem
-npx supabase login
-npx supabase link --project-ref <ref-do-projeto>
-npx supabase db push          # aplica migrations pendentes
-
-# Supabase local
-npx supabase start            # sobe tudo e aplica as migrations
-npx supabase status           # URL e chaves para o .env.local
+npx supabase@2.120.0 login
+npx supabase@2.120.0 link --project-ref <ref-do-projeto>   # ref = parte da URL https://<ref>.supabase.co
+npm run db:status
 ```
 
-No Supabase local, crie o usuário no Studio (http://localhost:54323), rode o `seed.sql` no SQL Editor dele e abra os e-mails no Mailpit (http://localhost:54324). A config local ([supabase/config.toml](supabase/config.toml)) já desliga cadastros públicos e usa o template de magic link do projeto. Para criar uma migration nova: `npx supabase migration new <nome>`.
+Se o `db:status` mostrar `20261012000000` só na coluna *Local* (a inicial foi aplicada pelo painel, então o histórico remoto está vazio), registre-a como já aplicada — isso **não** roda o SQL de novo, só grava no histórico:
+
+```bash
+npx supabase@2.120.0 migration repair --status applied 20261012000000
+npm run db:status   # agora deve aparecer nas duas colunas
+```
+
+**Para cada migration nova:**
+
+```bash
+npm run db:new -- nome_da_mudanca   # cria supabase/migrations/<timestamp>_nome_da_mudanca.sql
+npm run db:push                      # aplica só as pendentes
+```
+
+Nunca rode `supabase db reset` (ou similares) com `--linked`/no projeto remoto: apaga os dados.
