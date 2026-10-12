@@ -30,6 +30,7 @@ export async function salvarMetrica(_anterior: EstadoForm, dados: FormData): Pro
     unidade: textoOuNulo(dados, "unidade"),
     direcao,
     meta_valor: Number.isNaN(meta) ? null : meta,
+    no_dashboard: dados.get("no_dashboard") === "on",
   };
 
   let metricaId = id;

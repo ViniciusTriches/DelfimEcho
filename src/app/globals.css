@@ -88,12 +88,21 @@
   --viz-eixo: #c3c2b7;
   --viz-mudo: #898781;
   --viz-bom: #0ca30c;
+  /* Heatmap: rampa sequencial azul validada (pouco → muito). */
+  --viz-calor-1: #86b6ef;
+  --viz-calor-2: #3987e5;
+  --viz-calor-3: #1c5cab;
+  --viz-calor-4: #0d366b;
   /* Design system (docs/design-system.md): estados de hábito. Só ícones/marcas no claro (~3:1). */
   --sequencia: #d97706;
   --concluido: #059669;
 }
 
 .dark {
+  --viz-calor-1: #184f95;
+  --viz-calor-2: #2a78d6;
+  --viz-calor-3: #6da7ec;
+  --viz-calor-4: #b7d3f6;
   --sequencia: #f59e0b;
   --concluido: #10b981;
   --viz-efetiva: #3987e5;

@@ -263,6 +263,7 @@ export type Database = {
           direcao: string
           id: string
           meta_valor: number | null
+          no_dashboard: boolean
           nome: string
           ordem: number
           unidade: string | null
@@ -274,6 +275,7 @@ export type Database = {
           direcao?: string
           id?: string
           meta_valor?: number | null
+          no_dashboard?: boolean
           nome: string
           ordem?: number
           unidade?: string | null
@@ -285,6 +287,7 @@ export type Database = {
           direcao?: string
           id?: string
           meta_valor?: number | null
+          no_dashboard?: boolean
           nome?: string
           ordem?: number
           unidade?: string | null
@@ -630,18 +633,53 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          dias_alerta_abandono: number
           fator_pratica_passiva: number
           user_id: string
         }
         Insert: {
+          dias_alerta_abandono?: number
           fator_pratica_passiva?: number
           user_id?: string
         }
         Update: {
+          dias_alerta_abandono?: number
           fator_pratica_passiva?: number
           user_id?: string
         }
         Relationships: []
+      }
+      weekly_plans: {
+        Row: {
+          area_id: string
+          horas: number
+          id: string
+          semana: string
+          user_id: string
+        }
+        Insert: {
+          area_id: string
+          horas: number
+          id?: string
+          semana: string
+          user_id?: string
+        }
+        Update: {
+          area_id?: string
+          horas?: number
+          id?: string
+          semana?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "weekly_plans_area_id_fkey"
+            columns: ["area_id"]
+            isOneToOne: false
+            referencedRelation: "areas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

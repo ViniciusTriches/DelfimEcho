@@ -4,20 +4,11 @@ import { ChevronLeftIcon, ChevronRightIcon, FlameIcon, PlusIcon, Settings2Icon }
 import { PageHeader } from "@/components/page-header";
 import { buttonVariants } from "@/components/ui/button";
 import { formatarDiaSemana, hojeSP, inicioSemana, mesDe, somarDias } from "@/lib/datas";
-import {
-  descreverFrequencia,
-  melhorSequencia,
-  previsto,
-  sequenciaAtual,
-  somarTaxas,
-  type Taxa,
-  taxa,
-} from "@/lib/habitos";
-import { todasAsLinhas } from "@/lib/supabase/paginar";
-import { createClient } from "@/lib/supabase/server";
+import { melhorSequencia, sequenciaAtual, somarTaxas, type Taxa, taxa } from "@/lib/habitos";
 import { cn } from "@/lib/utils";
 import { CalendarioHabitos } from "./calendario";
 import { Checklist } from "./checklist";
+import { carregarHabitos, montarChecklist } from "./dados";
 
 export const metadata: Metadata = { title: "Hábitos" };
 
@@ -32,14 +23,10 @@ export default async function HabitosPage({ searchParams }: PageProps<"/habitos"
   const mes = typeof params.mes === "string" && MES.test(params.mes) && params.mes <= mesDe(hoje) ? params.mes : mesDe(hoje);
   const filtro = typeof params.habito === "string" ? params.habito : null;
 
-  const supabase = await createClient();
-  const { data: habitos } = await supabase
-    .from("habits")
-    .select("id, nome, frequencia, dias_semana, inicio, areas(cor)")
-    .eq("ativo", true)
-    .order("ordem");
+  const carregados = await carregarHabitos(hoje, `${mes}-01`);
+  const { habitos, feitos } = carregados;
 
-  if (!habitos?.length) {
+  if (!habitos.length) {
     return (
       <>
         <PageHeader titulo="Hábitos" />
@@ -54,38 +41,7 @@ export default async function HabitosPage({ searchParams }: PageProps<"/habitos"
     );
   }
 
-  const desde = habitos.reduce((min, h) => (h.inicio < min ? h.inicio : min), hoje);
-  const logs = await todasAsLinhas((de, ate) =>
-    supabase
-      .from("habit_logs")
-      .select("habit_id, data")
-      .eq("concluido", true)
-      .gte("data", desde < `${mes}-01` ? desde : `${mes}-01`)
-      .order("data")
-      .order("habit_id")
-      .range(de, ate),
-  );
-
-  const feitos = new Map<string, Set<string>>(habitos.map((h) => [h.id, new Set()]));
-  logs.forEach((l) => feitos.get(l.habit_id)?.add(l.data));
-
-  const semana = inicioSemana(dia);
-  const itens = habitos.map((h) => {
-    const f = feitos.get(h.id)!;
-    return {
-      id: h.id,
-      nome: h.nome,
-      cor: h.areas?.cor ?? null,
-      frequencia: descreverFrequencia(h),
-      previsto: previsto(h, dia),
-      feito: f.has(dia),
-      sequencia: sequenciaAtual(h, f, hoje),
-      semana: Array.from({ length: 7 }, (_, i) => {
-        const d = somarDias(semana, i);
-        return { dia: d, previsto: previsto(h, d), feito: f.has(d), futuro: d > hoje };
-      }),
-    };
-  });
+  const itens = montarChecklist(carregados, dia, hoje);
 
   // Cumprimento: semana e mês atuais (hoje só conta se já foi feito).
   const inicioMes = `${mesDe(hoje)}-01`;

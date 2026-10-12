@@ -116,6 +116,21 @@ export function MetricaForm({ metrica, areas, areaInicial, voltar }: Props) {
         <p className="text-xs text-muted-foreground">Aparece como linha de referência no gráfico.</p>
       </div>
 
+      <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
+        <input
+          type="checkbox"
+          name="no_dashboard"
+          defaultChecked={metrica?.no_dashboard ?? false}
+          className="mt-0.5 size-4 accent-primary"
+        />
+        <span>
+          Mostrar no início
+          <span className="block text-xs text-muted-foreground">
+            Atalho de registro rápido no dashboard (ex.: peso).
+          </span>
+        </span>
+      </label>
+
       {estado?.erro && (
         <p role="alert" className="text-sm text-destructive">
           {estado.erro}

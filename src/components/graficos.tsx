@@ -6,6 +6,10 @@ import {
   CartesianGrid,
   Line,
   LineChart,
+  PolarAngleAxis,
+  PolarGrid,
+  Radar,
+  RadarChart,
   ReferenceLine,
   ResponsiveContainer,
   Tooltip,
@@ -213,6 +217,44 @@ export function GraficoLinha({
       <Tabela
         cabecalho={["Período", nome]}
         linhas={dados.filter((d) => d.valor !== null).map((d) => [d.titulo, formatar(d.valor!)])}
+      />
+    </div>
+  );
+}
+
+export type PontoRadar = { area: string; efetivas: number };
+
+/** Distribuição de horas efetivas entre áreas (uma série; o título nomeia o período). */
+export function GraficoRadar({ dados }: { dados: PontoRadar[] }) {
+  return (
+    <div>
+      <div className="h-64 sm:h-72">
+        <ResponsiveContainer width="100%" height="100%">
+          <RadarChart data={dados} outerRadius="72%" margin={{ top: 8, right: 24, bottom: 8, left: 24 }}>
+            <PolarGrid stroke={COR.grade} />
+            <PolarAngleAxis dataKey="area" tick={{ fontSize: 12, fill: COR.mudo }} />
+            <Tooltip
+              content={({ active, payload }) => {
+                const p = active ? (payload?.[0]?.payload as PontoRadar | undefined) : undefined;
+                if (!p) return null;
+                return <CaixaTooltip titulo={p.area} linhas={[{ cor: COR.efetiva, nome: "Efetivas", valor: formatarHoras(p.efetivas) }]} />;
+              }}
+            />
+            <Radar
+              dataKey="efetivas"
+              stroke={COR.efetiva}
+              strokeWidth={2}
+              fill={COR.efetiva}
+              fillOpacity={0.12}
+              dot={{ r: 4, fill: COR.efetiva, stroke: COR.superficie, strokeWidth: 2 }}
+              isAnimationActive={false}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
+      <Tabela
+        cabecalho={["Área", "Efetivas"]}
+        linhas={[...dados].sort((a, b) => b.efetivas - a.efetivas).map((d) => [d.area, formatarHoras(d.efetivas)])}
       />
     </div>
   );

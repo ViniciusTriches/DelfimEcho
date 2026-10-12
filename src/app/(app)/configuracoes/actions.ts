@@ -37,3 +37,18 @@ export async function salvarFatores(_anterior: EstadoFatores, dados: FormData): 
   revalidatePath("/", "layout");
   return { ok: true, mensagem: "Fatores salvos. As horas efetivas já foram recalculadas." };
 }
+
+export async function salvarAlerta(_anterior: EstadoFatores, dados: FormData): Promise<EstadoFatores> {
+  const usuario = await getUsuario();
+  const supabase = await createClient();
+  const dias = numero(dados, "dias_alerta_abandono");
+  if (!Number.isInteger(dias) || dias < 1 || dias > 365) return { ok: false, mensagem: "Use de 1 a 365 dias." };
+
+  const { error } = await supabase
+    .from("user_settings")
+    .upsert({ user_id: usuario.id, dias_alerta_abandono: dias }, { onConflict: "user_id" });
+  if (error) return { ok: false, mensagem: `Não foi possível salvar. (${error.code})` };
+
+  revalidatePath("/", "layout");
+  return { ok: true, mensagem: "Alerta atualizado." };
+}

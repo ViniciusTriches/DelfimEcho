@@ -31,6 +31,8 @@ Produção: https://delfimecho.vercel.app
   - cumprimento da semana e do mês (geral e por hábito) e sequência atual/melhor; só contam dias previstos desde a data "acompanhar desde", e hoje entra quando for feito;
   - histórico em calendário mensal (todos os hábitos ou um só);
   - gerenciar (`/habitos/gerenciar`): criar, editar (todos os dias ou dias específicos, área, acompanhar desde), reordenar, pausar/retomar e excluir.
+- **Início (dashboard)**: botão "Registrar sessão" e atalho do timer; hábitos de hoje; alertas (habilidades sem sessão há N dias — limite em Configurações — e metas vencendo em até 14 dias ou atrasadas); **plano da semana** (planejado × realizado por área, em horas efetivas) e destaques como Padel; registro rápido das métricas marcadas "Mostrar no início"; cartões por área (semana e mês, com variação vs. o mesmo ponto do período anterior); radar de distribuição entre áreas (30 dias); heatmap de dias com prática (12 meses; 6 no celular).
+- **Plano da semana** (`/plano`): horas planejadas por área para a semana atual; sem plano, começa com o da semana anterior como ponto de partida.
 - **Metas** (`/metas`): metas de resultado por status (ativas, concluídas, abandonadas), com área, habilidade opcional, critério de conclusão e prazo (atrasada / vence em breve). Concluir, abandonar, reabrir; meta concluída pode "virar marco".
 - **Métricas** (`/metricas`): último valor, variação desde o anterior (melhorou/piorou conforme a direção) e situação da meta; registro rápido direto do cartão. Na página da métrica: gráfico de linha com a meta como referência, registro com data e observação, histórico. Arquivar/excluir.
 - **Marcos** (`/marcos`): linha do tempo de conquistas por ano, filtrável por área.
