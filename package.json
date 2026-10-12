@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "db:status": "npx --yes supabase@2.120.0 migration list",
     "db:new": "npx --yes supabase@2.120.0 migration new",
-    "db:push": "npx --yes supabase@2.120.0 db push"
+    "db:push": "npx --yes supabase@2.120.0 db push",
+    "db:types": "npx --yes supabase@2.120.0 gen types typescript --linked --schema public > src/lib/database.types.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

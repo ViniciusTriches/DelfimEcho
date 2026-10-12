@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { LogOutIcon } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { NavRodape, NavTopo } from "@/components/nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { sair } from "./actions";
@@ -14,24 +15,26 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
           <Link href="/">
             <Logo />
           </Link>
-          <nav className="flex flex-1 items-center gap-1 text-sm">
-            {/* Itens de navegação entram nas próximas fases. */}
-          </nav>
-          <ThemeToggle />
-          <form action={sair}>
-            <Button variant="ghost" type="submit">
-              <LogOutIcon />
-              Sair
-            </Button>
-          </form>
+          <NavTopo />
+          <div className="ml-auto flex items-center gap-1">
+            <ThemeToggle />
+            <form action={sair}>
+              <Button variant="ghost" type="submit">
+                <LogOutIcon />
+                Sair
+              </Button>
+            </form>
+          </div>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6">
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-24 md:pb-10">
         <Suspense fallback={<p className="text-sm text-muted-foreground">Carregando…</p>}>
           {children}
         </Suspense>
       </main>
+
+      <NavRodape />
     </>
   );
 }

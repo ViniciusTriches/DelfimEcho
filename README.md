@@ -6,6 +6,15 @@ Stack: Next.js 16 (App Router, Cache Components) · TypeScript · Supabase (Post
 
 Produção: https://delfimecho.vercel.app
 
+## O que já existe
+
+- **Login** por e-mail e senha, sessão persistente.
+- **Áreas** (`/areas`): criar, editar (nome, descrição, cor, ícone), reordenar, arquivar/restaurar e excluir.
+- **Habilidades** (dentro de cada área): criar, editar, mover de área, reordenar, arquivar/restaurar e excluir. Cada uma tem:
+  - meta de tempo por **níveis** (editor com escalas prontas CEFR e Geral, ou níveis próprios), **periódica** (horas por semana e/ou mês) ou **nenhuma**;
+  - horas antes do Echo (ponto de partida), autoavaliação 1–10 e opção de destacar no dashboard.
+- Arquivar esconde sem apagar; excluir apaga em cascata (sessões incluídas) e pede confirmação mostrando o que será perdido.
+
 ## Variáveis de ambiente
 
 Copie `.env.example` para `.env.local` e preencha (as mesmas variáveis vão na Vercel):
@@ -84,6 +93,7 @@ Com login por senha não há redirecionamento pelo Supabase, então *Site URL* e
 | `npm run db:status` | Migrations locais × aplicadas no projeto remoto |
 | `npm run db:new -- <nome>` | Cria um arquivo de migration novo |
 | `npm run db:push` | Aplica no projeto remoto as migrations pendentes |
+| `npm run db:types` | Regenera `src/lib/database.types.ts` a partir do banco (rode após cada migration) |
 
 ## Modelo de dados (resumo)
 

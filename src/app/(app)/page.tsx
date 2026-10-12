@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getUsuario } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,15 +40,20 @@ export default async function DashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {areas?.map((area) => (
-          <Card key={area.id} className="border-l-4" style={{ borderLeftColor: area.cor }}>
-            <CardHeader>
-              <CardTitle>{area.nome}</CardTitle>
-              <CardDescription>{area.descricao}</CardDescription>
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              {area.skills[0]?.count ?? 0} habilidade(s) · {area.metrics[0]?.count ?? 0} métrica(s)
-            </CardContent>
-          </Card>
+          <Link key={area.id} href={`/areas/${area.id}`}>
+            <Card
+              className="h-full border-l-4 transition-colors hover:bg-muted/50"
+              style={{ borderLeftColor: area.cor }}
+            >
+              <CardHeader>
+                <CardTitle>{area.nome}</CardTitle>
+                <CardDescription>{area.descricao}</CardDescription>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                {area.skills[0]?.count ?? 0} habilidade(s) · {area.metrics[0]?.count ?? 0} métrica(s)
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
