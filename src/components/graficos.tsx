@@ -13,6 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import { formatarHoras } from "@/lib/formato";
+import { formatarValor } from "@/lib/metricas";
 
 // Tokens definidos em globals.css (claro/escuro): par ordinal azul validado.
 const COR = {
@@ -74,8 +75,8 @@ function Tabela({ cabecalho, linhas }: { cabecalho: string[]; linhas: string[][]
           </tr>
         </thead>
         <tbody>
-          {linhas.map((l) => (
-            <tr key={l[0]} className="border-t">
+          {linhas.map((l, i) => (
+            <tr key={i} className="border-t">
               {l.map((v, i) => (
                 <td key={i} className={i ? "py-1 text-right" : "py-1"}>
                   {v}
@@ -148,26 +149,44 @@ export function GraficoHoras({ dados, meta }: { dados: PontoHoras[]; meta?: numb
 
 export type PontoLinha = { rotulo: string; titulo: string; valor: number | null };
 
-/** Uma série ao longo do tempo (nota média, autoavaliação). Sem legenda: o título da seção nomeia a série. */
+/**
+ * Uma série ao longo do tempo (nota média, autoavaliação, métrica). Sem legenda de série:
+ * o título da seção nomeia a série; só a meta (se houver) ganha item de legenda.
+ * Sem `dominio`, o eixo se ajusta aos dados (e à meta).
+ */
 export function GraficoLinha({
   dados,
   dominio,
   nome,
-  formatar = (v) => NUM.format(v),
+  unidade,
+  meta,
 }: {
   dados: PontoLinha[];
-  dominio: [number, number];
+  dominio?: [number, number];
   nome: string;
-  formatar?: (v: number) => string;
+  unidade?: string | null;
+  meta?: number | null;
 }) {
+  const formatar = (v: number) => formatarValor(v, unidade);
+  const temMeta = meta !== null && meta !== undefined;
   return (
     <div>
+      {temMeta && <Legenda itens={[{ cor: COR.mudo, nome: `Meta (${formatar(meta)})`, linha: true }]} />}
       <div className="h-44">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={dados} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
+          <LineChart data={dados} margin={{ top: 8, right: 8, bottom: 0, left: dominio ? -20 : 0 }}>
             <CartesianGrid vertical={false} stroke={COR.grade} />
             <XAxis dataKey="rotulo" tick={EIXO} tickLine={false} axisLine={{ stroke: COR.eixo }} interval="preserveStartEnd" minTickGap={8} />
-            <YAxis domain={dominio} tick={EIXO} tickLine={false} axisLine={false} allowDecimals={false} />
+            <YAxis
+              domain={dominio ?? ["auto", "auto"]}
+              tick={EIXO}
+              tickLine={false}
+              axisLine={false}
+              allowDecimals={!dominio}
+              tickFormatter={(v: number) => NUM.format(v)}
+              width={dominio ? 60 : 48}
+            />
+            {temMeta && <ReferenceLine y={meta} stroke={COR.mudo} strokeWidth={1} ifOverflow="extendDomain" />}
             <Tooltip
               cursor={{ stroke: COR.eixo, strokeWidth: 1 }}
               content={({ active, payload }) => {

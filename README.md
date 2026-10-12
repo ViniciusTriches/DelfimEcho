@@ -31,6 +31,11 @@ Produção: https://delfimecho.vercel.app
   - cumprimento da semana e do mês (geral e por hábito) e sequência atual/melhor; só contam dias previstos desde a data "acompanhar desde", e hoje entra quando for feito;
   - histórico em calendário mensal (todos os hábitos ou um só);
   - gerenciar (`/habitos/gerenciar`): criar, editar (todos os dias ou dias específicos, área, acompanhar desde), reordenar, pausar/retomar e excluir.
+- **Metas** (`/metas`): metas de resultado por status (ativas, concluídas, abandonadas), com área, habilidade opcional, critério de conclusão e prazo (atrasada / vence em breve). Concluir, abandonar, reabrir; meta concluída pode "virar marco".
+- **Métricas** (`/metricas`): último valor, variação desde o anterior (melhorou/piorou conforme a direção) e situação da meta; registro rápido direto do cartão. Na página da métrica: gráfico de linha com a meta como referência, registro com data e observação, histórico. Arquivar/excluir.
+- **Marcos** (`/marcos`): linha do tempo de conquistas por ano, filtrável por área.
+- Cada **área** mostra suas metas ativas, métricas (com registro rápido) e marcos recentes.
+- **Navegação**: barra inferior no celular com Início, Registrar, Hábitos, Áreas e **Mais** (Metas, Métricas, Marcos, Configurações — e Revisões a partir da Fase 8); no PC, os mesmos itens no cabeçalho com "Mais" como menu.
 - **Configurações** (`/configuracoes`): fatores de qualidade (e as descrições das notas) e fator da prática passiva. Mudar um fator recalcula as horas efetivas de todas as sessões.
 
 ## Design

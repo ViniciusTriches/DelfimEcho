@@ -20,6 +20,7 @@ import { NOMES_PERIODO, type Periodo } from "@/lib/tipos";
 import { ehUuid } from "@/lib/uuid";
 import { arquivarHabilidade, moverHabilidade } from "../../habilidades/actions";
 import { arquivarArea } from "../actions";
+import { SecoesDaArea } from "./secoes";
 
 export async function generateMetadata({ params }: PageProps<"/areas/[id]">): Promise<Metadata> {
   const { id } = await params;
@@ -175,6 +176,8 @@ export default async function AreaPage({ params }: PageProps<"/areas/[id]">) {
           </details>
         )}
       </section>
+
+      <SecoesDaArea areaId={id} />
     </>
   );
 }
