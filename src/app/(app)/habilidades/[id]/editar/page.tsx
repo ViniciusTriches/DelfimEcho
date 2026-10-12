@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArchiveIcon, ArchiveRestoreIcon, Trash2Icon } from "lucide-react";
+import { ArchiveIcon, ArchiveRestoreIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ConfirmButton } from "@/components/confirm-button";
 import { PageHeader } from "@/components/page-header";
+import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { ehUuid } from "@/lib/uuid";
 import { arquivarHabilidade, excluirHabilidade } from "../../actions";
@@ -43,21 +45,29 @@ export default async function EditarHabilidadePage({ params }: PageProps<"/habil
         descricao={habilidade.arquivada ? "Habilidade arquivada" : "Editar habilidade"}
         voltar={voltar}
         acoes={
-          habilidade.arquivada ? (
-            <ConfirmButton acao={arquivarHabilidade.bind(null, id, false)} variant="outline">
-              <ArchiveRestoreIcon />
-              Restaurar
-            </ConfirmButton>
-          ) : (
-            <ConfirmButton
-              acao={arquivarHabilidade.bind(null, id, true)}
-              confirmar={`Arquivar "${habilidade.nome}"? Ela some das listas, mas o histórico é mantido.`}
-              variant="outline"
-            >
-              <ArchiveIcon />
-              Arquivar
-            </ConfirmButton>
-          )
+          <>
+            {!habilidade.arquivada && (
+              <Link href={`/registrar?habilidade=${id}`} className={buttonVariants()}>
+                <PlusCircleIcon />
+                Registrar sessão
+              </Link>
+            )}
+            {habilidade.arquivada ? (
+              <ConfirmButton acao={arquivarHabilidade.bind(null, id, false)} variant="outline">
+                <ArchiveRestoreIcon />
+                Restaurar
+              </ConfirmButton>
+            ) : (
+              <ConfirmButton
+                acao={arquivarHabilidade.bind(null, id, true)}
+                confirmar={`Arquivar "${habilidade.nome}"? Ela some das listas, mas o histórico é mantido.`}
+                variant="outline"
+              >
+                <ArchiveIcon />
+                Arquivar
+              </ConfirmButton>
+            )}
+          </>
         }
       />
 

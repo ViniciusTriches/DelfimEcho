@@ -97,6 +97,7 @@ export async function salvarHabilidade(
     nivel_atual_autoavaliado: nivelAtual,
     horas_iniciais: Number.isNaN(horasIniciais) ? 0 : horasIniciais,
     destaque_dashboard: dados.get("destaque_dashboard") === "on",
+    permite_pratica_passiva: dados.get("permite_pratica_passiva") === "on",
   };
 
   // Ordem: fim da lista da área (na criação ou quando muda de área).

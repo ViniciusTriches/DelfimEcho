@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Suspense } from "react";
-import { HomeIcon, LayersIcon, type LucideIcon } from "lucide-react";
+import { HomeIcon, LayersIcon, type LucideIcon, PlusCircleIcon, SettingsIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const ITENS: { href: string; nome: string; icone: LucideIcon }[] = [
+// `tambem`: outras rotas que destacam o item (ex.: habilidades ficam em "Áreas").
+const ITENS: { href: string; nome: string; icone: LucideIcon; tambem?: string[] }[] = [
   { href: "/", nome: "Início", icone: HomeIcon },
-  { href: "/areas", nome: "Áreas", icone: LayersIcon },
+  { href: "/registrar", nome: "Registrar", icone: PlusCircleIcon, tambem: ["/timer"] },
+  { href: "/areas", nome: "Áreas", icone: LayersIcon, tambem: ["/habilidades"] },
+  { href: "/configuracoes", nome: "Ajustes", icone: SettingsIcon },
 ];
 
 type Ativo = (href: string) => boolean;
@@ -16,11 +19,11 @@ const nenhumAtivo: Ativo = () => false;
 
 function useAtivo(): Ativo {
   const pathname = usePathname();
-  // Páginas de habilidade ficam dentro de "Áreas".
-  return (href) =>
-    href === "/"
-      ? pathname === "/"
-      : pathname.startsWith(href) || (href === "/areas" && pathname.startsWith("/habilidades"));
+  return (href) => {
+    if (href === "/") return pathname === "/";
+    const item = ITENS.find((i) => i.href === href);
+    return [href, ...(item?.tambem ?? [])].some((p) => pathname.startsWith(p));
+  };
 }
 
 function LinksTopo({ ativo }: { ativo: Ativo }) {

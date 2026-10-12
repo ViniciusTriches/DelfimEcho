@@ -326,6 +326,22 @@ export function SkillForm({
         </span>
       </label>
 
+      <label className="flex items-start gap-3 text-sm">
+        <input
+          type="checkbox"
+          name="permite_pratica_passiva"
+          defaultChecked={habilidade?.permite_pratica_passiva ?? false}
+          className="mt-0.5 size-4 accent-primary"
+        />
+        <span>
+          Permite prática passiva
+          <span className="block text-xs text-muted-foreground">
+            Mostra a opção ativa/passiva ao registrar (ex.: ouvir podcast em idiomas). Sessões
+            passivas contam com o fator definido em Configurações.
+          </span>
+        </span>
+      </label>
+
       {estado?.erro && (
         <p role="alert" className="text-sm text-destructive">
           {estado.erro}

@@ -4,6 +4,7 @@ import { LogOutIcon } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { NavRodape, NavTopo } from "@/components/nav";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { TimerBadge } from "@/components/timer-badge";
 import { Button } from "@/components/ui/button";
 import { sair } from "./actions";
 
@@ -17,11 +18,14 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
           </Link>
           <NavTopo />
           <div className="ml-auto flex items-center gap-1">
+            <Suspense fallback={null}>
+              <TimerBadge />
+            </Suspense>
             <ThemeToggle />
             <form action={sair}>
-              <Button variant="ghost" type="submit">
+              <Button variant="ghost" type="submit" aria-label="Sair">
                 <LogOutIcon />
-                Sair
+                <span className="hidden sm:inline">Sair</span>
               </Button>
             </form>
           </div>

@@ -14,6 +14,14 @@ Produção: https://delfimecho.vercel.app
   - meta de tempo por **níveis** (editor com escalas prontas CEFR e Geral, ou níveis próprios), **periódica** (horas por semana e/ou mês) ou **nenhuma**;
   - horas antes do Echo (ponto de partida), autoavaliação 1–10 e opção de destacar no dashboard.
 - Arquivar esconde sem apagar; excluir apaga em cascata (sessões incluídas) e pede confirmação mostrando o que será perdido.
+- **Registrar sessão** (`/registrar`, pensado para o celular):
+  - habilidades mais usadas (últimos 90 dias) como atalho; duração em minutos (com atalhos) ou início e fim;
+  - nota de qualidade 1–5 com a descrição e o fator de cada nota, e prévia das horas efetivas;
+  - **próximo passo encadeado**: o "próximo passo" da última sessão da habilidade vira a sugestão de foco;
+  - **prática ativa/passiva** nas habilidades com "Permite prática passiva" (ligado em Idiomas);
+  - reflexão (aprendizado, erros, próximo passo, feedback) recolhida por padrão; lista das últimas sessões com opção de excluir.
+- **Timer** (`/timer`), guardado no banco: começa num aparelho e termina em outro. Pausar/retomar, botão **"Me distraí"** (conta distrações) e **modo foco** em tela cheia (mantém a tela acesa quando o navegador permite). Ao encerrar, abre o registro com a duração (sem as pausas) e uma nota sugerida pela taxa de distrações (0 → 5; até 1 a cada 30 min → 4; até 2 → 3; até 4 → 2; mais → 1). O timer ativo aparece no cabeçalho.
+- **Configurações** (`/configuracoes`): fatores de qualidade (e as descrições das notas) e fator da prática passiva. Mudar um fator recalcula as horas efetivas de todas as sessões.
 
 ## Variáveis de ambiente
 
@@ -98,7 +106,8 @@ Com login por senha não há redirecionamento pelo Supabase, então *Site URL* e
 ## Modelo de dados (resumo)
 
 - Todas as tabelas têm `user_id` e RLS `user_id = auth.uid()`.
-- **Horas efetivas** = duração × fator da nota de qualidade (tabela `quality_factors`, editável). A view `practice_sessions_horas` entrega `horas_brutas`, `horas_efetivas` e `data_local` (dia em America/Sao_Paulo).
+- **Horas efetivas** = duração × fator da nota de qualidade (`quality_factors`) × fator da prática passiva (`user_settings`, só em sessões passivas). A view `practice_sessions_horas` entrega `horas_brutas`, `horas_efetivas` e `data_local` (dia em America/Sao_Paulo).
+- `active_timer`: no máximo um por usuário, com foco, distrações e pausa (`pausado_em` + `segundos_pausados`).
 - `skills.horas_iniciais`: horas acumuladas antes de usar o Echo (ponto de partida).
 - `skills.destaque_dashboard`: mostra as horas da semana da habilidade no dashboard (ex.: Padel).
 - `habits.dias_semana`: 1 = segunda … 7 = domingo.

@@ -16,20 +16,32 @@ export type Database = {
     Tables: {
       active_timer: {
         Row: {
+          distracoes: number
+          foco_especifico: string | null
           id: string
           iniciado_em: string
+          pausado_em: string | null
+          segundos_pausados: number
           skill_id: string
           user_id: string
         }
         Insert: {
+          distracoes?: number
+          foco_especifico?: string | null
           id?: string
           iniciado_em?: string
+          pausado_em?: string | null
+          segundos_pausados?: number
           skill_id: string
           user_id?: string
         }
         Update: {
+          distracoes?: number
+          foco_especifico?: string | null
           id?: string
           iniciado_em?: string
+          pausado_em?: string | null
+          segundos_pausados?: number
           skill_id?: string
           user_id?: string
         }
@@ -366,6 +378,7 @@ export type Database = {
         Row: {
           aprendizado: string | null
           criado_em: string
+          distracoes: number
           duracao_minutos: number
           erros: string | null
           fim: string
@@ -376,11 +389,13 @@ export type Database = {
           proximo_passo: string | null
           skill_id: string
           teve_feedback: boolean
+          tipo_pratica: string
           user_id: string
         }
         Insert: {
           aprendizado?: string | null
           criado_em?: string
+          distracoes?: number
           duracao_minutos: number
           erros?: string | null
           fim: string
@@ -391,11 +406,13 @@ export type Database = {
           proximo_passo?: string | null
           skill_id: string
           teve_feedback?: boolean
+          tipo_pratica?: string
           user_id?: string
         }
         Update: {
           aprendizado?: string | null
           criado_em?: string
+          distracoes?: number
           duracao_minutos?: number
           erros?: string | null
           fim?: string
@@ -406,6 +423,7 @@ export type Database = {
           proximo_passo?: string | null
           skill_id?: string
           teve_feedback?: boolean
+          tipo_pratica?: string
           user_id?: string
         }
         Relationships: [
@@ -563,6 +581,7 @@ export type Database = {
           nivel_atual_autoavaliado: number | null
           nome: string
           ordem: number
+          permite_pratica_passiva: boolean
           tipo_meta_tempo: string
           user_id: string
         }
@@ -577,6 +596,7 @@ export type Database = {
           nivel_atual_autoavaliado?: number | null
           nome: string
           ordem?: number
+          permite_pratica_passiva?: boolean
           tipo_meta_tempo?: string
           user_id?: string
         }
@@ -591,6 +611,7 @@ export type Database = {
           nivel_atual_autoavaliado?: number | null
           nome?: string
           ordem?: number
+          permite_pratica_passiva?: boolean
           tipo_meta_tempo?: string
           user_id?: string
         }
@@ -604,6 +625,21 @@ export type Database = {
           },
         ]
       }
+      user_settings: {
+        Row: {
+          fator_pratica_passiva: number
+          user_id: string
+        }
+        Insert: {
+          fator_pratica_passiva?: number
+          user_id?: string
+        }
+        Update: {
+          fator_pratica_passiva?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       practice_sessions_horas: {
@@ -611,6 +647,7 @@ export type Database = {
           aprendizado: string | null
           criado_em: string | null
           data_local: string | null
+          distracoes: number | null
           duracao_minutos: number | null
           erros: string | null
           fim: string | null
@@ -623,6 +660,7 @@ export type Database = {
           proximo_passo: string | null
           skill_id: string | null
           teve_feedback: boolean | null
+          tipo_pratica: string | null
           user_id: string | null
         }
         Relationships: [
