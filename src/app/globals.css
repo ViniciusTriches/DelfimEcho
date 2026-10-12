@@ -81,9 +81,22 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* Gráficos: par ordinal azul validado (brutas claro, efetivas forte) e tinta de apoio. */
+  --viz-efetiva: #2a78d6;
+  --viz-bruta: #86b6ef;
+  --viz-grade: #e1e0d9;
+  --viz-eixo: #c3c2b7;
+  --viz-mudo: #898781;
+  --viz-bom: #0ca30c;
 }
 
 .dark {
+  --viz-efetiva: #3987e5;
+  --viz-bruta: #184f95;
+  --viz-grade: #2c2c2a;
+  --viz-eixo: #383835;
+  --viz-mudo: #898781;
+  --viz-bom: #0ca30c;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

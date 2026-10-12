@@ -115,7 +115,7 @@ export default async function AreaPage({ params }: PageProps<"/areas/[id]">) {
               key={skill.id}
               className="flex items-center gap-2 rounded-xl border bg-card p-2 pl-4 transition-colors hover:bg-muted/50"
             >
-              <Link href={`/habilidades/${skill.id}/editar`} className="min-w-0 flex-1 py-1">
+              <Link href={`/habilidades/${skill.id}`} className="min-w-0 flex-1 py-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="font-medium">{skill.nome}</span>
                   {skill.destaque_dashboard && <Badge variant="secondary">No dashboard</Badge>}
@@ -158,7 +158,7 @@ export default async function AreaPage({ params }: PageProps<"/areas/[id]">) {
             <ul className="mt-3 flex flex-col gap-2">
               {arquivadas.map((skill) => (
                 <li key={skill.id} className="flex items-center gap-3 rounded-xl border p-2 pl-4 opacity-70">
-                  <Link href={`/habilidades/${skill.id}/editar`} className="min-w-0 flex-1 truncate">
+                  <Link href={`/habilidades/${skill.id}`} className="min-w-0 flex-1 truncate">
                     {skill.nome}
                   </Link>
                   <ConfirmButton

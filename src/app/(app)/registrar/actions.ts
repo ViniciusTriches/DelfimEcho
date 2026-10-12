@@ -9,7 +9,7 @@ import { ehUuid } from "@/lib/uuid";
 
 export type EstadoSessao =
   | { ok: false; erro: string }
-  | { ok: true; habilidade: string; minutos: number; horasEfetivas: number }
+  | { ok: true; skillId: string; habilidade: string; minutos: number; horasEfetivas: number }
   | null;
 
 const MAX_MINUTOS = 24 * 60;
@@ -90,6 +90,7 @@ export async function salvarSessao(_anterior: EstadoSessao, dados: FormData): Pr
   revalidatePath("/", "layout");
   return {
     ok: true,
+    skillId,
     habilidade: skill.nome,
     minutos,
     horasEfetivas: Number(horas?.horas_efetivas ?? 0),

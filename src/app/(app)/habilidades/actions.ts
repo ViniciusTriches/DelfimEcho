@@ -172,7 +172,59 @@ export async function salvarHabilidade(
   }
 
   revalidatePath("/", "layout");
-  redirect(`/areas/${areaId}`);
+  redirect(`/habilidades/${skillId}`);
+}
+
+// ---------------------------------------------------------------------------
+// Autoavaliações
+// ---------------------------------------------------------------------------
+
+type Cliente = Awaited<ReturnType<typeof createClient>>;
+
+/** O nível atual da habilidade acompanha a autoavaliação mais recente. */
+async function sincronizarNivelAtual(supabase: Cliente, skillId: string) {
+  const { data: ultima } = await supabase
+    .from("skill_assessments")
+    .select("nivel")
+    .eq("skill_id", skillId)
+    .order("data", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (ultima) await supabase.from("skills").update({ nivel_atual_autoavaliado: ultima.nivel }).eq("id", skillId);
+}
+
+export type EstadoAvaliacao = { ok: boolean; mensagem: string } | null;
+
+export async function salvarAvaliacao(_anterior: EstadoAvaliacao, dados: FormData): Promise<EstadoAvaliacao> {
+  await getUsuario();
+  const supabase = await createClient();
+
+  const skillId = texto(dados, "skill_id");
+  const nivel = Number(texto(dados, "nivel"));
+  const data = texto(dados, "data");
+
+  if (!ehUuid(skillId)) return { ok: false, mensagem: "Habilidade inválida." };
+  if (!(Number.isInteger(nivel) && nivel >= 1 && nivel <= 10))
+    return { ok: false, mensagem: "Escolha um nível de 1 a 10." };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(data)) return { ok: false, mensagem: "Informe a data." };
+
+  const { error } = await supabase
+    .from("skill_assessments")
+    .insert({ skill_id: skillId, nivel, data, observacao: textoOuNulo(dados, "observacao") });
+  if (error) return { ok: false, mensagem: `Não foi possível salvar. (${error.code})` };
+
+  await sincronizarNivelAtual(supabase, skillId);
+  revalidatePath("/", "layout");
+  return { ok: true, mensagem: "Autoavaliação registrada." };
+}
+
+export async function excluirAvaliacao(id: string, skillId: string) {
+  await getUsuario();
+  const supabase = await createClient();
+  const { error } = await supabase.from("skill_assessments").delete().eq("id", id);
+  if (error) return { erro: `Não foi possível excluir. (${error.code})` };
+  await sincronizarNivelAtual(supabase, skillId);
+  revalidatePath("/", "layout");
 }
 
 export async function arquivarHabilidade(id: string, arquivada: boolean) {

@@ -126,8 +126,11 @@ function RegistroForm({
         </p>
         <div className="flex flex-wrap gap-2">
           <Button onClick={aoRegistrarOutra}>Registrar outra</Button>
-          <Link href="/" className={buttonVariants({ variant: "outline" })}>
-            Ir para o início
+          <Link href={`/habilidades/${estado.skillId}`} className={buttonVariants({ variant: "outline" })}>
+            Ver {estado.habilidade}
+          </Link>
+          <Link href="/" className={buttonVariants({ variant: "ghost" })}>
+            Início
           </Link>
         </div>
       </div>

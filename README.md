@@ -21,6 +21,11 @@ Produção: https://delfimecho.vercel.app
   - **prática ativa/passiva** nas habilidades com "Permite prática passiva" (ligado em Idiomas);
   - reflexão (aprendizado, erros, próximo passo, feedback) recolhida por padrão; lista das últimas sessões com opção de excluir.
 - **Timer** (`/timer`), guardado no banco: começa num aparelho e termina em outro. Pausar/retomar, botão **"Me distraí"** (conta distrações) e **modo foco** em tela cheia (mantém a tela acesa quando o navegador permite). Ao encerrar, abre o registro com a duração (sem as pausas) e uma nota sugerida pela taxa de distrações (0 → 5; até 1 a cada 30 min → 4; até 2 → 3; até 4 → 2; mais → 1). O timer ativo aparece no cabeçalho.
+- **Página da habilidade** (`/habilidades/[id]`): totais de horas efetivas e brutas (incluindo as horas antes do Echo), últimas 4 semanas, nota média;
+  - **níveis**: barra até o próximo nível, escada de níveis atingidos e estimativa de chegada no ritmo das últimas 4 semanas;
+  - **periódica**: progresso da semana/mês atual e em quantos períodos anteriores a meta foi batida;
+  - gráficos de horas por semana (e por mês, se houver meta mensal), qualidade média por semana e histórico de autoavaliações (com aviso para se reavaliar a cada 30 dias);
+  - sessões com as reflexões, para reler o que aprendeu.
 - **Configurações** (`/configuracoes`): fatores de qualidade (e as descrições das notas) e fator da prática passiva. Mudar um fator recalcula as horas efetivas de todas as sessões.
 
 ## Variáveis de ambiente

@@ -36,13 +36,13 @@ export default async function EditarHabilidadePage({ params }: PageProps<"/habil
   if (areaAtual && !areas.some((a) => a.id === areaAtual.id)) areas.push(areaAtual);
 
   const metaDe = (periodo: string) => metas?.find((m) => m.periodo === periodo)?.horas_alvo;
-  const voltar = { href: `/areas/${habilidade.area_id}`, nome: areaAtual?.nome ?? "Área" };
+  const voltar = { href: `/habilidades/${id}`, nome: habilidade.nome };
 
   return (
     <>
       <PageHeader
-        titulo={habilidade.nome}
-        descricao={habilidade.arquivada ? "Habilidade arquivada" : "Editar habilidade"}
+        titulo="Editar habilidade"
+        descricao={habilidade.arquivada ? "Habilidade arquivada" : undefined}
         voltar={voltar}
         acoes={
           <>
