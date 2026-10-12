@@ -3,8 +3,10 @@ import {
   AlertTriangleIcon,
   ArrowDownRightIcon,
   ArrowUpRightIcon,
+  ChevronRightIcon,
   ClockIcon,
   MinusIcon,
+  NotebookPenIcon,
   PencilIcon,
   PlusCircleIcon,
   TimerIcon,
@@ -14,7 +16,7 @@ import { Cronometro } from "@/components/cronometro";
 import { GraficoRadar } from "@/components/graficos";
 import { PageHeader } from "@/components/page-header";
 import { buttonVariants } from "@/components/ui/button";
-import { formatarDia, formatarDiaSemana } from "@/lib/datas";
+import { formatarDia, formatarDiaMes, formatarDiaSemana, formatarMesAno, somarDias } from "@/lib/datas";
 import { formatarHoras } from "@/lib/formato";
 import { descreverPrazo } from "@/lib/metas";
 import type { Horas } from "@/lib/painel";
@@ -70,9 +72,32 @@ export default async function DashboardPage() {
             </Secao>
           )}
 
-          {(d.abandonadas.length > 0 || d.metasProximas.length > 0) && (
+          {(d.abandonadas.length > 0 || d.metasProximas.length > 0 || d.lembretesRevisao.length > 0) && (
             <Secao titulo="Atenção">
               <ul className="flex flex-col gap-2">
+                {d.lembretesRevisao.map((l) => {
+                  const semanal = l.tipo === "semanal";
+                  return (
+                    <li key={l.tipo}>
+                      <Link
+                        href={semanal ? `/revisoes/semanal?semana=${l.inicio}` : `/revisoes/mensal?mes=${l.inicio.slice(0, 7)}`}
+                        className="flex min-h-14 items-center gap-3 rounded-xl border border-primary/30 bg-primary/5 p-3 transition-colors duration-150 hover:bg-primary/10"
+                      >
+                        <NotebookPenIcon className="size-4 shrink-0 text-primary" aria-hidden />
+                        <div className="min-w-0 flex-1">
+                          <p className="font-medium">{semanal ? "Revisão da semana" : "Revisão do mês"}</p>
+                          <p className="text-xs text-muted-foreground first-letter:uppercase">
+                            {semanal
+                              ? `Semana de ${formatarDiaMes(l.inicio)} a ${formatarDiaMes(somarDias(l.inicio, 6))}`
+                              : formatarMesAno(l.inicio)}{" "}
+                            · ainda não feita
+                          </p>
+                        </div>
+                        <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                      </Link>
+                    </li>
+                  );
+                })}
                 {d.abandonadas.map((s) => (
                   <li key={s.id} className="flex items-center gap-3 rounded-xl border bg-card p-3">
                     <AlertTriangleIcon className="size-4 shrink-0 text-[var(--sequencia)]" aria-hidden />

@@ -2,6 +2,7 @@ import "server-only";
 import { hojeSP, inicioSemana, somarDias } from "@/lib/datas";
 import { DIAS_PRAZO_PROXIMO } from "@/lib/metas";
 import { abandonadas, DIAS_ALERTA_PADRAO, heatmap, horasPorArea, horasPorSkill, periodos, type SessaoArea } from "@/lib/painel";
+import { lembretesPendentes } from "@/lib/revisoes";
 import { todasAsLinhas } from "@/lib/supabase/paginar";
 import { createClient } from "@/lib/supabase/server";
 import { carregarHabitos, montarChecklist } from "../habitos/dados";
@@ -27,6 +28,7 @@ export async function carregarPainel() {
     { data: timer },
     habitos,
     metricas,
+    { data: revisoes },
   ] = await Promise.all([
     supabase.from("areas").select("id, nome, cor, icone").eq("arquivada", false).order("ordem"),
     supabase.from("skills").select("id, nome, area_id, arquivada, destaque_dashboard, criado_em, areas(nome, cor, arquivada)"),
@@ -51,6 +53,7 @@ export async function carregarPainel() {
     supabase.from("active_timer").select("iniciado_em, pausado_em, segundos_pausados, skills(nome)").maybeSingle(),
     carregarHabitos(hoje),
     carregarMetricas(),
+    supabase.from("reviews").select("tipo, periodo_inicio").gte("periodo_inicio", somarDias(hoje, -45)),
   ]);
 
   const sessoes: SessaoArea[] = sessoesBrutas.map((s) => ({
@@ -80,6 +83,7 @@ export async function carregarPainel() {
     checklist: montarChecklist(habitos, hoje, hoje),
     metricas: metricas.filter((m) => m.no_dashboard),
     metasProximas: metas ?? [],
+    lembretesRevisao: lembretesPendentes(hoje, revisoes ?? []),
     limiteAlerta,
     // Só as sessões dos últimos ~12 meses são carregadas: sem sessão nessa janela e criada
     // antes dela = "mais de um ano" (pode ter havido sessões antes).

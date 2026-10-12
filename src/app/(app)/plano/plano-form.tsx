@@ -13,10 +13,18 @@ export type LinhaPlano = {
   nome: string;
   cor: string;
   horas: number | null; // valor inicial (desta semana ou copiado)
-  realizadoAnterior: number; // horas efetivas na semana passada, como referência
+  realizadoAnterior: number; // horas efetivas na semana de referência
 };
 
-export function PlanoForm({ linhas }: { linhas: LinhaPlano[] }) {
+export function PlanoForm({
+  linhas,
+  semana,
+  rotuloReferencia,
+}: {
+  linhas: LinhaPlano[];
+  semana: string;
+  rotuloReferencia: string;
+}) {
   const [estado, acao, pendente] = useActionState(salvarPlano, null);
   const [valores, setValores] = useState(() =>
     Object.fromEntries(linhas.map((l) => [l.areaId, l.horas === null ? "" : String(l.horas)])),
@@ -25,6 +33,7 @@ export function PlanoForm({ linhas }: { linhas: LinhaPlano[] }) {
 
   return (
     <form onSubmit={enviarSemResetar(acao)} className="flex max-w-xl flex-col gap-4">
+      <input type="hidden" name="semana" value={semana} />
       <ul className="flex flex-col divide-y rounded-xl border bg-card">
         {linhas.map((l) => (
           <li key={l.areaId} className="flex items-center gap-3 px-4 py-3">
@@ -32,7 +41,7 @@ export function PlanoForm({ linhas }: { linhas: LinhaPlano[] }) {
             <label htmlFor={`horas_${l.areaId}`} className="min-w-0 flex-1">
               <span className="block font-medium">{l.nome}</span>
               <span className="block text-xs text-muted-foreground">
-                Semana passada: {formatarHoras(l.realizadoAnterior)} efetivas
+                {rotuloReferencia}: {formatarHoras(l.realizadoAnterior)} efetivas
               </span>
             </label>
             <div className="relative w-28 shrink-0">

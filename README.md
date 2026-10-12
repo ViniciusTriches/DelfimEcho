@@ -32,12 +32,17 @@ Produção: https://delfimecho.vercel.app
   - histórico em calendário mensal (todos os hábitos ou um só);
   - gerenciar (`/habitos/gerenciar`): criar, editar (todos os dias ou dias específicos, área, acompanhar desde), reordenar, pausar/retomar e excluir.
 - **Início (dashboard)**: botão "Registrar sessão" e atalho do timer; hábitos de hoje; alertas (habilidades sem sessão há N dias — limite em Configurações — e metas vencendo em até 14 dias ou atrasadas); **plano da semana** (planejado × realizado por área, em horas efetivas) e destaques como Padel; registro rápido das métricas marcadas "Mostrar no início"; cartões por área (semana e mês, com variação vs. o mesmo ponto do período anterior); radar de distribuição entre áreas (30 dias); heatmap de dias com prática (12 meses; 6 no celular).
-- **Plano da semana** (`/plano`): horas planejadas por área para a semana atual; sem plano, começa com o da semana anterior como ponto de partida.
+- **Plano da semana** (`/plano`): horas planejadas por área para a semana atual ou a próxima; sem plano, começa com o plano mais recente (ou com a semana revisada, quando vem da revisão semanal).
 - **Metas** (`/metas`): metas de resultado por status (ativas, concluídas, abandonadas), com área, habilidade opcional, critério de conclusão e prazo (atrasada / vence em breve). Concluir, abandonar, reabrir; meta concluída pode "virar marco".
 - **Métricas** (`/metricas`): último valor, variação desde o anterior (melhorou/piorou conforme a direção) e situação da meta; registro rápido direto do cartão. Na página da métrica: gráfico de linha com a meta como referência, registro com data e observação, histórico. Arquivar/excluir.
 - **Marcos** (`/marcos`): linha do tempo de conquistas por ano, filtrável por área.
+- **Revisões** (`/revisoes`, no "Mais"): lista das revisões passadas (filtro semanal/mensal) e atalhos para revisar.
+  - **Semanal** (`/revisoes/semanal`): resumo automático — horas por área com **planejado × realizado** e variação vs. semana anterior, cumprimento de hábitos, metas concluídas e vencendo, melhores sessões — e as perguntas (o que funcionou, onde travei, prioridades, nota geral). Depois de salvar: **"Planejar próxima semana"**, com o plano já preenchido a partir da semana revisada (ou das horas realizadas nela, se ela não tinha plano).
+  - **Mensal** (`/revisoes/mensal`): o mesmo resumo para o mês, mais **métricas do mês** (primeiro e último valor e variação), metas concluídas e marcos.
+  - Navegação entre períodos; refazer uma revisão atualiza a existente.
+  - **Lembretes no início**: revisão da semana do domingo até quarta-feira seguinte; revisão do mês do dia 1 ao 7 do mês seguinte — enquanto não forem feitas.
 - Cada **área** mostra suas metas ativas, métricas (com registro rápido) e marcos recentes.
-- **Navegação**: barra inferior no celular com Início, Registrar, Hábitos, Áreas e **Mais** (Metas, Métricas, Marcos, Configurações — e Revisões a partir da Fase 8); no PC, os mesmos itens no cabeçalho com "Mais" como menu.
+- **Navegação**: barra inferior no celular com Início, Registrar, Hábitos, Áreas e **Mais** (Metas, Métricas, Marcos, Revisões, Configurações); no PC, os mesmos itens no cabeçalho com "Mais" como menu.
 - **Configurações** (`/configuracoes`): fatores de qualidade (e as descrições das notas) e fator da prática passiva. Mudar um fator recalcula as horas efetivas de todas as sessões.
 
 ## Design

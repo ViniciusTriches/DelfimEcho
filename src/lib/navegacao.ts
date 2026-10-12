@@ -6,6 +6,7 @@ import {
   ListChecksIcon,
   type LucideIcon,
   MilestoneIcon,
+  NotebookPenIcon,
   PlusCircleIcon,
   SettingsIcon,
 } from "lucide-react";
@@ -25,6 +26,7 @@ export const MAIS: ItemNav[] = [
   { href: "/metas", nome: "Metas", icone: FlagIcon, descricao: "Metas de resultado, prazos e critérios" },
   { href: "/metricas", nome: "Métricas", icone: LineChartIcon, descricao: "Valores como peso e faturamento" },
   { href: "/marcos", nome: "Marcos", icone: MilestoneIcon, descricao: "Linha do tempo de conquistas" },
+  { href: "/revisoes", nome: "Revisões", icone: NotebookPenIcon, descricao: "Revisões semanais e mensais" },
   {
     href: "/configuracoes",
     nome: "Configurações",

@@ -4,16 +4,19 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getUsuario } from "@/lib/auth";
 import { hojeSP, inicioSemana } from "@/lib/datas";
-import { ehUuid } from "@/lib/uuid";
+import { texto } from "@/lib/form";
+import { semanasPlanejaveis } from "@/lib/revisoes";
 import { createClient } from "@/lib/supabase/server";
+import { ehUuid } from "@/lib/uuid";
 
 export type EstadoPlano = { erro: string } | null;
 
-/** Salva o plano da semana atual: campo vazio remove a área do plano. */
+/** Salva o plano de uma semana (atual ou próxima): campo vazio remove a área do plano. */
 export async function salvarPlano(_anterior: EstadoPlano, dados: FormData): Promise<EstadoPlano> {
   await getUsuario();
   const supabase = await createClient();
-  const semana = inicioSemana(hojeSP());
+  const semana = texto(dados, "semana");
+  if (!semanasPlanejaveis(hojeSP()).includes(semana)) return { erro: "Só dá para planejar a semana atual ou a próxima." };
 
   const salvar: { semana: string; area_id: string; horas: number }[] = [];
   const remover: string[] = [];
@@ -41,5 +44,5 @@ export async function salvarPlano(_anterior: EstadoPlano, dados: FormData): Prom
   }
 
   revalidatePath("/", "layout");
-  redirect("/#semana");
+  redirect(semana === inicioSemana(hojeSP()) ? "/#semana" : `/plano?semana=${semana}&salvo=1`);
 }
