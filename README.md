@@ -16,30 +16,39 @@ Copie `.env.example` para `.env.local` e preencha (as mesmas variáveis vão na 
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Mesmo lugar: chave *publishable* (ou a *anon* legada) |
 | `ALLOWED_EMAIL` | Seu e-mail — o único que consegue entrar |
 
-O app não usa a chave secreta (*service role*) em lugar nenhum. Nenhuma URL do site fica fixa no código: o magic link volta para a origem de onde o login foi pedido.
+O app não usa a chave secreta (*service role*) em lugar nenhum.
 
 ## Configuração do Supabase (pelo painel)
 
 Feito uma vez só, no projeto do Supabase:
 
-1. **Usuário** — *Authentication → Users → Add user → Create new user* com o mesmo e-mail de `ALLOWED_EMAIL`, marcando *Auto Confirm User*.
-2. **Bloquear cadastros** — *Authentication → Sign In / Providers*: desligue *Allow new users to sign up*. O login nunca cria contas; só entra quem já existe.
-3. **URLs** — *Authentication → URL Configuration*:
-   - *Site URL*: `https://delfimecho.vercel.app`
-   - *Redirect URLs*: `http://localhost:3000/**` e `https://delfimecho.vercel.app/**`
-4. **Migration inicial** — *SQL Editor → New query*: cole o conteúdo de [supabase/migrations/20261012000000_schema_inicial.sql](supabase/migrations/20261012000000_schema_inicial.sql) e clique em *Run*. Rode uma vez só. As migrations seguintes são aplicadas pelo CLI (veja [Migrations](#migrations-supabase-cli)).
-5. **Seed** — *SQL Editor → New query*: cole o conteúdo de [supabase/seed.sql](supabase/seed.sql), troque `seu-email@exemplo.com` pelo seu e-mail na linha marcada no topo e clique em *Run*. O resultado mostra as contagens (6 áreas, 11 habilidades, 47 níveis, 2 metas periódicas, 5 métricas, 5 hábitos, 5 fatores). O seed é idempotente: rodar de novo só recria o que estiver faltando, comparando pelo nome.
+1. **Usuário** — *Authentication → Users → Add user → Create new user* com o mesmo e-mail de `ALLOWED_EMAIL`, uma senha e *Auto Confirm User* marcado. (Para definir ou trocar a senha depois, veja [Senha](#senha).)
+2. **Bloquear cadastros** — *Authentication → Sign In / Providers*: desligue *Allow new users to sign up* e deixe o provedor *Email* ligado (é ele que permite login com senha).
+3. **Migration inicial** — *SQL Editor → New query*: cole o conteúdo de [supabase/migrations/20261012000000_schema_inicial.sql](supabase/migrations/20261012000000_schema_inicial.sql) e clique em *Run*. Rode uma vez só. As migrations seguintes são aplicadas pelo CLI (veja [Migrations](#migrations-supabase-cli)).
+4. **Seed** — *SQL Editor → New query*: cole o conteúdo de [supabase/seed.sql](supabase/seed.sql), troque `seu-email@exemplo.com` pelo seu e-mail na linha marcada no topo e clique em *Run*. O resultado mostra as contagens (6 áreas, 11 habilidades, 47 níveis, 2 metas periódicas, 5 métricas, 5 hábitos, 5 fatores). O seed é idempotente: rodar de novo só recria o que estiver faltando, comparando pelo nome.
 
-O e-mail usa o **template padrão** do Supabase (editar templates exige SMTP próprio).
+## Login
 
-## Login (magic link)
-
-1. Em `/login`, informe o `ALLOWED_EMAIL` e clique em *Enviar link de acesso*.
-2. O link do e-mail passa pelo Supabase e volta para `/auth/confirm?code=…` no mesmo endereço em que o login foi pedido (localhost ou Vercel). Essa rota troca o `code` pela sessão (fluxo PKCE).
-3. **Abra o link no mesmo navegador em que o pediu.** A troca usa um cookie gravado quando o link foi pedido; outro navegador (ou o navegador interno do app de e-mail, no celular) não tem esse cookie. Para entrar no celular, peça o link pelo navegador do celular e abra o e-mail ali (no app de e-mail, use "abrir no navegador" se necessário).
-4. Se falhar, a tela de login mostra o motivo e o código do erro (ex.: `otp_expired` = link expirado ou já usado; `pkce_code_verifier_not_found` = aberto em outro navegador). Cada link vale uma vez só, e só o último pedido é válido.
+- Login com **e-mail e senha** (`signInWithPassword`). Só o `ALLOWED_EMAIL` entra; qualquer outro e-mail recebe a mesma resposta de "e-mail ou senha incorretos". Nenhum e-mail é enviado, então não há limite de envio do Supabase envolvido.
+- Erros aparecem com o código do Supabase entre parênteses, ex.: `(invalid_credentials)`, `(email_not_confirmed)`, `(over_request_rate_limit)`.
+- **Sessão persistente:** o cookie da sessão dura 400 dias (o máximo dos navegadores) e o token é renovado automaticamente a cada acesso, então você só precisa entrar de novo se sair, limpar os cookies ou ficar mais de 400 dias sem abrir o Echo naquele aparelho. Para isso funcionar, mantenha desligados *Time-box user sessions* e *Inactivity timeout* em *Authentication → Sessions* (já vêm desligados).
+- **Sair** (botão no topo) encerra só a sessão do aparelho atual; os outros continuam logados.
 
 Se uma variável de ambiente estiver faltando, o site mostra uma página "configuração incompleta" com o nome dela, em vez de um erro 500.
+
+## Senha
+
+Para definir ou redefinir a senha sem e-mail, rode no *SQL Editor* (troque a senha e o e-mail):
+
+```sql
+update auth.users
+set encrypted_password = extensions.crypt('SUA_NOVA_SENHA', extensions.gen_salt('bf')),
+    email_confirmed_at = coalesce(email_confirmed_at, now()),
+    updated_at = now()
+where email = 'seu-email@exemplo.com';
+```
+
+O resultado deve ser *1 row affected*. A senha fica no histórico de queries do SQL Editor: apague a query depois de rodar. Trocar a senha não encerra as sessões já abertas nos outros aparelhos.
 
 ## Rodando localmente
 
@@ -48,7 +57,7 @@ npm install
 npm run dev
 ```
 
-Abra http://localhost:3000, informe o `ALLOWED_EMAIL` e clique no link que chegar no e-mail.
+Abra http://localhost:3000 e entre com o `ALLOWED_EMAIL` e a senha.
 
 ## Deploy (Vercel)
 
@@ -62,7 +71,7 @@ Em *Vercel → Project → Settings → Environment Variables*, cadastre (para *
 
 Variáveis `NEXT_PUBLIC_*` entram no build: depois de alterá-las, faça um *Redeploy*.
 
-No Supabase, as URLs do passo 3 acima precisam incluir `https://delfimecho.vercel.app/**`. Para usar previews da Vercel (`*.vercel.app` de branches), adicione também a URL do preview em *Redirect URLs*.
+Com login por senha não há redirecionamento pelo Supabase, então *Site URL* e *Redirect URLs* não precisam de configuração para o Echo funcionar (nem em localhost, nem em previews da Vercel).
 
 ## Scripts
 

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
 import { LoginForm } from "./login-form";
@@ -13,12 +12,10 @@ export default function LoginPage() {
         <CardHeader>
           <Logo className="mb-2" />
           <CardTitle>Entrar</CardTitle>
-          <CardDescription>Enviaremos um link de acesso para o seu e-mail.</CardDescription>
+          <CardDescription>Use seu e-mail e senha. A sessão fica salva neste aparelho.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Suspense>
-            <LoginForm />
-          </Suspense>
+          <LoginForm />
         </CardContent>
       </Card>
     </main>

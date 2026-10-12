@@ -19,8 +19,9 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
           </nav>
           <ThemeToggle />
           <form action={sair}>
-            <Button variant="ghost" size="icon" type="submit" aria-label="Sair">
+            <Button variant="ghost" type="submit">
               <LogOutIcon />
+              Sair
             </Button>
           </form>
         </div>

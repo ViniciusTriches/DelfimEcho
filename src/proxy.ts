@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { variaveisFaltando } from "@/lib/env";
 
 // Rotas acessíveis sem login.
-const PUBLICAS = ["/login", "/auth"];
+const PUBLICAS = ["/login"];
 
 /**
  * Renova a sessão do Supabase a cada requisição e manda para /login quem não
@@ -39,19 +39,13 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const logado = Boolean(data?.claims);
 
-  const { pathname, searchParams } = request.nextUrl;
+  const { pathname } = request.nextUrl;
   const publica = PUBLICAS.some((p) => pathname === p || pathname.startsWith(`${p}/`));
 
   if (!logado && !publica) {
     const url = request.nextUrl.clone();
-    // Se o Supabase devolveu o magic link para outra rota (ex.: a Site URL, quando a URL
-    // não está em Redirect URLs), encaminha o code/erro para a rota de confirmação.
-    if (searchParams.has("code") || searchParams.has("error_code")) {
-      url.pathname = "/auth/confirm";
-    } else {
-      url.pathname = "/login";
-      url.search = "";
-    }
+    url.pathname = "/login";
+    url.search = "";
     return NextResponse.redirect(url);
   }
 

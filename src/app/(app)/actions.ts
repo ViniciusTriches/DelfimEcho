@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function sair() {
   const supabase = await createClient();
-  await supabase.auth.signOut();
+  // "local" encerra só a sessão deste aparelho (o padrão, "global", deslogaria todos).
+  await supabase.auth.signOut({ scope: "local" });
   redirect("/login");
 }

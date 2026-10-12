@@ -1,49 +1,41 @@
 "use server";
 
-import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export type EstadoLogin = { ok: boolean; mensagem: string } | null;
+export type EstadoLogin = { mensagem: string; codigo?: string } | null;
 
-export async function enviarMagicLink(
-  _anterior: EstadoLogin,
-  formData: FormData,
-): Promise<EstadoLogin> {
+const MENSAGENS: Record<string, string> = {
+  invalid_credentials: "E-mail ou senha incorretos.",
+  email_not_confirmed: "Seu e-mail ainda não foi confirmado no Supabase.",
+  over_request_rate_limit: "Muitas tentativas. Espere alguns minutos e tente de novo.",
+  user_banned: "Este usuário está bloqueado no Supabase.",
+};
+
+export async function entrar(_anterior: EstadoLogin, formData: FormData): Promise<EstadoLogin> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const senha = String(formData.get("senha") ?? "");
   const permitido = process.env.ALLOWED_EMAIL?.trim().toLowerCase();
 
-  if (!email) return { ok: false, mensagem: "Informe seu e-mail." };
+  if (!email || !senha) return { mensagem: "Informe e-mail e senha." };
 
-  // App de um usuário só: qualquer outro e-mail recebe a mesma resposta,
-  // sem revelar se é o e-mail certo.
+  // App de um usuário só: outro e-mail recebe a mesma resposta de credencial inválida,
+  // sem revelar qual é o e-mail certo.
   if (!permitido || email !== permitido) {
-    return { ok: true, mensagem: "Se este e-mail tiver acesso, o link chegará em instantes." };
+    return { mensagem: MENSAGENS.invalid_credentials, codigo: "invalid_credentials" };
   }
 
-  // O link volta para onde o login foi pedido (localhost em dev, domínio da Vercel
-  // em produção). Essa URL precisa estar em Redirect URLs no Supabase.
-  const h = await headers();
-  const origem =
-    h.get("origin") ??
-    `${h.get("x-forwarded-proto") ?? "http"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
-
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    // O usuário é criado pelo seed; o login nunca cria contas.
-    options: { emailRedirectTo: `${origem}/auth/confirm`, shouldCreateUser: false },
-  });
+  const { error } = await supabase.auth.signInWithPassword({ email, password: senha });
 
   if (error) {
-    console.error("signInWithOtp:", error.message);
-    const limite = error.status === 429;
+    console.error("signInWithPassword:", error.code, error.message);
+    const codigo = error.code ?? (error.status === 429 ? "over_request_rate_limit" : "erro_desconhecido");
     return {
-      ok: false,
-      mensagem: limite
-        ? "Muitas tentativas. Espere um pouco e tente de novo."
-        : "Não foi possível enviar o link. Tente novamente.",
+      mensagem: MENSAGENS[codigo] ?? "Não foi possível entrar. Tente novamente.",
+      codigo,
     };
   }
 
-  return { ok: true, mensagem: "Se este e-mail tiver acesso, o link chegará em instantes." };
+  redirect("/");
 }
