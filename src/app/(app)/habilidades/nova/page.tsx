@@ -26,7 +26,7 @@ export default async function NovaHabilidadePage({ searchParams }: PageProps<"/h
     return (
       <>
         <PageHeader titulo="Nova habilidade" voltar={voltar} />
-        <p className="text-sm text-muted-foreground">
+        <p className="type-body-medium text-on-surface-variant">
           Crie uma <Link href="/areas/nova" className="underline">área</Link> primeiro.
         </p>
       </>

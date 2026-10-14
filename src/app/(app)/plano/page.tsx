@@ -88,17 +88,17 @@ export default async function PlanoPage({ searchParams }: PageProps<"/plano">) {
         voltar={{ href: "/", nome: "Início" }}
       />
       {salvo && (
-        <p role="status" className="mb-4 max-w-xl rounded-lg border p-3 text-sm">
+        <p role="status" className="mb-4 max-w-xl rounded-lg border p-3 type-body-medium">
           Plano salvo. <Link href="/" className="underline underline-offset-2">Voltar ao início</Link>
         </p>
       )}
       {origem && (
-        <p className="mb-4 max-w-xl rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+        <p className="mb-4 max-w-xl rounded-lg bg-secondary-container text-on-secondary-container p-3 type-body-medium">
           {origem} Ajuste e salve.
         </p>
       )}
       {!planoAtual?.length && !origem && (
-        <p className="mb-4 max-w-xl text-sm text-muted-foreground">
+        <p className="mb-4 max-w-xl type-body-medium text-on-surface-variant">
           Primeiro plano: use as horas da semana anterior como referência. Deixe vazio as áreas que não entram no plano.
         </p>
       )}

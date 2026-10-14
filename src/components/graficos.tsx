@@ -16,31 +16,35 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { ChevronDownIcon } from "lucide-react";
 import { formatarHoras } from "@/lib/formato";
 import { formatarValor } from "@/lib/metricas";
 
-// Tokens definidos em globals.css (claro/escuro): par ordinal azul validado.
+// Tokens de globals.css (claro/escuro): par ordinal da rampa da primária, validado.
+// Os gráficos ficam em cartões surface-container-low: o anel dos pontos usa essa superfície.
 const COR = {
   efetiva: "var(--viz-efetiva)",
   bruta: "var(--viz-bruta)",
   grade: "var(--viz-grade)",
   eixo: "var(--viz-eixo)",
   mudo: "var(--viz-mudo)",
-  superficie: "var(--card)",
+  superficie: "var(--md-surface-container-low)",
+  cursor: "var(--md-surface-container-highest)",
 };
 
-const EIXO = { fontSize: 12, fill: COR.mudo };
+const EIXO = { fontSize: 12, fill: COR.mudo, fontFamily: "var(--font-roboto-mono)" };
+const EIXO_TEXTO = { fontSize: 12, fill: COR.mudo };
 const NUM = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
 
 function CaixaTooltip({ titulo, linhas }: { titulo: string; linhas: { cor: string; nome: string; valor: string }[] }) {
   return (
-    <div className="rounded-lg border bg-popover px-3 py-2 text-xs text-popover-foreground shadow-md">
-      <p className="mb-1 font-medium">{titulo}</p>
+    <div className="min-w-36 rounded-md bg-surface-container-highest px-3 py-2.5 type-body-small text-on-surface shadow-elev-2">
+      <p className="mb-1.5 type-title-small">{titulo}</p>
       {linhas.map((l) => (
         <p key={l.nome} className="flex items-center gap-2">
-          <span className="size-2 rounded-full" style={{ backgroundColor: l.cor }} aria-hidden />
-          <span className="text-muted-foreground">{l.nome}</span>
-          <span className="ml-auto pl-3 font-medium tabular-nums">{l.valor}</span>
+          <span className="size-2.5 rounded-full" style={{ backgroundColor: l.cor }} aria-hidden />
+          <span className="text-on-surface-variant">{l.nome}</span>
+          <span className="numero ml-auto pl-3 font-medium">{l.valor}</span>
         </p>
       ))}
     </div>
@@ -49,13 +53,13 @@ function CaixaTooltip({ titulo, linhas }: { titulo: string; linhas: { cor: strin
 
 function Legenda({ itens }: { itens: { cor: string; nome: string; linha?: boolean }[] }) {
   return (
-    <ul className="mb-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+    <ul className="mb-3 flex flex-wrap gap-x-4 gap-y-1 type-label-medium text-on-surface-variant">
       {itens.map((i) => (
         <li key={i.nome} className="flex items-center gap-1.5">
           {i.linha ? (
-            <span className="h-px w-3.5" style={{ backgroundColor: i.cor }} aria-hidden />
+            <span className="h-0.5 w-4 rounded-full" style={{ backgroundColor: i.cor }} aria-hidden />
           ) : (
-            <span className="size-2.5 rounded-sm" style={{ backgroundColor: i.cor }} aria-hidden />
+            <span className="size-2.5 rounded-full" style={{ backgroundColor: i.cor }} aria-hidden />
           )}
           {i.nome}
         </li>
@@ -66,13 +70,16 @@ function Legenda({ itens }: { itens: { cor: string; nome: string; linha?: boolea
 
 function Tabela({ cabecalho, linhas }: { cabecalho: string[]; linhas: string[][] }) {
   return (
-    <details className="mt-2 text-xs">
-      <summary className="cursor-pointer text-muted-foreground">Ver tabela</summary>
-      <table className="mt-2 w-full tabular-nums">
+    <details className="group mt-2 type-body-small">
+      <summary className="camada-estado -ml-3 flex min-h-11 w-fit cursor-pointer list-none items-center gap-1.5 rounded-full px-3 type-label-large text-on-surface-variant [&::-webkit-details-marker]:hidden">
+        <ChevronDownIcon className="size-4 transition-transform group-open:rotate-180" aria-hidden />
+        Ver tabela
+      </summary>
+      <table className="mt-1 w-full">
         <thead>
-          <tr className="text-left text-muted-foreground">
+          <tr className="text-left type-label-medium text-on-surface-variant">
             {cabecalho.map((c, i) => (
-              <th key={c} className={i ? "py-1 text-right font-normal" : "py-1 font-normal"}>
+              <th key={c} className={i ? "py-1.5 text-right font-medium" : "py-1.5 font-medium"}>
                 {c}
               </th>
             ))}
@@ -80,9 +87,9 @@ function Tabela({ cabecalho, linhas }: { cabecalho: string[]; linhas: string[][]
         </thead>
         <tbody>
           {linhas.map((l, i) => (
-            <tr key={i} className="border-t">
+            <tr key={i} className="border-t border-outline-variant text-on-surface">
               {l.map((v, i) => (
-                <td key={i} className={i ? "py-1 text-right" : "py-1"}>
+                <td key={i} className={i ? "numero py-1.5 text-right" : "py-1.5"}>
                   {v}
                 </td>
               ))}
@@ -112,7 +119,7 @@ export function GraficoHoras({ dados, meta }: { dados: PontoHoras[]; meta?: numb
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={dados} barGap={2} barCategoryGap="20%" margin={{ top: 8, right: 4, bottom: 0, left: -12 }}>
             <CartesianGrid vertical={false} stroke={COR.grade} />
-            <XAxis dataKey="rotulo" tick={EIXO} tickLine={false} axisLine={{ stroke: COR.eixo }} interval="preserveStartEnd" minTickGap={8} />
+            <XAxis dataKey="rotulo" tick={EIXO_TEXTO} tickLine={false} axisLine={{ stroke: COR.eixo }} interval="preserveStartEnd" minTickGap={8} />
             <YAxis
               tick={EIXO}
               tickLine={false}
@@ -122,7 +129,7 @@ export function GraficoHoras({ dados, meta }: { dados: PontoHoras[]; meta?: numb
               tickFormatter={(v: number) => NUM.format(v)}
             />
             <Tooltip
-              cursor={{ fill: "var(--muted)", opacity: 0.6 }}
+              cursor={{ fill: COR.cursor, opacity: 0.6 }}
               content={({ active, payload }) => {
                 const p = active ? (payload?.[0]?.payload as PontoHoras | undefined) : undefined;
                 if (!p) return null;
@@ -137,7 +144,7 @@ export function GraficoHoras({ dados, meta }: { dados: PontoHoras[]; meta?: numb
                 );
               }}
             />
-            {meta ? <ReferenceLine y={meta} stroke={COR.mudo} strokeWidth={1} ifOverflow="extendDomain" /> : null}
+            {meta ? <ReferenceLine y={meta} stroke={COR.mudo} strokeWidth={1.5} strokeDasharray="4 4" ifOverflow="extendDomain" /> : null}
             <Bar dataKey="brutas" name="Brutas" fill={COR.bruta} radius={[4, 4, 0, 0]} maxBarSize={12} isAnimationActive={false} />
             <Bar dataKey="efetivas" name="Efetivas" fill={COR.efetiva} radius={[4, 4, 0, 0]} maxBarSize={12} isAnimationActive={false} />
           </BarChart>
@@ -180,7 +187,7 @@ export function GraficoLinha({
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={dados} margin={{ top: 8, right: 8, bottom: 0, left: dominio ? -20 : 0 }}>
             <CartesianGrid vertical={false} stroke={COR.grade} />
-            <XAxis dataKey="rotulo" tick={EIXO} tickLine={false} axisLine={{ stroke: COR.eixo }} interval="preserveStartEnd" minTickGap={8} />
+            <XAxis dataKey="rotulo" tick={EIXO_TEXTO} tickLine={false} axisLine={{ stroke: COR.eixo }} interval="preserveStartEnd" minTickGap={8} />
             <YAxis
               domain={dominio ?? ["auto", "auto"]}
               tick={EIXO}
@@ -190,7 +197,7 @@ export function GraficoLinha({
               tickFormatter={(v: number) => NUM.format(v)}
               width={dominio ? 60 : 48}
             />
-            {temMeta && <ReferenceLine y={meta} stroke={COR.mudo} strokeWidth={1} ifOverflow="extendDomain" />}
+            {temMeta && <ReferenceLine y={meta} stroke={COR.mudo} strokeWidth={1.5} strokeDasharray="4 4" ifOverflow="extendDomain" />}
             <Tooltip
               cursor={{ stroke: COR.eixo, strokeWidth: 1 }}
               content={({ active, payload }) => {
@@ -232,7 +239,7 @@ export function GraficoRadar({ dados }: { dados: PontoRadar[] }) {
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={dados} outerRadius="72%" margin={{ top: 8, right: 24, bottom: 8, left: 24 }}>
             <PolarGrid stroke={COR.grade} />
-            <PolarAngleAxis dataKey="area" tick={{ fontSize: 12, fill: COR.mudo }} />
+            <PolarAngleAxis dataKey="area" tick={EIXO_TEXTO} />
             <Tooltip
               content={({ active, payload }) => {
                 const p = active ? (payload?.[0]?.payload as PontoRadar | undefined) : undefined;

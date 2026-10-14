@@ -34,10 +34,10 @@ export function ValorForm({
   const idValor = `valor-${metricId}${completo ? "-completo" : ""}`;
 
   return (
-    <form key={chave} onSubmit={enviarSemResetar(acao)} className="flex flex-col gap-2">
+    <form key={chave} onSubmit={enviarSemResetar(acao)} className={completo ? "flex flex-col gap-4" : "flex flex-col gap-2"}>
       <input type="hidden" name="metric_id" value={metricId} />
       <div className={completo ? "grid gap-3 sm:grid-cols-[1fr_11rem]" : "flex gap-2"}>
-        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
           {completo && <Label htmlFor={idValor}>Valor{unidade ? ` (${unidade})` : ""}</Label>}
           <Input
             id={idValor}
@@ -46,19 +46,19 @@ export function ValorForm({
             inputMode="decimal"
             step="any"
             required
+            className="numero"
             aria-label={completo ? undefined : `Novo valor de ${nome}${unidade ? ` em ${unidade}` : ""}`}
             placeholder={completo ? undefined : unidade ? `Novo valor (${unidade})` : "Novo valor"}
-            className="h-11 sm:h-8"
           />
         </div>
         {completo && (
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <Label htmlFor={`data-${metricId}`}>Data</Label>
-            <Input id={`data-${metricId}`} name="data" type="date" defaultValue={hoje} max={hoje} className="h-11 sm:h-8" required />
+            <Input id={`data-${metricId}`} name="data" type="date" defaultValue={hoje} max={hoje} required />
           </div>
         )}
         {!completo && (
-          <Button type="submit" variant="outline" disabled={pendente} className="h-11 shrink-0 sm:h-8" aria-label={`Registrar ${nome}`}>
+          <Button type="submit" variant="secondary" disabled={pendente} className="shrink-0" aria-label={`Registrar ${nome}`}>
             <PlusIcon />
             {pendente ? "…" : "Registrar"}
           </Button>
@@ -66,19 +66,19 @@ export function ValorForm({
       </div>
       {completo && (
         <>
-          <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col gap-2">
             <Label htmlFor={`obs-${metricId}`}>
-              Observação <span className="font-normal text-muted-foreground">(opcional)</span>
+              Observação <span className="text-on-surface-variant">(opcional)</span>
             </Label>
-            <Input id={`obs-${metricId}`} name="observacao" maxLength={200} className="h-11 sm:h-8" />
+            <Input id={`obs-${metricId}`} name="observacao" maxLength={200} />
           </div>
-          <Button type="submit" disabled={pendente} className="min-h-11 w-fit sm:min-h-8">
+          <Button type="submit" disabled={pendente} className="w-fit">
             {pendente ? "Registrando…" : "Registrar valor"}
           </Button>
         </>
       )}
       {estado && (
-        <p role="status" className={estado.ok ? "text-xs text-muted-foreground" : "text-xs text-destructive"}>
+        <p role="status" className={estado.ok ? "type-body-small text-on-surface-variant" : "type-body-small text-error"}>
           {estado.mensagem}
         </p>
       )}

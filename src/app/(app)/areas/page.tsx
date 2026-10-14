@@ -37,7 +37,7 @@ export default async function AreasPage() {
       />
 
       {ativas.length === 0 && (
-        <p className="text-sm text-muted-foreground">Nenhuma área ainda. Crie a primeira.</p>
+        <p className="rounded-lg bg-surface-container-low p-6 type-body-large text-on-surface-variant">Nenhuma área ainda. Crie a primeira: trabalho, saúde, idiomas…</p>
       )}
 
       <ul className="flex flex-col gap-2">
@@ -46,13 +46,13 @@ export default async function AreasPage() {
           return (
             <li
               key={area.id}
-              className="flex items-center gap-2 rounded-xl border bg-card p-2 pl-3 transition-colors hover:bg-muted/50"
+              className="camada-estado flex items-center gap-2 rounded-lg bg-surface-container-low py-2 pr-2 pl-4"
             >
-              <Link href={`/areas/${area.id}`} className="flex min-w-0 flex-1 items-center gap-3 py-1">
+              <Link href={`/areas/${area.id}`} className="flex min-h-14 min-w-0 flex-1 items-center gap-4 py-1">
                 <AreaIcon icone={area.icone} cor={area.cor} />
                 <div className="min-w-0">
-                  <p className="truncate font-medium">{area.nome}</p>
-                  <p className="truncate text-sm text-muted-foreground">
+                  <p className="truncate type-title-medium text-on-surface">{area.nome}</p>
+                  <p className="truncate type-body-medium text-on-surface-variant">
                     {n === 0 ? "Sem habilidades" : `${n} habilidade${n > 1 ? "s" : ""}`}
                     {area.descricao && ` · ${area.descricao}`}
                   </p>
@@ -84,16 +84,16 @@ export default async function AreasPage() {
       </ul>
 
       {arquivadas.length > 0 && (
-        <details className="mt-8">
-          <summary className="cursor-pointer text-sm text-muted-foreground">
+        <details className="group mt-10">
+          <summary className="camada-estado flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-full px-3 type-label-large text-on-surface-variant [&::-webkit-details-marker]:hidden"><ChevronDownIcon className="size-4 transition-transform group-open:rotate-180" aria-hidden />
             Arquivadas ({arquivadas.length})
           </summary>
           <ul className="mt-3 flex flex-col gap-2">
             {arquivadas.map((area) => (
-              <li key={area.id} className="flex items-center gap-3 rounded-xl border p-2 pl-3 opacity-70">
+              <li key={area.id} className="flex items-center gap-4 rounded-lg border border-outline-variant py-2 pr-2 pl-4 text-on-surface-variant">
                 <Link href={`/areas/${area.id}`} className="flex min-w-0 flex-1 items-center gap-3">
                   <AreaIcon icone={area.icone} cor={area.cor} />
-                  <span className="truncate">{area.nome}</span>
+                  <span className="truncate type-body-large">{area.nome}</span>
                 </Link>
                 <ConfirmButton acao={arquivarArea.bind(null, area.id, false)} variant="outline" size="sm">
                   <ArchiveRestoreIcon />

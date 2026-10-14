@@ -14,16 +14,16 @@ export function NavegacaoPeriodo({
   detalhe?: string;
 }) {
   return (
-    <div className="mb-8 flex items-center justify-between gap-2 rounded-xl border bg-card p-1">
-      <Link href={anterior} className="flex size-11 items-center justify-center rounded-lg hover:bg-muted" aria-label="Período anterior">
+    <div className="mb-8 flex items-center justify-between gap-2 rounded-full bg-surface-container-low p-1">
+      <Link href={anterior} className="camada-estado flex size-11 items-center justify-center rounded-full text-on-surface-variant" aria-label="Período anterior">
         <ChevronLeftIcon className="size-5" />
       </Link>
       <div className="text-center">
-        <p className="font-medium first-letter:uppercase">{rotulo}</p>
-        {detalhe && <p className="text-xs text-muted-foreground">{detalhe}</p>}
+        <p className="type-title-medium text-on-surface first-letter:uppercase">{rotulo}</p>
+        {detalhe && <p className="type-body-small text-on-surface-variant">{detalhe}</p>}
       </div>
       {seguinte ? (
-        <Link href={seguinte} className="flex size-11 items-center justify-center rounded-lg hover:bg-muted" aria-label="Próximo período">
+        <Link href={seguinte} className="camada-estado flex size-11 items-center justify-center rounded-full text-on-surface-variant" aria-label="Próximo período">
           <ChevronRightIcon className="size-5" />
         </Link>
       ) : (

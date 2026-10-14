@@ -14,6 +14,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { formatarDia, hojeSP } from "@/lib/datas";
 import { descreverPrazo } from "@/lib/metas";
 import { cn } from "@/lib/utils";
+import { corArea } from "@/lib/cores-area";
 import { alterarStatusMeta } from "./actions";
 
 export type MetaComArea = {
@@ -44,14 +45,14 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
   });
 
   return (
-    <li className="flex flex-col gap-3 rounded-xl border bg-card p-4">
+    <li className="flex flex-col gap-4 rounded-lg bg-surface-container-low p-5">
       <div className="flex items-start gap-3">
         <div className="min-w-0 flex-1">
-          <p className={cn("font-medium", !ativa && "text-muted-foreground")}>{meta.titulo}</p>
-          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+          <p className={cn("type-title-medium", ativa ? "text-on-surface" : "text-on-surface-variant")}>{meta.titulo}</p>
+          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 type-body-medium text-on-surface-variant">
             {mostrarArea && meta.areas && (
               <span className="flex items-center gap-1.5">
-                <span className="size-2 rounded-full" style={{ backgroundColor: meta.areas.cor }} aria-hidden />
+                <span className="size-2 rounded-full" style={{ backgroundColor: corArea(meta.areas.cor) }} aria-hidden />
                 {meta.areas.nome}
               </span>
             )}
@@ -60,7 +61,7 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
         </div>
         <Link
           href={`/metas/${meta.id}/editar`}
-          className={buttonVariants({ variant: "ghost", size: "icon", className: "size-11 shrink-0 sm:size-8" })}
+          className={buttonVariants({ variant: "ghost", size: "icon", className: "-mt-2 -mr-2 shrink-0 text-on-surface-variant" })}
           aria-label={`Editar ${meta.titulo}`}
         >
           <PencilIcon />
@@ -68,8 +69,8 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
       </div>
 
       {meta.criterio_de_conclusao && (
-        <p className="text-sm">
-          <span className="text-muted-foreground">Critério: </span>
+        <p className="rounded-md bg-surface-container px-3 py-2 type-body-medium text-on-surface">
+          <span className="type-label-medium text-on-surface-variant">Critério · </span>
           {meta.criterio_de_conclusao}
         </p>
       )}
@@ -78,21 +79,21 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
         {ativa ? (
           <span
             className={cn(
-              "flex items-center gap-1.5 text-sm",
-              prazo.tom === "atrasada" ? "font-medium text-destructive" : prazo.tom === "proxima" ? "font-medium" : "text-muted-foreground",
+              "flex items-center gap-1.5 type-body-medium",
+              prazo.tom === "atrasada" ? "font-medium text-error" : prazo.tom === "proxima" ? "font-medium text-on-surface" : "text-on-surface-variant",
             )}
           >
             <IconePrazo
-              className={cn("size-4", prazo.tom === "proxima" && "text-[var(--sequencia)]")}
+              className={cn("size-4", prazo.tom === "proxima" && "text-sequencia")}
               aria-hidden
             />
             {prazo.texto}
-            {meta.prazo && <span className="font-normal text-muted-foreground">· {formatarDia(meta.prazo)}</span>}
+            {meta.prazo && <span className="font-normal text-on-surface-variant">· {formatarDia(meta.prazo)}</span>}
           </span>
         ) : (
-          <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+          <span className="flex items-center gap-1.5 type-body-medium text-on-surface-variant">
             {concluida ? (
-              <CheckIcon className="size-4 text-[var(--concluido)]" aria-hidden />
+              <CheckIcon className="size-4 text-concluido" aria-hidden />
             ) : (
               <XIcon className="size-4" aria-hidden />
             )}
@@ -107,9 +108,8 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
             <>
               <ConfirmButton
                 acao={alterarStatusMeta.bind(null, meta.id, "abandonada")}
-                confirmar={`Abandonar "${meta.titulo}"? Ela fica no histórico e pode ser reaberta.`}
-                variant="ghost"
-                className="min-h-11 sm:min-h-8"
+                confirmar={`Abandonar "${meta.titulo}"?\n\nEla fica no histórico e pode ser reaberta.`}
+                variant="text"
               >
                 Abandonar
               </ConfirmButton>
@@ -117,10 +117,9 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
                 acao={alterarStatusMeta.bind(null, meta.id, "concluida")}
                 confirmar={
                   meta.criterio_de_conclusao
-                    ? `Critério: ${meta.criterio_de_conclusao}\n\nMarcar como concluída?`
+                    ? `Marcar como concluída?\n\nCritério: ${meta.criterio_de_conclusao}`
                     : "Marcar como concluída?"
                 }
-                className="min-h-11 sm:min-h-8"
               >
                 <CheckIcon />
                 Concluir
@@ -131,7 +130,7 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
               {concluida && (
                 <Link
                   href={`/marcos/novo?${novoMarco}`}
-                  className={buttonVariants({ variant: "outline", className: "min-h-11 sm:min-h-8" })}
+                  className={buttonVariants({ variant: "secondary" })}
                 >
                   <MilestoneIcon />
                   Virar marco
@@ -139,8 +138,7 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
               )}
               <ConfirmButton
                 acao={alterarStatusMeta.bind(null, meta.id, "ativa")}
-                variant="ghost"
-                className="min-h-11 sm:min-h-8"
+                variant="text"
               >
                 <RotateCcwIcon />
                 Reabrir

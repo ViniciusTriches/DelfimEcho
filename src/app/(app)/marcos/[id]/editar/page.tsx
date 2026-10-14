@@ -28,14 +28,13 @@ export default async function EditarMarcoPage({ params }: PageProps<"/marcos/[id
       <PageHeader titulo="Editar marco" voltar={{ href: "/marcos", nome: "Marcos" }} />
       <MarcoForm marco={marco} areas={areas} skills={skills} hoje={hojeSP()} voltar="/marcos" />
 
-      <section className="mt-12 max-w-xl rounded-xl border border-destructive/30 p-4">
-        <h2 className="font-medium">Excluir marco</h2>
-        <p className="mt-1 mb-3 text-sm text-muted-foreground">Não dá para desfazer.</p>
+      <section className="mt-16 max-w-xl rounded-lg border border-outline-variant p-5">
+        <h2 className="type-title-medium text-error">Excluir marco</h2>
+        <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">Não dá para desfazer.</p>
         <ConfirmButton
           acao={excluirMarco.bind(null, id)}
           confirmar={`Excluir o marco "${marco.titulo}"?`}
           variant="destructive"
-          className="min-h-11 sm:min-h-8"
         >
           <Trash2Icon />
           Excluir marco

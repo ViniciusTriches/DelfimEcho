@@ -19,7 +19,7 @@ export default async function NovaMetaPage({ searchParams }: PageProps<"/metas/n
       {areas.length ? (
         <MetaForm areas={areas} skills={skills} areaInicial={area} skillInicial={skill} voltar={voltar} />
       ) : (
-        <p className="text-sm text-muted-foreground">
+        <p className="type-body-medium text-on-surface-variant">
           Crie uma <Link href="/areas/nova" className="underline">área</Link> primeiro.
         </p>
       )}

@@ -19,13 +19,11 @@ export function AvaliacaoForm({ skillId, hoje, nivelAtual }: { skillId: string; 
   }
 
   return (
-    <form key={chave} onSubmit={enviarSemResetar(acao)} className="flex flex-col gap-3">
+    <form key={chave} onSubmit={enviarSemResetar(acao)} className="flex flex-col gap-4">
       <input type="hidden" name="skill_id" value={skillId} />
       <div className="grid grid-cols-[6rem_1fr] gap-3 sm:grid-cols-[6rem_10rem]">
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="nivel" className="text-xs">
-            Nível (1–10)
-          </Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="nivel">Nível (1–10)</Label>
           <NativeSelect id="nivel" name="nivel" defaultValue={nivelAtual?.toString() ?? ""} className="w-full" required>
             <NativeSelectOption value="" disabled>
               —
@@ -37,25 +35,21 @@ export function AvaliacaoForm({ skillId, hoje, nivelAtual }: { skillId: string; 
             ))}
           </NativeSelect>
         </div>
-        <div className="flex flex-col gap-1.5">
-          <Label htmlFor="data_avaliacao" className="text-xs">
-            Data
-          </Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="data_avaliacao">Data</Label>
           <Input id="data_avaliacao" name="data" type="date" defaultValue={hoje} max={hoje} required />
         </div>
       </div>
-      <div className="flex flex-col gap-1.5">
-        <Label htmlFor="observacao" className="text-xs">
-          Observação
-        </Label>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="observacao">Observação</Label>
         <Input id="observacao" name="observacao" maxLength={300} placeholder="Por que esse nível? O que mudou?" />
       </div>
       {estado && (
-        <p role="status" className={estado.ok ? "text-sm text-muted-foreground" : "text-sm text-destructive"}>
+        <p role="status" className={estado.ok ? "type-body-medium text-on-surface-variant" : "type-body-medium text-error"}>
           {estado.mensagem}
         </p>
       )}
-      <Button type="submit" variant="outline" disabled={pendente} className="w-fit">
+      <Button type="submit" variant="secondary" disabled={pendente} className="w-fit">
         {pendente ? "Salvando…" : "Registrar autoavaliação"}
       </Button>
     </form>

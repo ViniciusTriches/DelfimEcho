@@ -48,16 +48,15 @@ export default async function EditarMetricaPage({ params }: PageProps<"/metricas
       />
       <MetricaForm metrica={metrica} areas={areas} voltar={`/metricas/${id}`} />
 
-      <section className="mt-12 max-w-xl rounded-xl border border-destructive/30 p-4">
-        <h2 className="font-medium">Excluir métrica</h2>
-        <p className="mt-1 mb-3 text-sm text-muted-foreground">
+      <section className="mt-16 max-w-xl rounded-lg border border-outline-variant p-5">
+        <h2 className="type-title-medium text-error">Excluir métrica</h2>
+        <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">
           Apaga a métrica e {valores ?? 0} valor(es) registrados. Não dá para desfazer.
         </p>
         <ConfirmButton
           acao={excluirMetrica.bind(null, id)}
           confirmar={`Excluir "${metrica.nome}" e ${valores ?? 0} valor(es)?`}
           variant="destructive"
-          className="min-h-11 sm:min-h-8"
         >
           <Trash2Icon />
           Excluir métrica

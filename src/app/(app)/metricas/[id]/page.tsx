@@ -63,49 +63,49 @@ export default async function MetricaPage({ params }: PageProps<"/metricas/[id]"
         }
       />
 
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <section aria-labelledby="titulo-evolucao">
-          <h2 id="titulo-evolucao" className="mb-3 text-lg font-semibold">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <section aria-labelledby="titulo-evolucao" className="min-w-0 rounded-lg bg-surface-container-low p-5">
+          <h2 id="titulo-evolucao" className="mb-4 type-title-large text-on-surface">
             Evolução
           </h2>
           {pontos.length >= 2 ? (
             <GraficoLinha dados={pontos} nome={metrica.nome} unidade={metrica.unidade} meta={meta} />
           ) : (
-            <p className="text-sm text-muted-foreground">
+            <p className="type-body-medium text-on-surface-variant">
               O gráfico aparece a partir de 2 valores registrados.
             </p>
           )}
         </section>
 
-        <section aria-labelledby="titulo-registrar">
-          <h2 id="titulo-registrar" className="mb-3 text-lg font-semibold">
+        <section aria-labelledby="titulo-registrar" className="rounded-lg bg-surface-container-low p-5 lg:self-start">
+          <h2 id="titulo-registrar" className="mb-4 type-title-large text-on-surface">
             Registrar valor
           </h2>
           <ValorForm metricId={id} nome={metrica.nome} unidade={metrica.unidade} hoje={hojeSP()} completo />
         </section>
       </div>
 
-      <section aria-labelledby="titulo-historico" className="mt-10 max-w-2xl">
-        <h2 id="titulo-historico" className="mb-3 text-lg font-semibold">
+      <section aria-labelledby="titulo-historico" className="mt-12 max-w-2xl">
+        <h2 id="titulo-historico" className="mb-4 type-title-large text-on-surface">
           Histórico
         </h2>
         {valores.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Nenhum valor registrado.</p>
+          <p className="rounded-lg border border-dashed border-outline-variant px-4 py-5 type-body-medium text-on-surface-variant">Nenhum valor registrado.</p>
         ) : (
-          <ul className="flex flex-col divide-y rounded-xl border">
+          <ul className="flex flex-col divide-y divide-outline-variant overflow-hidden rounded-lg bg-surface-container-low py-1">
             {[...valores].reverse().map((v) => (
-              <li key={v.id} className="flex items-center gap-3 px-3 py-2 text-sm">
-                <span className="w-28 shrink-0 text-muted-foreground">{formatarDia(v.data)}</span>
+              <li key={v.id} className="flex min-h-14 items-center gap-4 py-2 pr-2 pl-4 type-body-medium">
+                <span className="w-28 shrink-0 text-on-surface-variant">{formatarDia(v.data)}</span>
                 <span className="min-w-0 flex-1">
-                  <span className="font-medium tabular-nums">{formatarValor(Number(v.valor), metrica.unidade)}</span>
-                  {v.observacao && <span className="block truncate text-muted-foreground">{v.observacao}</span>}
+                  <span className="numero type-title-medium text-on-surface">{formatarValor(Number(v.valor), metrica.unidade)}</span>
+                  {v.observacao && <span className="block truncate text-on-surface-variant">{v.observacao}</span>}
                 </span>
                 <ConfirmButton
                   acao={excluirValor.bind(null, v.id)}
                   confirmar="Excluir este valor?"
                   variant="ghost"
+                  className="text-on-surface-variant"
                   size="icon"
-                  className="size-11 sm:size-8"
                   aria-label={`Excluir valor de ${formatarDia(v.data)}`}
                 >
                   <Trash2Icon />

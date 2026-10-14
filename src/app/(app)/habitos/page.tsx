@@ -30,8 +30,8 @@ export default async function HabitosPage({ searchParams }: PageProps<"/habitos"
     return (
       <>
         <PageHeader titulo="Hábitos" />
-        <div className="flex max-w-xl flex-col items-start gap-4 rounded-xl border p-5">
-          <p className="text-muted-foreground">Nenhum hábito ativo. Crie o primeiro para começar o checklist diário.</p>
+        <div className="flex max-w-xl flex-col items-start gap-4 rounded-lg bg-surface-container-low p-5">
+          <p className="text-on-surface-variant">Nenhum hábito ativo. Crie o primeiro para começar o checklist diário.</p>
           <Link href="/habitos/novo" className={buttonVariants()}>
             <PlusIcon />
             Novo hábito
@@ -91,57 +91,57 @@ export default async function HabitosPage({ searchParams }: PageProps<"/habitos"
         }
       />
 
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_24rem]">
+      <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[minmax(0,1fr)_24rem]">
         <section aria-labelledby="titulo-checklist">
-          <div className="mb-3 flex items-center justify-between gap-2">
+          <div className="mb-4 flex items-center justify-between gap-2 rounded-full bg-surface-container-low p-1">
             <Link
               href={link({ dia: somarDias(dia, -1) })}
               scroll={false}
-              className="flex size-11 items-center justify-center rounded-lg hover:bg-muted"
+              className={buttonVariants({ variant: "ghost", size: "icon" })}
               aria-label="Dia anterior"
             >
               <ChevronLeftIcon className="size-5" />
             </Link>
             <div className="text-center">
-              <h2 id="titulo-checklist" className="text-lg font-semibold">
+              <h2 id="titulo-checklist" className="type-title-medium text-on-surface">
                 {rotuloDia}
               </h2>
               {dia !== hoje && (
-                <p className="text-xs text-muted-foreground first-letter:uppercase">{formatarDiaSemana(dia)}</p>
+                <p className="type-body-small text-on-surface-variant first-letter:uppercase">{formatarDiaSemana(dia)}</p>
               )}
             </div>
             {dia < hoje ? (
               <Link
                 href={link({ dia: somarDias(dia, 1) })}
                 scroll={false}
-                className="flex size-11 items-center justify-center rounded-lg hover:bg-muted"
+                className={buttonVariants({ variant: "ghost", size: "icon" })}
                 aria-label="Próximo dia"
               >
                 <ChevronRightIcon className="size-5" />
               </Link>
             ) : (
-              <span className="size-11" />
+              <span className="size-10" />
             )}
           </div>
           <Checklist key={dia} dia={dia} itens={itens} />
         </section>
 
         <section aria-labelledby="titulo-cumprimento">
-          <h2 id="titulo-cumprimento" className="mb-3 text-lg font-semibold">
+          <h2 id="titulo-cumprimento" className="mb-4 type-title-large text-on-surface">
             Cumprimento
           </h2>
           <div className="mb-4 grid grid-cols-2 gap-3">
             <Resumo rotulo="Esta semana" t={geralSemana} />
             <Resumo rotulo="Este mês" t={geralMes} />
           </div>
-          <div className="overflow-x-auto rounded-xl border">
-            <table className="w-full text-sm">
+          <div className="overflow-x-auto rounded-lg bg-surface-container-low">
+            <table className="w-full type-body-medium">
               <thead>
-                <tr className="text-left text-xs text-muted-foreground">
-                  <th className="px-3 py-2 font-normal">Hábito</th>
-                  <th className="px-2 py-2 text-right font-normal">Semana</th>
-                  <th className="px-2 py-2 text-right font-normal">Mês</th>
-                  <th className="px-3 py-2 text-right font-normal">
+                <tr className="text-left type-label-medium text-on-surface-variant">
+                  <th className="px-4 py-3 font-medium">Hábito</th>
+                  <th className="px-2 py-3 text-right font-medium">Semana</th>
+                  <th className="px-2 py-3 text-right font-medium">Mês</th>
+                  <th className="px-4 py-3 text-right font-medium">
                     <span className="sr-only">Sequência atual e melhor</span>
                     <FlameIcon className="ml-auto size-3.5" aria-hidden />
                   </th>
@@ -149,28 +149,28 @@ export default async function HabitosPage({ searchParams }: PageProps<"/habitos"
               </thead>
               <tbody>
                 {estatisticas.map((e) => (
-                  <tr key={e.id} className="border-t">
-                    <td className="max-w-40 truncate px-3 py-2">{e.nome}</td>
-                    <td className="px-2 py-2 text-right tabular-nums">{pct(e.semana)}</td>
-                    <td className="px-2 py-2 text-right tabular-nums">{pct(e.mes)}</td>
-                    <td className="px-3 py-2 text-right tabular-nums" title={`Atual ${e.sequencia} · melhor ${e.melhor}`}>
+                  <tr key={e.id} className="border-t border-outline-variant">
+                    <td className="max-w-40 truncate px-4 py-3">{e.nome}</td>
+                    <td className="numero px-2 py-3 text-right">{pct(e.semana)}</td>
+                    <td className="numero px-2 py-3 text-right">{pct(e.mes)}</td>
+                    <td className="numero px-4 py-3 text-right" title={`Atual ${e.sequencia} · melhor ${e.melhor}`}>
                       {e.sequencia}
-                      <span className="text-muted-foreground"> / {e.melhor}</span>
+                      <span className="text-on-surface-variant"> / {e.melhor}</span>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="mt-3 type-body-small text-on-surface-variant">
             Sequência: atual / melhor. Só contam os dias previstos desde o início de cada hábito; hoje entra quando
             for feito.
           </p>
         </section>
       </div>
 
-      <section aria-labelledby="titulo-calendario" className="mt-10">
-        <h2 id="titulo-calendario" className="mb-3 text-lg font-semibold">
+      <section aria-labelledby="titulo-calendario" className="mt-12">
+        <h2 id="titulo-calendario" className="mb-4 type-title-large text-on-surface">
           Histórico
         </h2>
         <CalendarioHabitos
@@ -192,10 +192,10 @@ function pct(t: Taxa) {
 
 function Resumo({ rotulo, t }: { rotulo: string; t: Taxa }) {
   return (
-    <div className="rounded-xl border bg-card p-3">
-      <p className="text-xs text-muted-foreground">{rotulo}</p>
-      <p className={cn("mt-1 text-2xl font-semibold", t.fracao === null && "text-muted-foreground")}>{pct(t)}</p>
-      <p className="mt-0.5 text-xs text-muted-foreground tabular-nums">
+    <div className="rounded-lg bg-surface-container-low p-4">
+      <p className="type-label-medium text-on-surface-variant">{rotulo}</p>
+      <p className={cn("mt-1 numero-grande type-headline-medium text-on-surface", t.fracao === null && "text-on-surface-variant")}>{pct(t)}</p>
+      <p className="mt-1 type-body-small text-on-surface-variant">
         {t.previstos ? `${t.feitos} de ${t.previstos} previstos` : "Nada previsto ainda"}
       </p>
     </div>

@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import { CheckIcon } from "lucide-react";
+import { ErroFormulario } from "@/components/erro-formulario";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,10 +16,10 @@ export function FatoresForm({ fatores, fatorPassivo }: { fatores: FatorQualidade
   return (
     <form onSubmit={enviarSemResetar(acao)} className="flex flex-col gap-6">
       <fieldset className="flex flex-col gap-3">
-        <legend className="mb-1 text-sm font-medium">Fator por nota de qualidade</legend>
+        <legend className="mb-1 type-title-small text-on-surface">Fator por nota de qualidade</legend>
         {fatores.map((f) => (
-          <div key={f.nota} className="flex items-center gap-2">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold">
+          <div key={f.nota} className="flex items-center gap-3">
+            <span className="numero flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary-container type-title-medium text-on-secondary-container">
               {f.nota}
             </span>
             <Input
@@ -29,7 +31,7 @@ export function FatoresForm({ fatores, fatorPassivo }: { fatores: FatorQualidade
               max={1}
               step={0.05}
               defaultValue={f.fator}
-              className="w-20 shrink-0"
+              className="numero w-24 shrink-0"
               required
             />
             <Input
@@ -54,19 +56,24 @@ export function FatoresForm({ fatores, fatorPassivo }: { fatores: FatorQualidade
           max={1}
           step={0.05}
           defaultValue={fatorPassivo}
-          className="w-24"
+          className="numero w-24"
           required
         />
-        <p className="text-xs text-muted-foreground">
+        <p className="type-body-small text-on-surface-variant">
           Multiplica as horas efetivas de sessões marcadas como passivas (ouvir, assistir). Só aparece
           nas habilidades com &quot;Permite prática passiva&quot; ligado.
         </p>
       </div>
 
       {estado && (
-        <p role="status" className={estado.ok ? "text-sm text-emerald-600 dark:text-emerald-400" : "text-sm text-destructive"}>
-          {estado.mensagem}
-        </p>
+        estado.ok ? (
+          <p role="status" className="flex items-center gap-2 type-body-medium text-on-surface-variant">
+            <CheckIcon className="size-4 text-concluido" aria-hidden />
+            {estado.mensagem}
+          </p>
+        ) : (
+          <ErroFormulario>{estado.mensagem}</ErroFormulario>
+        )
       )}
 
       <Button type="submit" disabled={pendente} className="w-fit">

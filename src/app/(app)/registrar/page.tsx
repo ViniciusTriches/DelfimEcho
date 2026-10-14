@@ -27,7 +27,7 @@ export default async function RegistrarPage({ searchParams }: PageProps<"/regist
       />
 
       {timer && !dadosTimer && (
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/30 bg-primary/5 p-3 text-sm">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-secondary-container text-on-secondary-container p-3 type-body-medium">
           <span>
             Timer ativo: <strong>{timer.skills?.nome}</strong>
           </span>
@@ -38,7 +38,7 @@ export default async function RegistrarPage({ searchParams }: PageProps<"/regist
       )}
 
       {habilidades.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="type-body-medium text-on-surface-variant">
           Nenhuma habilidade ativa. Crie uma em <Link href="/areas" className="underline">Áreas</Link>.
         </p>
       ) : (

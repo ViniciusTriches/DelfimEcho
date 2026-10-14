@@ -1,10 +1,12 @@
 "use client";
 
 import { useOptimistic, useTransition } from "react";
-import { CheckIcon, FlameIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, FlameIcon } from "lucide-react";
+import { Progresso } from "@/components/ui/progresso";
 import { toast } from "sonner";
 import { NOMES_DIAS } from "@/lib/habitos";
 import { cn } from "@/lib/utils";
+import { corArea } from "@/lib/cores-area";
 import { marcarHabito } from "./actions";
 
 export type DiaSemana = { dia: string; previsto: boolean; feito: boolean; futuro: boolean };
@@ -49,26 +51,26 @@ export function Checklist({ dia, itens }: { dia: string; itens: ItemChecklist[] 
     <div className="flex flex-col gap-4">
       {previstos.length > 0 && (
         <div>
-          <div className="mb-1.5 flex items-baseline justify-between text-sm">
-            <span className="text-muted-foreground">
-              <strong className="text-foreground tabular-nums">
-                {feitosPrevistos} de {previstos.length}
-              </strong>{" "}
+          <div className="mb-2 flex items-baseline justify-between type-body-medium">
+            <span className="text-on-surface-variant">
+              <span className="numero text-on-surface">
+                {feitosPrevistos}/{previstos.length}
+              </span>{" "}
               feitos
             </span>
             {feitosPrevistos === previstos.length && (
-              <span className="flex items-center gap-1 font-medium">
-                <CheckIcon className="size-4 text-[var(--concluido)]" aria-hidden />
+              <span className="flex items-center gap-1 type-label-large text-on-surface">
+                <CheckIcon className="size-4 text-concluido" aria-hidden />
                 Dia completo
               </span>
             )}
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-muted">
-            <div
-              className="h-full rounded-full bg-[var(--concluido)] transition-[width] duration-300 motion-reduce:transition-none"
-              style={{ width: `${(feitosPrevistos / previstos.length) * 100}%` }}
-            />
-          </div>
+          <Progresso
+            fracao={feitosPrevistos / previstos.length}
+            rotulo={`${feitosPrevistos} de ${previstos.length} hábitos feitos`}
+            corPreenchimento="bg-concluido"
+            corTrilho="bg-surface-container-highest"
+          />
         </div>
       )}
 
@@ -76,7 +78,8 @@ export function Checklist({ dia, itens }: { dia: string; itens: ItemChecklist[] 
 
       {outros.length > 0 && (
         <details className="group">
-          <summary className="cursor-pointer text-sm text-muted-foreground">
+          <summary className="camada-estado flex min-h-10 w-fit cursor-pointer list-none items-center gap-1 rounded-full px-3 type-label-large text-on-surface-variant [&::-webkit-details-marker]:hidden">
+            <ChevronDownIcon className="size-4 transition-transform duration-200 group-open:rotate-180" aria-hidden />
             Não previstos neste dia ({outros.length})
           </summary>
           <div className="mt-2">
@@ -109,14 +112,13 @@ function Lista({
               aria-checked={feito}
               onClick={() => marcar(item)}
               className={cn(
-                "flex min-h-14 w-full cursor-pointer items-center gap-3 rounded-xl border bg-card px-3 py-2 text-left transition-colors duration-150 hover:bg-muted/60 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
-                feito && "border-[var(--concluido)]/40",
+                "camada-estado flex min-h-16 w-full cursor-pointer items-center gap-4 rounded-lg bg-surface-container-low px-4 py-2 text-left text-on-surface",
               )}
             >
               <span
                 className={cn(
                   "flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-150",
-                  feito ? "border-[var(--concluido)] bg-[var(--concluido)] text-white" : "border-muted-foreground/40",
+                  feito ? "border-concluido bg-concluido text-surface" : "border-outline",
                 )}
                 aria-hidden
               >
@@ -124,11 +126,11 @@ function Lista({
               </span>
 
               <span className="min-w-0 flex-1">
-                <span className={cn("block truncate font-medium", feito && "text-muted-foreground line-through")}>
+                <span className={cn("block truncate type-body-large", feito && "text-on-surface-variant line-through decoration-on-surface-variant/50")}>
                   {item.nome}
                 </span>
-                <span className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                  {item.cor && <span className="size-2 rounded-full" style={{ backgroundColor: item.cor }} aria-hidden />}
+                <span className="mt-1 flex items-center gap-2 type-body-small text-on-surface-variant">
+                  {item.cor && <span className="size-2 rounded-full" style={{ backgroundColor: corArea(item.cor) }} aria-hidden />}
                   {item.frequencia}
                   <Semana dias={item.semana} />
                 </span>
@@ -136,12 +138,12 @@ function Lista({
 
               {item.sequencia > 0 && (
                 <span
-                  className="flex shrink-0 items-center gap-1 text-sm font-medium tabular-nums"
+                  className="flex shrink-0 items-center gap-1 type-label-large text-on-surface"
                   aria-label={`Sequência de ${item.sequencia} ${item.sequencia === 1 ? "dia" : "dias"}`}
                   title={`Sequência de ${item.sequencia} ${item.sequencia === 1 ? "dia" : "dias"}`}
                 >
-                  <FlameIcon className="size-4 text-[var(--sequencia)]" aria-hidden />
-                  {item.sequencia}
+                  <FlameIcon className="size-4 text-sequencia" aria-hidden />
+                  <span className="numero">{item.sequencia}</span>
                 </span>
               )}
             </button>
@@ -167,10 +169,10 @@ function Semana({ dias }: { dias: DiaSemana[] }) {
           className={cn(
             "size-2 rounded-full",
             d.feito
-              ? "bg-[var(--concluido)]"
+              ? "bg-concluido"
               : d.previsto && !d.futuro
-                ? "border border-muted-foreground/50"
-                : "bg-muted",
+                ? "border border-outline"
+                : "bg-surface-container-highest",
           )}
         />
       ))}

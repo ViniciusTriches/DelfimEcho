@@ -50,7 +50,7 @@ export function AreaSkillSelect({
       </div>
       <div className="flex flex-col gap-2">
         <Label htmlFor="skill_id">
-          Habilidade <span className="font-normal text-muted-foreground">(opcional)</span>
+          Habilidade <span className="font-normal text-on-surface-variant">(opcional)</span>
         </Label>
         <NativeSelect
           id="skill_id"

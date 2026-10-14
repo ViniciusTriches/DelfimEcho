@@ -3,6 +3,17 @@
 import Link from "next/link";
 import { useActionState, useRef, useState } from "react";
 import { ChevronDownIcon, ChevronUpIcon, PlusIcon, XIcon } from "lucide-react";
+import { CampoSwitch } from "@/components/campo-switch";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { ErroFormulario } from "@/components/erro-formulario";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,15 +63,22 @@ export function SkillForm({
     });
   }
 
+  const [escalaPendente, setEscalaPendente] = useState<(typeof ESCALAS)[number] | null>(null);
+
+  function substituirPor(escala: (typeof ESCALAS)[number]) {
+    setNiveis(escala.niveis.map((n) => ({ id: novoId(), ...n })));
+    setEscalaPendente(null);
+  }
+
   function aplicarEscala(id: string) {
     const escala = ESCALAS.find((e) => e.id === id);
     if (!escala) return;
-    if (niveis.length && !window.confirm(`Substituir os níveis atuais pela escala ${escala.nome}?`)) return;
-    setNiveis(escala.niveis.map((n) => ({ id: novoId(), ...n })));
+    if (niveis.length) setEscalaPendente(escala);
+    else substituirPor(escala);
   }
 
   return (
-    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-2xl flex-col gap-6">
+    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-2xl flex-col gap-8">
       {habilidade && <input type="hidden" name="id" value={habilidade.id} />}
       <input type="hidden" name="niveis" value={JSON.stringify(niveis)} />
 
@@ -106,12 +124,12 @@ export function SkillForm({
       </div>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-2 text-sm font-medium">Meta de tempo</legend>
+        <legend className="mb-3 type-title-small text-on-surface">Meta de tempo</legend>
         <div className="grid gap-2 sm:grid-cols-3">
           {TIPOS_META_TEMPO.map((t) => (
             <label
               key={t.valor}
-              className="cursor-pointer rounded-lg border p-3 has-checked:border-primary has-checked:bg-primary/5 has-focus-visible:ring-2 has-focus-visible:ring-ring"
+              className="opcao p-4"
             >
               <input
                 type="radio"
@@ -121,25 +139,25 @@ export function SkillForm({
                 onChange={() => setTipo(t.valor)}
                 className="sr-only"
               />
-              <span className="block text-sm font-medium">{t.nome}</span>
-              <span className="block text-xs text-muted-foreground">{t.descricao}</span>
+              <span className="block type-body-medium font-medium">{t.nome}</span>
+              <span className="block type-body-small text-on-surface-variant">{t.descricao}</span>
             </label>
           ))}
         </div>
       </fieldset>
 
       {tipo === "niveis" && (
-        <section className="flex flex-col gap-3 rounded-xl border p-4">
+        <section className="flex flex-col gap-4 rounded-lg bg-surface-container-low p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div>
-              <h2 className="text-sm font-medium">Níveis</h2>
-              <p className="text-xs text-muted-foreground">
+              <h2 className="type-body-medium font-medium">Níveis</h2>
+              <p className="type-body-small text-on-surface-variant">
                 Horas efetivas acumuladas para chegar a cada nível, do menor para o maior.
               </p>
             </div>
             <div className="flex flex-wrap gap-1">
               {ESCALAS.map((e) => (
-                <Button key={e.id} type="button" variant="outline" size="xs" onClick={() => aplicarEscala(e.id)}>
+                <Button key={e.id} type="button" variant="outline" size="sm" onClick={() => aplicarEscala(e.id)}>
                   Escala {e.nome}
                 </Button>
               ))}
@@ -147,16 +165,16 @@ export function SkillForm({
           </div>
 
           {niveis.length === 0 && (
-            <p className="text-sm text-muted-foreground">
+            <p className="type-body-medium text-on-surface-variant">
               Nenhum nível. Use uma escala pronta ou adicione manualmente.
             </p>
           )}
 
           <ol className="flex flex-col gap-3">
             {niveis.map((n, i) => (
-              <li key={n.id} className="flex flex-col gap-1.5 rounded-lg bg-muted/40 p-2">
+              <li key={n.id} className="flex flex-col gap-2 rounded-md bg-surface-container p-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 shrink-0 text-center text-xs text-muted-foreground">{i + 1}</span>
+                  <span className="w-5 shrink-0 text-center type-body-small text-on-surface-variant">{i + 1}</span>
                   <Input
                     aria-label={`Nome do nível ${i + 1}`}
                     placeholder="Nome (ex.: B1)"
@@ -177,7 +195,7 @@ export function SkillForm({
                       className="pr-7"
                       required
                     />
-                    <span className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 text-xs text-muted-foreground">
+                    <span className="pointer-events-none absolute top-1/2 right-2.5 -translate-y-1/2 type-body-small text-on-surface-variant">
                       h
                     </span>
                   </div>
@@ -188,7 +206,7 @@ export function SkillForm({
                     placeholder="Fonte de referência (opcional)"
                     value={n.fonte}
                     onChange={(e) => alterar(i, "fonte", e.target.value)}
-                    className="h-7 min-w-0 flex-1 text-xs"
+                    className="h-7 min-w-0 flex-1 type-body-small"
                   />
                   <div className="flex shrink-0">
                     <Button
@@ -240,10 +258,10 @@ export function SkillForm({
       )}
 
       {tipo === "periodica" && (
-        <section className="flex flex-col gap-3 rounded-xl border p-4">
+        <section className="flex flex-col gap-4 rounded-lg bg-surface-container-low p-5">
           <div>
-            <h2 className="text-sm font-medium">Meta periódica</h2>
-            <p className="text-xs text-muted-foreground">
+            <h2 className="type-body-medium font-medium">Meta periódica</h2>
+            <p className="type-body-small text-on-surface-variant">
               Horas efetivas por período. Preencha um ou os dois; deixe vazio para não ter meta naquele período.
             </p>
           </div>
@@ -289,7 +307,7 @@ export function SkillForm({
             defaultValue={habilidade?.horas_iniciais || ""}
             placeholder="0"
           />
-          <p className="text-xs text-muted-foreground">
+          <p className="type-body-small text-on-surface-variant">
             Ponto de partida: horas que você já praticou antes de começar a registrar aqui.
           </p>
         </div>
@@ -311,51 +329,49 @@ export function SkillForm({
         </div>
       </section>
 
-      <label className="flex items-start gap-3 text-sm">
-        <input
-          type="checkbox"
+      <div className="flex flex-col gap-2">
+        <CampoSwitch
           name="destaque_dashboard"
+          titulo="Destacar no início"
+          descricao="Mostra as horas da semana desta habilidade no dashboard (ex.: Padel)."
           defaultChecked={habilidade?.destaque_dashboard ?? false}
-          className="mt-0.5 size-4 accent-primary"
         />
-        <span>
-          Destacar no dashboard
-          <span className="block text-xs text-muted-foreground">
-            Mostra as horas da semana desta habilidade no dashboard (ex.: Padel).
-          </span>
-        </span>
-      </label>
-
-      <label className="flex items-start gap-3 text-sm">
-        <input
-          type="checkbox"
+        <CampoSwitch
           name="permite_pratica_passiva"
+          titulo="Permite prática passiva"
+          descricao="Mostra a opção ativa/passiva ao registrar (ex.: ouvir podcast). Sessões passivas contam com o fator de Configurações."
           defaultChecked={habilidade?.permite_pratica_passiva ?? false}
-          className="mt-0.5 size-4 accent-primary"
         />
-        <span>
-          Permite prática passiva
-          <span className="block text-xs text-muted-foreground">
-            Mostra a opção ativa/passiva ao registrar (ex.: ouvir podcast em idiomas). Sessões
-            passivas contam com o fator definido em Configurações.
-          </span>
-        </span>
-      </label>
+      </div>
 
       {estado?.erro && (
-        <p role="alert" className="text-sm text-destructive">
-          {estado.erro}
-        </p>
+        <ErroFormulario>{estado.erro}</ErroFormulario>
       )}
 
       <div className="flex gap-2">
         <Button type="submit" disabled={pendente}>
           {pendente ? "Salvando…" : habilidade ? "Salvar" : "Criar habilidade"}
         </Button>
-        <Link href={cancelarHref} className={buttonVariants({ variant: "ghost" })}>
+        <Link href={cancelarHref} className={buttonVariants({ variant: "text" })}>
           Cancelar
         </Link>
       </div>
+      <AlertDialog open={escalaPendente !== null} onOpenChange={(aberto) => !aberto && setEscalaPendente(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Substituir os níveis?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Os níveis atuais serão trocados pela escala {escalaPendente?.nome}. Nada é salvo até você clicar em Salvar.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <Button variant="text" onClick={() => escalaPendente && substituirPor(escalaPendente)}>
+              Substituir
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </form>
   );
 }

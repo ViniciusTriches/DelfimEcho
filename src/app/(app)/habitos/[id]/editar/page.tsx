@@ -28,9 +28,9 @@ export default async function EditarHabitoPage({ params }: PageProps<"/habitos/[
       <PageHeader titulo="Editar hábito" voltar={{ href: "/habitos/gerenciar", nome: "Gerenciar hábitos" }} />
       <HabitoForm habito={habito} areas={areas ?? []} hoje={hojeSP()} />
 
-      <section className="mt-12 max-w-xl rounded-xl border border-destructive/30 p-4">
-        <h2 className="font-medium">Excluir hábito</h2>
-        <p className="mt-1 mb-3 text-sm text-muted-foreground">
+      <section className="mt-16 max-w-xl rounded-lg border border-outline-variant p-5">
+        <h2 className="type-title-medium text-error">Excluir hábito</h2>
+        <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">
           Apaga o hábito e {registros ?? 0} dia(s) marcados. Para só parar de acompanhar, use &quot;Pausar&quot; em
           Gerenciar hábitos.
         </p>
@@ -38,7 +38,6 @@ export default async function EditarHabitoPage({ params }: PageProps<"/habitos/[
           acao={excluirHabito.bind(null, id)}
           confirmar={`Excluir "${habito.nome}" e ${registros ?? 0} dia(s) marcados? Não dá para desfazer.`}
           variant="destructive"
-          className="min-h-11 sm:min-h-8"
         >
           <Trash2Icon />
           Excluir hábito

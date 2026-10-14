@@ -2,6 +2,9 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
+import { CampoSwitch } from "@/components/campo-switch";
+import { ErroFormulario } from "@/components/erro-formulario";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,7 +26,7 @@ export function MetricaForm({ metrica, areas, areaInicial, voltar }: Props) {
   const [estado, acao, pendente] = useActionState(salvarMetrica, null);
 
   return (
-    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-xl flex-col gap-6">
+    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-xl flex-col gap-8">
       {metrica && <input type="hidden" name="id" value={metrica.id} />}
       <input type="hidden" name="voltar" value={metrica ? `/metricas/${metrica.id}` : ""} />
 
@@ -76,15 +79,15 @@ export function MetricaForm({ metrica, areas, areaInicial, voltar }: Props) {
       </div>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="mb-2 text-sm font-medium">O que é melhor?</legend>
+        <legend className="mb-3 type-title-small text-on-surface">O que é melhor?</legend>
         <div className="grid grid-cols-2 gap-2">
           {[
-            { valor: "maior_melhor", nome: "Subir", descricao: "ex.: faturamento" },
-            { valor: "menor_melhor", nome: "Descer", descricao: "ex.: peso, % de gordura" },
+            { valor: "maior_melhor", nome: "Subir", descricao: "ex.: faturamento", Icone: TrendingUpIcon },
+            { valor: "menor_melhor", nome: "Descer", descricao: "ex.: peso, % de gordura", Icone: TrendingDownIcon },
           ].map((d) => (
             <label
               key={d.valor}
-              className="flex min-h-11 cursor-pointer flex-col justify-center rounded-lg border px-3 py-2 transition-colors duration-150 has-checked:border-primary has-checked:bg-primary/5 has-focus-visible:ring-3 has-focus-visible:ring-ring/50"
+              className="opcao flex min-h-16 items-center gap-3 p-4"
             >
               <input
                 type="radio"
@@ -93,8 +96,11 @@ export function MetricaForm({ metrica, areas, areaInicial, voltar }: Props) {
                 defaultChecked={(metrica?.direcao ?? "maior_melhor") === d.valor}
                 className="sr-only"
               />
-              <span className="text-sm font-medium">{d.nome}</span>
-              <span className="text-xs text-muted-foreground">{d.descricao}</span>
+              <d.Icone className="size-5 shrink-0" aria-hidden />
+              <span className="flex flex-col">
+                <span className="type-title-small">{d.nome}</span>
+                <span className="type-body-small opacity-80">{d.descricao}</span>
+              </span>
             </label>
           ))}
         </div>
@@ -102,7 +108,7 @@ export function MetricaForm({ metrica, areas, areaInicial, voltar }: Props) {
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="meta_valor">
-          Meta <span className="font-normal text-muted-foreground">(opcional)</span>
+          Meta <span className="text-on-surface-variant">(opcional)</span>
         </Label>
         <Input
           id="meta_valor"
@@ -111,37 +117,27 @@ export function MetricaForm({ metrica, areas, areaInicial, voltar }: Props) {
           inputMode="decimal"
           step="any"
           defaultValue={metrica?.meta_valor ?? ""}
-          className="w-44"
+          className="numero w-44"
         />
-        <p className="text-xs text-muted-foreground">Aparece como linha de referência no gráfico.</p>
+        <p className="type-body-small text-on-surface-variant">Aparece como linha de referência no gráfico.</p>
       </div>
 
-      <label className="flex min-h-11 cursor-pointer items-start gap-3 text-sm">
-        <input
-          type="checkbox"
-          name="no_dashboard"
-          defaultChecked={metrica?.no_dashboard ?? false}
-          className="mt-0.5 size-4 accent-primary"
-        />
-        <span>
-          Mostrar no início
-          <span className="block text-xs text-muted-foreground">
-            Atalho de registro rápido no dashboard (ex.: peso).
-          </span>
-        </span>
-      </label>
+      <CampoSwitch
+        name="no_dashboard"
+        titulo="Mostrar no início"
+        descricao="Atalho de registro rápido no início (ex.: peso)."
+        defaultChecked={metrica?.no_dashboard ?? false}
+      />
 
       {estado?.erro && (
-        <p role="alert" className="text-sm text-destructive">
-          {estado.erro}
-        </p>
+        <ErroFormulario>{estado.erro}</ErroFormulario>
       )}
 
       <div className="flex gap-2">
-        <Button type="submit" disabled={pendente} className="min-h-11 sm:min-h-8">
+        <Button type="submit" disabled={pendente}>
           {pendente ? "Salvando…" : metrica ? "Salvar" : "Criar métrica"}
         </Button>
-        <Link href={voltar} className={buttonVariants({ variant: "ghost", className: "min-h-11 sm:min-h-8" })}>
+        <Link href={voltar} className={buttonVariants({ variant: "text" })}>
           Cancelar
         </Link>
       </div>

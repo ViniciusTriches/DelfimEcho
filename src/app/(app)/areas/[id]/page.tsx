@@ -99,30 +99,30 @@ export default async function AreaPage({ params }: PageProps<"/areas/[id]">) {
       />
 
       <section>
-        <div className="mb-3 flex items-center justify-between gap-2">
-          <h2 className="text-lg font-semibold">Habilidades</h2>
-          <Link href={`/habilidades/nova?area=${id}`} className={buttonVariants({ size: "sm" })}>
+        <div className="mb-4 flex items-center justify-between gap-2">
+          <h2 className="type-title-large text-on-surface">Habilidades</h2>
+          <Link href={`/habilidades/nova?area=${id}`} className={buttonVariants({ variant: "secondary", size: "sm" })}>
             <PlusIcon />
             Nova habilidade
           </Link>
         </div>
 
         {ativas.length === 0 && (
-          <p className="text-sm text-muted-foreground">Nenhuma habilidade nesta área.</p>
+          <p className="rounded-lg bg-surface-container-low p-6 type-body-large text-on-surface-variant">Nenhuma habilidade nesta área ainda.</p>
         )}
 
         <ul className="flex flex-col gap-2">
           {ativas.map((skill, i) => (
             <li
               key={skill.id}
-              className="flex items-center gap-2 rounded-xl border bg-card p-2 pl-4 transition-colors hover:bg-muted/50"
+              className="camada-estado flex items-center gap-2 rounded-lg bg-surface-container-low py-2 pr-2 pl-4"
             >
-              <Link href={`/habilidades/${skill.id}`} className="min-w-0 flex-1 py-1">
+              <Link href={`/habilidades/${skill.id}`} className="flex min-h-14 min-w-0 flex-1 flex-col justify-center py-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-medium">{skill.nome}</span>
-                  {skill.destaque_dashboard && <Badge variant="secondary">No dashboard</Badge>}
+                  <span className="type-title-medium text-on-surface">{skill.nome}</span>
+                  {skill.destaque_dashboard && <Badge variant="secondary">No início</Badge>}
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <p className="type-body-medium text-on-surface-variant">
                   {resumo(skill)}
                   {skill.horas_iniciais > 0 && ` · ${formatarHoras(skill.horas_iniciais)} antes do Echo`}
                   {skill.nivel_atual_autoavaliado && ` · autoavaliação ${skill.nivel_atual_autoavaliado}/10`}
@@ -153,14 +153,14 @@ export default async function AreaPage({ params }: PageProps<"/areas/[id]">) {
         </ul>
 
         {arquivadas.length > 0 && (
-          <details className="mt-6">
-            <summary className="cursor-pointer text-sm text-muted-foreground">
+          <details className="group mt-6">
+            <summary className="camada-estado flex min-h-11 w-fit cursor-pointer list-none items-center gap-2 rounded-full px-3 type-label-large text-on-surface-variant [&::-webkit-details-marker]:hidden"><ChevronDownIcon className="size-4 transition-transform group-open:rotate-180" aria-hidden />
               Habilidades arquivadas ({arquivadas.length})
             </summary>
             <ul className="mt-3 flex flex-col gap-2">
               {arquivadas.map((skill) => (
-                <li key={skill.id} className="flex items-center gap-3 rounded-xl border p-2 pl-4 opacity-70">
-                  <Link href={`/habilidades/${skill.id}`} className="min-w-0 flex-1 truncate">
+                <li key={skill.id} className="flex items-center gap-4 rounded-lg border border-outline-variant py-2 pr-2 pl-4 text-on-surface-variant">
+                  <Link href={`/habilidades/${skill.id}`} className="min-w-0 flex-1 truncate type-body-large">
                     {skill.nome}
                   </Link>
                   <ConfirmButton

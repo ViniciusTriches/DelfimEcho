@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CalendarDaysIcon, CalendarRangeIcon, ChevronRightIcon } from "lucide-react";
+import { Abas } from "@/components/abas";
 import { PageHeader } from "@/components/page-header";
 import { buttonVariants } from "@/components/ui/button";
 import { formatarDiaMes, formatarMesAno } from "@/lib/datas";
 import { createClient } from "@/lib/supabase/server";
-import { cn } from "@/lib/utils";
+
 
 export const metadata: Metadata = { title: "Revisões" };
 
@@ -36,7 +37,7 @@ export default async function RevisoesPage({ searchParams }: PageProps<"/revisoe
               <CalendarRangeIcon />
               Revisar semana
             </Link>
-            <Link href="/revisoes/mensal" className={buttonVariants({ variant: "outline" })}>
+            <Link href="/revisoes/mensal" className={buttonVariants({ variant: "secondary" })}>
               <CalendarDaysIcon />
               Revisar mês
             </Link>
@@ -44,27 +45,17 @@ export default async function RevisoesPage({ searchParams }: PageProps<"/revisoe
         }
       />
 
-      <nav aria-label="Tipo" className="mb-5 flex gap-1 border-b">
-        {FILTROS.map((f) => (
-          <Link
-            key={f.nome}
-            href={f.valor ? `/revisoes?tipo=${f.valor}` : "/revisoes"}
-            scroll={false}
-            aria-current={tipo === f.valor ? "page" : undefined}
-            className={cn(
-              "-mb-px inline-flex min-h-11 cursor-pointer items-center border-b-2 px-3 text-sm transition-colors duration-150",
-              tipo === f.valor
-                ? "border-primary font-medium text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {f.nome}
-          </Link>
-        ))}
-      </nav>
+      <Abas
+        rotulo="Tipo"
+        abas={FILTROS.map((f) => ({
+          href: f.valor ? `/revisoes?tipo=${f.valor}` : "/revisoes",
+          nome: f.nome,
+          ativa: tipo === f.valor,
+        }))}
+      />
 
       {!revisoes?.length ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="max-w-3xl rounded-lg bg-surface-container-low p-6 type-body-large text-on-surface-variant">
           Nenhuma revisão ainda. A primeira leva poucos minutos: o resumo da semana já vem pronto.
         </p>
       ) : (
@@ -78,32 +69,32 @@ export default async function RevisoesPage({ searchParams }: PageProps<"/revisoe
               <li key={r.id}>
                 <Link
                   href={href}
-                  className="flex cursor-pointer items-center gap-3 rounded-xl border bg-card p-4 transition-colors duration-150 hover:bg-muted/50"
+                  className="camada-estado flex min-h-18 items-center gap-4 rounded-lg bg-surface-container-low px-4 py-3"
                 >
                   {semanal ? (
-                    <CalendarRangeIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container"><CalendarRangeIcon className="size-5" aria-hidden /></span>
                   ) : (
-                    <CalendarDaysIcon className="size-5 shrink-0 text-muted-foreground" aria-hidden />
+                    <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-tertiary-container text-on-tertiary-container"><CalendarDaysIcon className="size-5" aria-hidden /></span>
                   )}
                   <div className="min-w-0 flex-1">
-                    <p className="font-medium first-letter:uppercase">
+                    <p className="type-title-medium text-on-surface first-letter:uppercase">
                       {semanal
                         ? `Semana de ${formatarDiaMes(r.periodo_inicio)} a ${formatarDiaMes(r.periodo_fim)}`
                         : formatarMesAno(r.periodo_inicio)}
                     </p>
                     {r.prioridades_proximo_periodo && (
-                      <p className="truncate text-sm text-muted-foreground">
+                      <p className="truncate type-body-medium text-on-surface-variant">
                         Prioridades: {r.prioridades_proximo_periodo}
                       </p>
                     )}
                   </div>
                   {r.nota_geral && (
-                    <span className="shrink-0 text-sm tabular-nums" aria-label={`Nota ${r.nota_geral} de 5`}>
-                      <strong>{r.nota_geral}</strong>
-                      <span className="text-muted-foreground">/5</span>
+                    <span className="numero shrink-0 type-title-medium text-on-surface" aria-label={`Nota ${r.nota_geral} de 5`}>
+                      {r.nota_geral}
+                      <span className="text-on-surface-variant">/5</span>
                     </span>
                   )}
-                  <ChevronRightIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+                  <ChevronRightIcon className="size-4 shrink-0 text-on-surface-variant" aria-hidden />
                 </Link>
               </li>
             );

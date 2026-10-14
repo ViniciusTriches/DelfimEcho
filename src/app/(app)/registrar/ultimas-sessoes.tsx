@@ -23,20 +23,20 @@ export async function UltimasSessoes() {
 
   return (
     <section className="mt-12 max-w-xl">
-      <h2 className="mb-3 text-sm font-medium text-muted-foreground">Últimas sessões</h2>
-      <ul className="flex flex-col divide-y rounded-xl border">
+      <h2 className="mb-4 type-title-large text-on-surface">Últimas sessões</h2>
+      <ul className="flex flex-col divide-y divide-outline-variant overflow-hidden rounded-lg bg-surface-container-low">
         {sessoes.map((s) => (
-          <li key={s.id} className="flex items-center gap-3 p-3 text-sm">
+          <li key={s.id} className="flex items-center gap-3 py-3 pr-2 pl-4 type-body-medium">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-x-2">
-                <span className="font-medium">{nomes.get(s.skill_id!) ?? "—"}</span>
+                <span className="type-title-small text-on-surface">{nomes.get(s.skill_id!) ?? "—"}</span>
                 {s.tipo_pratica === "passiva" && <Badge variant="secondary">passiva</Badge>}
               </div>
-              <p className="text-muted-foreground">
+              <p className="text-on-surface-variant">
                 {formatarDataHora(s.inicio!)} · {formatarDuracao(s.duracao_minutos!)} · nota {s.nota_qualidade} ·{" "}
-                {formatarHoras(Number(s.horas_efetivas))} efetivas
+                <span className="text-on-surface">{formatarHoras(Number(s.horas_efetivas))}</span> efetivas
               </p>
-              {s.foco_especifico && <p className="truncate text-muted-foreground">{s.foco_especifico}</p>}
+              {s.foco_especifico && <p className="truncate text-on-surface-variant">{s.foco_especifico}</p>}
             </div>
             <ConfirmButton
               acao={excluirSessao.bind(null, s.id!)}

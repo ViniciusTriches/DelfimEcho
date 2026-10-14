@@ -2,13 +2,15 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CheckIcon, PencilIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
+import { CheckIcon, PencilIcon, PlusCircleIcon, Trash2Icon, RefreshCwIcon } from "lucide-react";
 import { ConfirmButton } from "@/components/confirm-button";
 import { Bloco } from "@/components/esqueleto";
 import { GraficoHoras, GraficoLinha } from "@/components/graficos";
 import { PageHeader } from "@/components/page-header";
+import { Horas } from "@/components/horas";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { Progresso } from "@/components/ui/progresso";
 import {
   diasEntre,
   formatarDia,
@@ -124,17 +126,17 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
       />
 
       {/* Números principais */}
-      <div className="mb-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <Numero rotulo="Horas efetivas no total" valor={formatarHoras(totalEfetivas)} detalhe={`${formatarHoras(totalBrutas)} brutas`} />
+      <div className="mb-12 grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <Numero rotulo="Horas efetivas no total" valor={<Horas valor={totalEfetivas} grande />} detalhe={`${formatarHoras(totalBrutas)} brutas`} />
         <Numero
           rotulo="Últimas 4 semanas"
-          valor={formatarHoras(ultimos28.efetivas)}
+          valor={<Horas valor={ultimos28.efetivas} grande />}
           detalhe={`${formatarHoras(ultimos28.brutas)} brutas · ${NUM.format(ritmo)} h/semana`}
         />
-        <Numero rotulo="Sessões" valor={String(sessoes.length)} detalhe={iniciais > 0 ? `+ ${formatarHoras(iniciais)} antes do Echo` : undefined} />
+        <Numero rotulo="Sessões" valor={<span className="numero-grande">{sessoes.length}</span>} detalhe={iniciais > 0 ? `+ ${formatarHoras(iniciais)} antes do Echo` : undefined} />
         <Numero
           rotulo="Nota média"
-          valor={media ? NUM.format(media) : "—"}
+          valor={<span className="numero-grande">{media ? NUM.format(media) : "—"}</span>}
           detalhe={habilidade.nivel_atual_autoavaliado ? `autoavaliação ${habilidade.nivel_atual_autoavaliado}/10` : undefined}
         />
       </div>
@@ -176,7 +178,7 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
             ) : null}
           </div>
           {!metaSemana && !metaMes && (
-            <p className="text-sm text-muted-foreground">
+            <p className="type-body-medium text-on-surface-variant">
               Meta não definida. <Link href={`/habilidades/${id}/editar`} className="underline">Definir meta</Link>
             </p>
           )}
@@ -184,7 +186,7 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
       )}
 
       {/* Gráficos */}
-      <Secao titulo="Horas por semana" descricao={`Últimas ${SEMANAS_GRAFICO} semanas (segunda a domingo)`}>
+      <Secao titulo="Horas por semana" descricao={`Últimas ${SEMANAS_GRAFICO} semanas (segunda a domingo)`} cartao>
         <GraficoHoras
           dados={semanas.map((s) => ({
             rotulo: s.rotulo,
@@ -197,7 +199,7 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
       </Secao>
 
       {metaMes ? (
-        <Secao titulo="Horas por mês" descricao="Últimos 6 meses">
+        <Secao titulo="Horas por mês" descricao="Últimos 6 meses" cartao>
           <GraficoHoras
             dados={seriesMensais(sessoes, hoje, 6).map((m) => ({
               rotulo: m.rotulo,
@@ -213,6 +215,7 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
       <Secao
         titulo="Qualidade média por semana"
         descricao="Nota de 1 a 5, ponderada pela duração das sessões"
+        cartao
       >
         {semanas.some((s) => s.notaMedia !== null) ? (
           <GraficoLinha
@@ -221,38 +224,41 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
             nome="Nota média"
           />
         ) : (
-          <p className="text-sm text-muted-foreground">Sem sessões nas últimas {SEMANAS_GRAFICO} semanas.</p>
+          <p className="type-body-medium text-on-surface-variant">Sem sessões nas últimas {SEMANAS_GRAFICO} semanas.</p>
         )}
       </Secao>
 
       {/* Autoavaliação */}
       <Secao titulo="Autoavaliação" descricao="Como você avalia seu nível de 1 a 10, ao longo do tempo">
         {reavaliar && !habilidade.arquivada && (
-          <p className="mb-4 rounded-lg border border-primary/30 bg-primary/5 p-3 text-sm">
+          <p className="mb-5 flex items-start gap-3 rounded-lg bg-secondary-container px-4 py-3 type-body-medium text-on-secondary-container">
+            <RefreshCwIcon className="mt-0.5 size-4 shrink-0" aria-hidden />
             {ultimaAvaliacao
               ? `Sua última autoavaliação foi há ${diasEntre(ultimaAvaliacao.data, hoje)} dias. Hora de se reavaliar.`
               : "Você ainda não se autoavaliou nesta habilidade. Que tal registrar o ponto de partida?"}
           </p>
         )}
-        <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
+        <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
           <div>
             {avaliacoes && avaliacoes.length >= 2 && (
-              <GraficoLinha
-                dados={avaliacoes.map((a) => ({ rotulo: formatarDiaMes(a.data), titulo: formatarDia(a.data), valor: a.nivel }))}
-                dominio={[1, 10]}
-                nome="Nível"
-              />
+              <div className="rounded-lg bg-surface-container-low p-5">
+                <GraficoLinha
+                  dados={avaliacoes.map((a) => ({ rotulo: formatarDiaMes(a.data), titulo: formatarDia(a.data), valor: a.nivel }))}
+                  dominio={[1, 10]}
+                  nome="Nível"
+                />
+              </div>
             )}
             {avaliacoes?.length ? (
-              <ul className="mt-3 flex flex-col divide-y rounded-xl border text-sm">
+              <ul className="mt-3 flex flex-col divide-y divide-outline-variant overflow-hidden rounded-lg bg-surface-container-low type-body-medium">
                 {[...avaliacoes].reverse().map((a) => (
-                  <li key={a.id} className="flex items-center gap-3 p-3">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted font-semibold">
+                  <li key={a.id} className="flex items-center gap-4 py-3 pr-2 pl-4">
+                    <span className="numero flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary-container type-title-medium text-on-secondary-container">
                       {a.nivel}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-muted-foreground">{formatarDia(a.data)}</p>
-                      {a.observacao && <p>{a.observacao}</p>}
+                      <p className="type-label-medium text-on-surface-variant">{formatarDia(a.data)}</p>
+                      {a.observacao && <p className="text-on-surface">{a.observacao}</p>}
                     </div>
                     <ConfirmButton
                       acao={excluirAvaliacao.bind(null, a.id, id)}
@@ -267,11 +273,14 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
                 ))}
               </ul>
             ) : (
-              <p className="text-sm text-muted-foreground">Nenhuma autoavaliação ainda.</p>
+              <p className="rounded-lg border border-dashed border-outline-variant px-4 py-5 type-body-medium text-on-surface-variant">Nenhuma autoavaliação ainda.</p>
             )}
           </div>
           {!habilidade.arquivada && (
-            <AvaliacaoForm skillId={id} hoje={hoje} nivelAtual={habilidade.nivel_atual_autoavaliado} />
+            <div className="rounded-lg bg-surface-container-low p-5 lg:self-start">
+              <h3 className="mb-4 type-title-medium text-on-surface">Nova autoavaliação</h3>
+              <AvaliacaoForm skillId={id} hoje={hoje} nivelAtual={habilidade.nivel_atual_autoavaliado} />
+            </div>
           )}
         </div>
       </Secao>
@@ -286,33 +295,32 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
   );
 }
 
-function Secao({ titulo, descricao, children }: { titulo: string; descricao?: string; children: React.ReactNode }) {
+function Secao({
+  titulo,
+  descricao,
+  cartao = false,
+  children,
+}: {
+  titulo: string;
+  descricao?: string;
+  cartao?: boolean;
+  children: React.ReactNode;
+}) {
   return (
-    <section className="mb-10">
-      <h2 className="text-lg font-semibold">{titulo}</h2>
-      {descricao && <p className="text-sm text-muted-foreground">{descricao}</p>}
-      <div className="mt-3">{children}</div>
+    <section className="mb-12">
+      <h2 className="type-title-large text-on-surface">{titulo}</h2>
+      {descricao && <p className="mt-0.5 type-body-medium text-on-surface-variant">{descricao}</p>}
+      <div className={cn("mt-4", cartao && "rounded-lg bg-surface-container-low p-5")}>{children}</div>
     </section>
   );
 }
 
-function Numero({ rotulo, valor, detalhe }: { rotulo: string; valor: string; detalhe?: string }) {
+function Numero({ rotulo, valor, detalhe }: { rotulo: string; valor: React.ReactNode; detalhe?: string }) {
   return (
-    <div className="rounded-xl border bg-card p-3">
-      <p className="text-xs text-muted-foreground">{rotulo}</p>
-      <p className="mt-1 text-2xl font-semibold">{valor}</p>
-      {detalhe && <p className="mt-0.5 text-xs text-muted-foreground">{detalhe}</p>}
-    </div>
-  );
-}
-
-function Barra({ fracao, className }: { fracao: number; className?: string }) {
-  return (
-    <div className={cn("h-2.5 overflow-hidden rounded-full bg-[var(--viz-bruta)]/35", className)}>
-      <div
-        className="h-full rounded-full bg-[var(--viz-efetiva)]"
-        style={{ width: `${Math.min(100, Math.max(0, fracao * 100))}%` }}
-      />
+    <div className="flex flex-col gap-1 rounded-lg bg-surface-container-low p-4">
+      <p className="type-label-medium text-on-surface-variant">{rotulo}</p>
+      <p className="type-headline-small text-on-surface">{valor}</p>
+      {detalhe && <p className="type-body-small text-on-surface-variant">{detalhe}</p>}
     </div>
   );
 }
@@ -334,8 +342,11 @@ function ProgressoNiveis({
 }) {
   if (!niveis.length) {
     return (
-      <p className="text-sm text-muted-foreground">
-        Níveis não definidos. <Link href={editarHref} className="underline">Definir níveis</Link>
+      <p className="type-body-medium text-on-surface-variant">
+        Níveis não definidos.{" "}
+        <Link href={editarHref} className="text-primary underline">
+          Definir níveis
+        </Link>
       </p>
     );
   }
@@ -344,69 +355,81 @@ function ProgressoNiveis({
   const prev = p.proximo ? estimativa(p.faltam, ritmo, hoje) : null;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
       {p.proximo ? (
-        <div className="rounded-xl border p-4">
-          <div className="mb-2 flex flex-wrap items-baseline justify-between gap-2">
-            <p className="text-sm">
-              {p.atual ? (
-                <>
-                  Nível atual: <strong>{p.atual.nome}</strong> · próximo:{" "}
-                </>
-              ) : (
-                "Rumo a "
-              )}
-              <strong>{p.proximo.nome}</strong>
+        <div className="flex flex-col gap-4 rounded-lg bg-surface-container-low p-5">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <p className="type-title-medium text-on-surface">
+              {p.atual ? `${p.atual.nome} → ` : "Rumo a "}
+              {p.proximo.nome}
             </p>
-            <p className="text-sm tabular-nums">
-              <strong>{formatarHoras(total)}</strong>
-              <span className="text-muted-foreground"> de {formatarHoras(p.proximo.horas)} efetivas</span>
+            <p className="type-body-medium text-on-surface-variant">
+              <span className="type-title-medium text-on-surface">
+                <Horas valor={total} />
+              </span>{" "}
+              de <Horas valor={p.proximo.horas} /> efetivas
             </p>
           </div>
-          <Barra fracao={p.fracao} />
-          <p className="mt-2 text-xs text-muted-foreground">
+          <Progresso
+            fracao={p.fracao}
+            rotulo={`${formatarHoras(total)} de ${formatarHoras(p.proximo.horas)} até ${p.proximo.nome}`}
+          />
+          <p className="type-body-small text-on-surface-variant">
             {formatarHoras(totalBrutas)} brutas · faltam {formatarHoras(p.faltam)} efetivas
           </p>
-          <p className="mt-3 text-sm">
+          <p className="type-body-medium text-on-surface">
             {prev ? (
               <>
-                No ritmo das últimas 4 semanas ({NUM.format(ritmo)} h efetivas/semana), você chega a{" "}
-                <strong>{p.proximo.nome}</strong> por volta de <strong>{formatarMesAno(prev.data)}</strong>{" "}
-                <span className="text-muted-foreground">
+                No ritmo das últimas 4 semanas ({NUM.format(ritmo)} h efetivas/semana), você chega a {p.proximo.nome}{" "}
+                por volta de <strong className="font-medium">{formatarMesAno(prev.data)}</strong>{" "}
+                <span className="text-on-surface-variant">
                   (~{prev.semanas < 1 ? "menos de 1 semana" : `${Math.ceil(prev.semanas)} semanas`})
                 </span>
                 .
               </>
             ) : (
-              <span className="text-muted-foreground">
+              <span className="text-on-surface-variant">
                 Sem prática nas últimas 4 semanas, então não dá para estimar a chegada.
               </span>
             )}
           </p>
         </div>
       ) : (
-        <p className="rounded-xl border p-4 text-sm">
-          Você passou do último nível (<strong>{p.atual?.nome}</strong>) com {formatarHoras(total)} efetivas.
+        <p className="rounded-lg bg-surface-container-low p-5 type-body-large text-on-surface">
+          Você passou do último nível ({p.atual?.nome}) com <Horas valor={total} /> efetivas.
         </p>
       )}
 
-      <ol className="flex flex-col gap-1.5">
+      <ol className="flex flex-col overflow-hidden rounded-lg bg-surface-container-low py-2">
         {p.niveis.map((n) => {
           const atingido = total >= n.horas;
           const eProximo = p.proximo?.nome === n.nome;
           return (
-            <li key={n.nome} className={cn("flex items-center gap-3 text-sm", !atingido && !eProximo && "text-muted-foreground")}>
+            <li
+              key={n.nome}
+              className={cn(
+                "flex min-h-11 items-center gap-3 px-4 type-body-medium",
+                eProximo
+                  ? "bg-secondary-container text-on-secondary-container"
+                  : atingido
+                    ? "text-on-surface"
+                    : "text-on-surface-variant",
+              )}
+            >
               <span
                 className={cn(
-                  "flex size-5 shrink-0 items-center justify-center rounded-full border",
-                  atingido && "border-[var(--viz-efetiva)] bg-[var(--viz-efetiva)] text-white",
-                  eProximo && "border-[var(--viz-efetiva)]",
+                  "flex size-6 shrink-0 items-center justify-center rounded-full border-2",
+                  atingido
+                    ? "border-primary bg-primary text-on-primary"
+                    : eProximo
+                      ? "border-on-secondary-container"
+                      : "border-outline",
                 )}
               >
-                {atingido && <CheckIcon className="size-3" aria-label="atingido" />}
+                {atingido && <CheckIcon className="size-3.5" strokeWidth={3} aria-label="atingido" />}
               </span>
               <span className={cn("flex-1", eProximo && "font-medium")}>{n.nome}</span>
-              <span className="tabular-nums">{formatarHoras(n.horas)}</span>
+              <Horas valor={n.horas} />
             </li>
           );
         })}
@@ -431,25 +454,24 @@ function ProgressoPeriodo({
   const batidas = historico.filter((h) => h >= meta).length;
   const atingiu = feito.efetivas >= meta;
   return (
-    <div className="rounded-xl border p-4">
-      <div className="mb-2 flex items-baseline justify-between gap-2">
-        <p className="text-sm font-medium first-letter:uppercase">{titulo}</p>
+    <div className="flex flex-col gap-3 rounded-lg bg-surface-container-low p-5">
+      <div className="flex items-center justify-between gap-2">
+        <p className="type-title-medium text-on-surface first-letter:uppercase">{titulo}</p>
         {atingiu && (
           <Badge variant="secondary" className="gap-1">
-            <CheckIcon className="size-3 text-[var(--viz-bom)]" aria-hidden />
+            <CheckIcon className="size-3.5" aria-hidden />
             Meta batida
           </Badge>
         )}
       </div>
-      <p className="mb-2 text-sm tabular-nums">
-        <strong>{formatarHoras(feito.efetivas)}</strong>
-        <span className="text-muted-foreground">
-          {" "}
-          de {formatarHoras(meta)}/{NOMES_PERIODO[periodo]} · {formatarHoras(feito.brutas)} brutas
-        </span>
+      <p className="type-body-medium text-on-surface-variant">
+        <span className="type-title-large text-on-surface">
+          <Horas valor={feito.efetivas} />
+        </span>{" "}
+        de <Horas valor={meta} />/{NOMES_PERIODO[periodo]} · {formatarHoras(feito.brutas)} brutas
       </p>
-      <Barra fracao={feito.efetivas / meta} />
-      <p className="mt-3 text-xs text-muted-foreground">
+      <Progresso fracao={feito.efetivas / meta} rotulo={`${formatarHoras(feito.efetivas)} de ${formatarHoras(meta)}`} />
+      <p className="type-body-small text-on-surface-variant">
         Meta batida em {batidas} de {historico.length} {periodo === "semana" ? "semanas" : "meses"} anteriores.
       </p>
     </div>

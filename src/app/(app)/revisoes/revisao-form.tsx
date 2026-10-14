@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { CalendarRangeIcon, CheckCircle2Icon } from "lucide-react";
+import { ErroFormulario } from "@/components/erro-formulario";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,7 +36,7 @@ export function RevisaoForm({
 
   return (
     <div className="flex flex-col gap-6">
-      <form onSubmit={enviarSemResetar(acao)} className="flex flex-col gap-5">
+      <form onSubmit={enviarSemResetar(acao)} className="flex flex-col gap-6">
         <input type="hidden" name="tipo" value={tipo} />
         <input type="hidden" name="periodo_inicio" value={periodoInicio} />
 
@@ -49,14 +50,14 @@ export function RevisaoForm({
         />
 
         <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 text-sm font-medium">
+          <legend className="mb-3 type-title-small text-on-surface">
             Nota geral {tipo === "semanal" ? "da semana" : "do mês"}
           </legend>
           <div className="grid grid-cols-5 gap-2">
             {NOTAS.map((n) => (
               <label
                 key={n.valor}
-                className="flex min-h-14 cursor-pointer flex-col items-center justify-center rounded-lg border transition-colors duration-150 has-checked:border-primary has-checked:bg-primary/10 has-focus-visible:ring-3 has-focus-visible:ring-ring/50"
+                className="opcao flex min-h-16 flex-col items-center justify-center gap-0.5"
               >
                 <input
                   type="radio"
@@ -65,42 +66,40 @@ export function RevisaoForm({
                   defaultChecked={revisao?.nota_geral === n.valor}
                   className="sr-only"
                 />
-                <span className="font-semibold">{n.valor}</span>
-                <span className="text-xs text-muted-foreground">{n.nome}</span>
+                <span className="numero type-title-medium">{n.valor}</span>
+                <span className="type-label-small opacity-80">{n.nome}</span>
               </label>
             ))}
           </div>
         </fieldset>
 
         {estado && !estado.ok && (
-          <p role="alert" className="text-sm text-destructive">
-            {estado.mensagem}
-          </p>
+          <ErroFormulario>{estado.mensagem}</ErroFormulario>
         )}
 
-        <Button type="submit" size="lg" disabled={pendente} className="h-11 w-full sm:w-fit">
+        <Button type="submit" size="lg" disabled={pendente} className="w-full sm:w-fit">
           {pendente ? "Salvando…" : revisao ? "Atualizar revisão" : "Salvar revisão"}
         </Button>
       </form>
 
       {estado?.ok && (
-        <div role="status" className="flex flex-col gap-3 rounded-xl border border-primary/30 bg-primary/5 p-4">
-          <p className="flex items-center gap-2 font-medium">
-            <CheckCircle2Icon className="size-5 text-[var(--concluido)]" aria-hidden />
+        <div role="status" className="flex flex-col items-start gap-3 rounded-lg bg-secondary-container p-5 text-on-secondary-container">
+          <p className="flex items-center gap-2 type-title-medium">
+            <CheckCircle2Icon className="size-5" aria-hidden />
             {estado.mensagem}
           </p>
           {planejarHref ? (
             <>
-              <p className="text-sm text-muted-foreground">
+              <p className="type-body-medium">
                 Próximo passo: transformar as prioridades em horas por área.
               </p>
-              <Link href={planejarHref} className={buttonVariants({ size: "lg", className: "h-11 w-full sm:w-fit" })}>
+              <Link href={planejarHref} className={buttonVariants({ size: "lg", className: "w-full sm:w-fit" })}>
                 <CalendarRangeIcon />
                 Planejar próxima semana
               </Link>
             </>
           ) : (
-            <Link href="/revisoes" className="text-sm text-primary underline-offset-4 hover:underline">
+            <Link href="/revisoes" className={buttonVariants({ variant: "text", className: "-ml-3" })}>
               Ver revisões anteriores
             </Link>
           )}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { AreaSkillSelect, type OpcaoArea, type OpcaoSkill } from "@/components/area-skill-select";
+import { ErroFormulario } from "@/components/erro-formulario";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,7 +25,7 @@ export function MarcoForm({ marco, areas, skills, inicial = {}, hoje, voltar }: 
   const [estado, acao, pendente] = useActionState(salvarMarco, null);
 
   return (
-    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-xl flex-col gap-6">
+    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-xl flex-col gap-8">
       {marco && <input type="hidden" name="id" value={marco.id} />}
       <input type="hidden" name="voltar" value={voltar} />
 
@@ -63,7 +64,7 @@ export function MarcoForm({ marco, areas, skills, inicial = {}, hoje, voltar }: 
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="descricao">
-          Descrição <span className="font-normal text-muted-foreground">(opcional)</span>
+          Descrição <span className="text-on-surface-variant">(opcional)</span>
         </Label>
         <Textarea
           id="descricao"
@@ -76,16 +77,14 @@ export function MarcoForm({ marco, areas, skills, inicial = {}, hoje, voltar }: 
       </div>
 
       {estado?.erro && (
-        <p role="alert" className="text-sm text-destructive">
-          {estado.erro}
-        </p>
+        <ErroFormulario>{estado.erro}</ErroFormulario>
       )}
 
       <div className="flex gap-2">
-        <Button type="submit" disabled={pendente} className="min-h-11 sm:min-h-8">
+        <Button type="submit" disabled={pendente}>
           {pendente ? "Salvando…" : marco ? "Salvar" : "Registrar marco"}
         </Button>
-        <Link href={voltar} className={buttonVariants({ variant: "ghost", className: "min-h-11 sm:min-h-8" })}>
+        <Link href={voltar} className={buttonVariants({ variant: "text" })}>
           Cancelar
         </Link>
       </div>

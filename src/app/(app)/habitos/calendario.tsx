@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { formatarDia, formatarMesAno, mesDe, somarDias, somarMeses } from "@/lib/datas";
 import { diaDaSemana, type HabitoRegra, NOMES_DIAS, previsto } from "@/lib/habitos";
+import { buttonVariants } from "@/components/ui/button";
+import { ChipCheck, chipVariants } from "@/components/ui/chip";
 import { cn } from "@/lib/utils";
 
 type Habito = HabitoRegra & { id: string; nome: string };
@@ -30,7 +32,7 @@ function Marcador({ e, unico }: { e: Estado; unico: boolean }) {
         aria-hidden
         className={cn(
           "size-3 rounded-full border-2",
-          e.pendenteHoje ? "border-dashed border-muted-foreground/60" : "border-muted-foreground/45",
+          e.pendenteHoje ? "border-dashed border-outline" : "border-outline",
         )}
       />
     );
@@ -78,44 +80,42 @@ export function CalendarioHabitos({
             href={href({ mes, habito: h.id })}
             scroll={false}
             aria-current={filtro === h.id ? "true" : undefined}
-            className={cn(
-              "inline-flex min-h-9 cursor-pointer items-center rounded-full border px-3 text-sm transition-colors duration-150",
-              filtro === h.id ? "border-primary bg-primary/10 font-medium" : "hover:bg-muted",
-            )}
+            className={chipVariants({ selecionado: filtro === h.id })}
           >
+            <ChipCheck visivel={filtro === h.id} />
             {h.nome}
           </Link>
         ))}
       </div>
 
-      <div className="max-w-md">
+      <div className="max-w-md rounded-lg bg-surface-container-low p-4">
         <div className="mb-2 flex items-center justify-between">
           <Link
             href={href({ mes: somarMeses(mes, -1), habito: filtro })}
             scroll={false}
-            className="flex size-11 items-center justify-center rounded-lg hover:bg-muted"
+            className={buttonVariants({ variant: "ghost", size: "icon" })}
             aria-label="Mês anterior"
           >
             <ChevronLeftIcon className="size-5" />
           </Link>
-          <p className="font-medium first-letter:uppercase">{formatarMesAno(primeiro)}</p>
+          <p className="type-title-medium text-on-surface first-letter:uppercase">{formatarMesAno(primeiro)}</p>
           {proximo <= mesDe(hoje) ? (
             <Link
               href={href({ mes: proximo, habito: filtro })}
               scroll={false}
-              className="flex size-11 items-center justify-center rounded-lg hover:bg-muted"
+              className={buttonVariants({ variant: "ghost", size: "icon" })}
               aria-label="Próximo mês"
             >
               <ChevronRightIcon className="size-5" />
             </Link>
           ) : (
-            <span className="size-11" />
+            <span className="size-10" />
           )}
         </div>
 
         <div className="grid grid-cols-7 gap-1 text-center">
           {NOMES_DIAS.map((n) => (
-            <span key={n} className="pb-1 text-xs text-muted-foreground">
+            <span key={n} className="pb-1 type-label-medium text-on-surface-variant">
               {n}
             </span>
           ))}
@@ -140,11 +140,11 @@ export function CalendarioHabitos({
                 key={dia}
                 className={cn(
                   "flex aspect-square flex-col items-center justify-center gap-1 rounded-lg",
-                  dia === hoje && "ring-2 ring-primary/60",
+                  dia === hoje && "ring-2 ring-primary ring-inset",
                 )}
                 title={descricao ? `${formatarDia(dia)}: ${descricao}` : undefined}
               >
-                <span className={cn("text-xs tabular-nums", e.futuro ? "text-muted-foreground/50" : "text-foreground")}>
+                <span className={cn("numero type-body-small", e.futuro ? "text-on-surface-variant/60" : "text-on-surface")}>
                   {Number(dia.slice(8))}
                 </span>
                 <Marcador e={e} unico={unico} />
@@ -154,9 +154,9 @@ export function CalendarioHabitos({
           })}
         </div>
 
-        <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+        <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 type-body-small text-on-surface-variant">
           <li className="flex items-center gap-1.5">
-            <span className="size-3 rounded-full bg-[var(--concluido)]" aria-hidden />
+            <span className="size-3 rounded-full bg-concluido" aria-hidden />
             {unico ? "Feito" : "Todos feitos"}
           </li>
           {!unico && (
@@ -170,11 +170,11 @@ export function CalendarioHabitos({
             </li>
           )}
           <li className="flex items-center gap-1.5">
-            <span className="size-3 rounded-full border-2 border-muted-foreground/45" aria-hidden />
+            <span className="size-3 rounded-full border-2 border-outline" aria-hidden />
             Nenhum feito
           </li>
           <li className="flex items-center gap-1.5">
-            <span className="size-3 rounded-full border-2 border-dashed border-muted-foreground/60" aria-hidden />
+            <span className="size-3 rounded-full border-2 border-dashed border-outline" aria-hidden />
             Hoje, pendente
           </li>
         </ul>

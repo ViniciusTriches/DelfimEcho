@@ -17,7 +17,7 @@ export default async function NovaMetricaPage({ searchParams }: PageProps<"/metr
       {areas.length ? (
         <MetricaForm areas={areas} areaInicial={area} voltar={voltar} />
       ) : (
-        <p className="text-sm text-muted-foreground">
+        <p className="type-body-medium text-on-surface-variant">
           Crie uma <Link href="/areas/nova" className="underline">área</Link> primeiro.
         </p>
       )}

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
+import { Abas } from "@/components/abas";
 import { FiltroAreas } from "@/components/filtro-areas";
 import { PageHeader } from "@/components/page-header";
 import { buttonVariants } from "@/components/ui/button";
 import { STATUS_META, type StatusMeta } from "@/lib/metas";
 import { carregarOpcoes, parametroUuid } from "@/lib/opcoes";
 import { createClient } from "@/lib/supabase/server";
-import { cn } from "@/lib/utils";
 import { MetaCard } from "./meta-card";
 
 export const metadata: Metadata = { title: "Metas" };
@@ -61,28 +61,18 @@ export default async function MetasPage({ searchParams }: PageProps<"/metas">) {
 
       <FiltroAreas areas={areas} atual={area} href={(a) => link({ area: a })} />
 
-      <nav aria-label="Status" className="mb-5 flex gap-1 border-b">
-        {STATUS_META.map((s) => (
-          <Link
-            key={s.valor}
-            href={link({ status: s.valor })}
-            scroll={false}
-            aria-current={status === s.valor ? "page" : undefined}
-            className={cn(
-              "-mb-px inline-flex min-h-11 cursor-pointer items-center gap-1.5 border-b-2 px-3 text-sm transition-colors duration-150",
-              status === s.valor
-                ? "border-primary font-medium text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {s.nome}
-            <span className="rounded-full bg-muted px-1.5 text-xs tabular-nums">{contagem[s.valor]}</span>
-          </Link>
-        ))}
-      </nav>
+      <Abas
+        rotulo="Status"
+        abas={STATUS_META.map((s) => ({
+          href: link({ status: s.valor }),
+          nome: s.nome,
+          ativa: status === s.valor,
+          contagem: contagem[s.valor],
+        }))}
+      />
 
       {lista.length === 0 ? (
-        <p className="text-sm text-muted-foreground">
+        <p className="max-w-3xl rounded-lg bg-surface-container-low p-6 type-body-large text-on-surface-variant">
           {status === "ativa" ? "Nenhuma meta ativa." : status === "concluida" ? "Nenhuma meta concluída ainda." : "Nenhuma meta abandonada."}
         </p>
       ) : (

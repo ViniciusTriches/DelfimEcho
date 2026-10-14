@@ -37,7 +37,7 @@ export default async function MarcosPage({ searchParams }: PageProps<"/marcos">)
       {marcos?.length ? (
         <LinhaDoTempo marcos={marcos} mostrarArea={!area} />
       ) : (
-        <p className="text-sm text-muted-foreground">
+        <p className="max-w-2xl rounded-lg bg-surface-container-low p-6 type-body-large text-on-surface-variant">
           Nenhum marco ainda. Registre a primeira conquista, ou use &quot;Virar marco&quot; numa meta concluída.
         </p>
       )}

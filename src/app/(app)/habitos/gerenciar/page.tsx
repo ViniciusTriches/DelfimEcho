@@ -7,6 +7,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { formatarDia } from "@/lib/datas";
 import { descreverFrequencia } from "@/lib/habitos";
 import { createClient } from "@/lib/supabase/server";
+import { corArea } from "@/lib/cores-area";
 import { alternarAtivo, moverHabito } from "../actions";
 
 export const metadata: Metadata = { title: "Gerenciar hábitos" };
@@ -34,25 +35,27 @@ export default async function GerenciarHabitosPage() {
         }
       />
 
-      {ativos.length === 0 && <p className="text-sm text-muted-foreground">Nenhum hábito ativo.</p>}
+      {ativos.length === 0 && (
+        <p className="max-w-2xl rounded-lg bg-surface-container-low p-6 type-body-large text-on-surface-variant">Nenhum hábito ativo.</p>
+      )}
 
       <ul className="flex max-w-2xl flex-col gap-2">
         {ativos.map((h, i) => (
-          <li key={h.id} className="flex items-center gap-2 rounded-xl border bg-card p-2 pl-4">
+          <li key={h.id} className="flex items-center gap-1 rounded-lg bg-surface-container-low py-2 pr-2 pl-4">
             <Link
               href={`/habitos/${h.id}/editar`}
-              className="flex min-h-11 min-w-0 flex-1 cursor-pointer flex-col justify-center"
+              className="flex min-h-14 min-w-0 flex-1 flex-col justify-center"
             >
-              <span className="truncate font-medium">{h.nome}</span>
-              <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                {h.areas && <span className="size-2 rounded-full" style={{ backgroundColor: h.areas.cor }} aria-hidden />}
+              <span className="truncate type-title-medium text-on-surface">{h.nome}</span>
+              <span className="flex items-center gap-1.5 type-body-medium text-on-surface-variant">
+                {h.areas && <span className="size-2 rounded-full" style={{ backgroundColor: corArea(h.areas.cor) }} aria-hidden />}
                 {descreverFrequencia(h)}
                 {h.areas && ` · ${h.areas.nome}`}
               </span>
             </Link>
             <Link
               href={`/habitos/${h.id}/editar`}
-              className={buttonVariants({ variant: "ghost", size: "icon", className: "size-11 sm:size-8" })}
+              className={buttonVariants({ variant: "ghost", size: "icon" })}
               aria-label={`Editar ${h.nome}`}
             >
               <PencilIcon />
@@ -62,7 +65,6 @@ export default async function GerenciarHabitosPage() {
               confirmar={`Pausar "${h.nome}"? Ele sai do checklist e das taxas; o histórico fica guardado.`}
               variant="ghost"
               size="icon"
-              className="size-11 sm:size-8"
               aria-label={`Pausar ${h.nome}`}
             >
               <PauseIcon />
@@ -72,7 +74,6 @@ export default async function GerenciarHabitosPage() {
                 acao={moverHabito.bind(null, h.id, "cima")}
                 variant="ghost"
                 size="icon-xs"
-                className="size-11 sm:size-7"
                 aria-label={`Mover ${h.nome} para cima`}
                 disabled={i === 0}
               >
@@ -82,7 +83,6 @@ export default async function GerenciarHabitosPage() {
                 acao={moverHabito.bind(null, h.id, "baixo")}
                 variant="ghost"
                 size="icon-xs"
-                className="size-11 sm:size-7"
                 aria-label={`Mover ${h.nome} para baixo`}
                 disabled={i === ativos.length - 1}
               >
@@ -94,19 +94,18 @@ export default async function GerenciarHabitosPage() {
       </ul>
 
       {pausados.length > 0 && (
-        <section className="mt-8 max-w-2xl">
-          <h2 className="mb-2 text-sm font-medium text-muted-foreground">Pausados ({pausados.length})</h2>
+        <section className="mt-12 max-w-2xl">
+          <h2 className="mb-3 type-title-small text-on-surface-variant">Pausados ({pausados.length})</h2>
           <ul className="flex flex-col gap-2">
             {pausados.map((h) => (
-              <li key={h.id} className="flex items-center gap-2 rounded-xl border p-2 pl-4">
-                <Link href={`/habitos/${h.id}/editar`} className="flex min-h-11 min-w-0 flex-1 flex-col justify-center">
-                  <span className="truncate text-muted-foreground">{h.nome}</span>
-                  <span className="text-xs text-muted-foreground">desde {formatarDia(h.inicio)}</span>
+              <li key={h.id} className="flex items-center gap-2 rounded-lg border border-outline-variant py-2 pr-2 pl-4">
+                <Link href={`/habitos/${h.id}/editar`} className="flex min-h-12 min-w-0 flex-1 flex-col justify-center">
+                  <span className="truncate type-body-large text-on-surface-variant">{h.nome}</span>
+                  <span className="type-body-small text-on-surface-variant">desde {formatarDia(h.inicio)}</span>
                 </Link>
                 <ConfirmButton
                   acao={alternarAtivo.bind(null, h.id, true)}
-                  variant="outline"
-                  className="min-h-11 sm:min-h-8"
+                  variant="secondary"
                 >
                   <PlayIcon />
                   Retomar

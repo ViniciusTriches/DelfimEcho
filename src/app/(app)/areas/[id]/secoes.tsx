@@ -92,22 +92,22 @@ function Secao({
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-10">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">{titulo}</h2>
+    <section className="mt-12">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+        <h2 className="type-title-large text-on-surface">{titulo}</h2>
         <div className="flex items-center gap-2">
           {todos && (
-            <Link href={todos} className={buttonVariants({ variant: "ghost", size: "sm", className: "min-h-11 sm:min-h-7" })}>
+            <Link href={todos} className={buttonVariants({ variant: "text", size: "sm" })}>
               Ver todos
             </Link>
           )}
-          <Link href={novo} className={buttonVariants({ variant: "outline", size: "sm", className: "min-h-11 sm:min-h-7" })}>
+          <Link href={novo} className={buttonVariants({ variant: "outline", size: "sm" })}>
             <PlusIcon />
             {novoNome}
           </Link>
         </div>
       </div>
-      {temItens ? children : <p className="text-sm text-muted-foreground">{vazio}</p>}
+      {temItens ? children : <p className="rounded-lg border border-dashed border-outline-variant px-4 py-5 type-body-medium text-on-surface-variant">{vazio}</p>}
     </section>
   );
 }
@@ -115,7 +115,7 @@ function Secao({
 /** Enquanto metas, métricas e marcos chegam (o resto da área já aparece). */
 export function SecoesCarregando() {
   return (
-    <div className="mt-10 flex flex-col gap-3" aria-busy="true">
+    <div className="mt-12 flex flex-col gap-3" aria-busy="true">
       <Bloco className="h-6 w-36" />
       <Bloco className="h-24 rounded-lg" />
       <Bloco className="h-24 rounded-lg" />

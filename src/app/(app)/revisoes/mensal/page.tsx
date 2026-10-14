@@ -33,7 +33,7 @@ export default async function RevisaoMensalPage({ searchParams }: PageProps<"/re
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_24rem]">
         <ResumoRevisao tipo="mensal" r={r} />
         <section aria-labelledby="titulo-perguntas" className="lg:sticky lg:top-20 lg:self-start">
-          <h2 id="titulo-perguntas" className="mb-3 text-lg font-semibold">
+          <h2 id="titulo-perguntas" className="mb-3 type-title-large">
             Sua revisão
           </h2>
           <RevisaoForm key={mes} tipo="mensal" periodoInicio={periodo.desde} revisao={r.revisao} />

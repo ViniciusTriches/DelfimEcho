@@ -18,10 +18,10 @@ export default async function ConfiguracoesPage() {
   return (
     <>
       <PageHeader titulo="Configurações" voltar={{ href: "/mais", nome: "Mais" }} />
-      <div className="flex max-w-xl flex-col gap-12">
-        <section>
-          <h2 className="text-lg font-semibold">Horas efetivas</h2>
-          <p className="mt-1 mb-4 text-sm text-muted-foreground">
+      <div className="flex max-w-xl flex-col gap-6">
+        <section className="rounded-lg bg-surface-container-low p-5 sm:p-6">
+          <h2 className="type-title-large text-on-surface">Horas efetivas</h2>
+          <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">
             Horas efetivas = duração × fator da nota de qualidade × fator da prática passiva (só em
             sessões passivas). Mudar um fator recalcula todas as sessões, inclusive as antigas.
           </p>
@@ -31,9 +31,9 @@ export default async function ConfiguracoesPage() {
           />
         </section>
 
-        <section>
-          <h2 className="text-lg font-semibold">Alerta de abandono</h2>
-          <p className="mt-1 mb-4 text-sm text-muted-foreground">
+        <section className="rounded-lg bg-surface-container-low p-5 sm:p-6">
+          <h2 className="type-title-large text-on-surface">Alerta de abandono</h2>
+          <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">
             Habilidades ativas sem sessão aparecem em destaque no início, com atalho para registrar.
           </p>
           <AlertaForm dias={config?.dias_alerta_abandono ?? DIAS_ALERTA_PADRAO} />

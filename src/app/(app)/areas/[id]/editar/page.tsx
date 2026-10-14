@@ -37,9 +37,9 @@ export default async function EditarAreaPage({ params }: PageProps<"/areas/[id]/
       <PageHeader titulo="Editar área" voltar={{ href: `/areas/${id}`, nome: area.nome }} />
       <AreaForm area={area} cancelarHref={`/areas/${id}`} />
 
-      <section className="mt-12 max-w-xl rounded-xl border border-destructive/30 p-4">
-        <h2 className="font-medium">Excluir área</h2>
-        <p className="mt-1 mb-3 text-sm text-muted-foreground">
+      <section className="mt-16 max-w-xl rounded-lg border border-outline-variant p-5">
+        <h2 className="type-title-medium text-error">Excluir área</h2>
+        <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">
           Apaga a área com {skillIds.length} habilidade(s) e {sessoes ?? 0} sessão(ões) de prática.
           Não dá para desfazer.
         </p>

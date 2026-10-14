@@ -27,16 +27,15 @@ export default async function EditarMetaPage({ params }: PageProps<"/metas/[id]/
       <PageHeader titulo="Editar meta" voltar={{ href: "/metas", nome: "Metas" }} />
       <MetaForm meta={meta} areas={areas} skills={skills} voltar="/metas" />
 
-      <section className="mt-12 max-w-xl rounded-xl border border-destructive/30 p-4">
-        <h2 className="font-medium">Excluir meta</h2>
-        <p className="mt-1 mb-3 text-sm text-muted-foreground">
+      <section className="mt-16 max-w-xl rounded-lg border border-outline-variant p-5">
+        <h2 className="type-title-medium text-error">Excluir meta</h2>
+        <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">
           Se desistiu, prefira &quot;Abandonar&quot;: ela fica no histórico. Excluir não dá para desfazer.
         </p>
         <ConfirmButton
           acao={excluirMeta.bind(null, id)}
           confirmar={`Excluir a meta "${meta.titulo}"?`}
           variant="destructive"
-          className="min-h-11 sm:min-h-8"
         >
           <Trash2Icon />
           Excluir meta

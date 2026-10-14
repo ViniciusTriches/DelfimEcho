@@ -19,8 +19,16 @@ export default async function TimerPage() {
     return (
       <>
         <PageHeader titulo="Timer" />
-        <div className="flex max-w-xl flex-col items-start gap-4 rounded-xl border p-5">
-          <p className="text-muted-foreground">Nenhum timer ativo.</p>
+        <div className="flex max-w-xl flex-col items-start gap-4 rounded-lg bg-surface-container-low p-6">
+          <span className="flex size-12 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container">
+            <TimerIcon className="size-6" aria-hidden />
+          </span>
+          <div>
+            <p className="type-title-medium text-on-surface">Nenhum timer ativo</p>
+            <p className="mt-1 type-body-medium text-on-surface-variant">
+              Escolha a habilidade e o foco na tela de registro e toque em Iniciar timer.
+            </p>
+          </div>
           <Link href="/registrar" className={buttonVariants()}>
             <TimerIcon />
             Iniciar pela tela de registro

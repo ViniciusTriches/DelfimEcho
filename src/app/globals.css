@@ -283,6 +283,67 @@
   }
 }
 
+/* Cartão de escolha (rádio/checkbox escondido dentro): contorno; selecionado = tonal. */
+@utility opcao {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--md-outline-variant);
+  color: var(--md-on-surface);
+  transition: background-color var(--md-dur-short3) var(--ease-standard), border-color var(--md-dur-short3) var(--ease-standard);
+  &:has(:checked) {
+    border-color: transparent;
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+  }
+  &:has(:focus-visible) {
+    outline: 2px solid var(--md-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Botão segmentado M3: grupo em pílula; cada segmento usa aria-pressed ou :checked. */
+@utility segmento {
+  display: inline-flex;
+  min-height: 2.5rem;
+  flex: 1 1 0%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--md-outline);
+  margin-left: -1px;
+  color: var(--md-on-surface);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  transition: background-color var(--md-dur-short3) var(--ease-standard);
+  &:first-child {
+    margin-left: 0;
+    border-start-start-radius: 9999px;
+    border-end-start-radius: 9999px;
+  }
+  &:last-child {
+    border-start-end-radius: 9999px;
+    border-end-end-radius: 9999px;
+  }
+  &[aria-pressed="true"],
+  &:has(:checked) {
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+  }
+  &:has(:focus-visible) {
+    outline: 2px solid var(--md-primary);
+    outline-offset: 2px;
+  }
+  @media (pointer: coarse) {
+    min-height: 2.75rem;
+  }
+}
+
 .eco-ripple {
   position: absolute;
   z-index: -1; /* atrás do texto e do ícone, como a camada de estado */

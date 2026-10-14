@@ -84,9 +84,9 @@ export default async function EditarHabilidadePage({ params }: PageProps<"/habil
         cancelarHref={voltar.href}
       />
 
-      <section className="mt-12 max-w-2xl rounded-xl border border-destructive/30 p-4">
-        <h2 className="font-medium">Excluir habilidade</h2>
-        <p className="mt-1 mb-3 text-sm text-muted-foreground">
+      <section className="mt-16 max-w-2xl rounded-lg border border-outline-variant p-5">
+        <h2 className="type-title-medium text-error">Excluir habilidade</h2>
+        <p className="mt-1 mb-4 type-body-medium text-on-surface-variant">
           Apaga a habilidade, seus níveis e {sessoes ?? 0} sessão(ões) de prática. Não dá para desfazer.
         </p>
         <ConfirmButton

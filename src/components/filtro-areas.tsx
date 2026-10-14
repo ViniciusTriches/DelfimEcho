@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { cn } from "@/lib/utils";
+import { ChipCheck, chipVariants } from "@/components/ui/chip";
+import { corArea } from "@/lib/cores-area";
 
-/** Chips para filtrar uma lista por área (links, então funciona com voltar/compartilhar). */
+/** Chips de filtro por área (links, então funciona com voltar/compartilhar). */
 export function FiltroAreas({
   areas,
   atual,
@@ -13,22 +14,25 @@ export function FiltroAreas({
 }) {
   if (areas.length < 2) return null;
   return (
-    <nav aria-label="Filtrar por área" className="mb-5 flex flex-wrap gap-2">
-      {[{ id: null, nome: "Todas", cor: null }, ...areas].map((a) => (
-        <Link
-          key={a.id ?? "todas"}
-          href={href(a.id)}
-          scroll={false}
-          aria-current={atual === a.id ? "true" : undefined}
-          className={cn(
-            "inline-flex min-h-9 cursor-pointer items-center gap-1.5 rounded-full border px-3 text-sm transition-colors duration-150",
-            atual === a.id ? "border-primary bg-primary/10 font-medium" : "hover:bg-muted",
-          )}
-        >
-          {a.cor && <span className="size-2 rounded-full" style={{ backgroundColor: a.cor }} aria-hidden />}
-          {a.nome}
-        </Link>
-      ))}
+    <nav aria-label="Filtrar por área" className="mb-6 flex flex-wrap gap-2">
+      {[{ id: null, nome: "Todas", cor: null }, ...areas].map((a) => {
+        const selecionado = atual === a.id;
+        return (
+          <Link
+            key={a.id ?? "todas"}
+            href={href(a.id)}
+            scroll={false}
+            aria-current={selecionado ? "true" : undefined}
+            className={chipVariants({ selecionado })}
+          >
+            <ChipCheck visivel={selecionado} />
+            {a.cor && !selecionado && (
+              <span className="size-2 rounded-full" style={{ backgroundColor: corArea(a.cor) }} aria-hidden />
+            )}
+            {a.nome}
+          </Link>
+        );
+      })}
     </nav>
   );
 }

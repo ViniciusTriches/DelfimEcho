@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useActionState, useState } from "react";
+import { CalendarDaysIcon, RepeatIcon } from "lucide-react";
+import { ErroFormulario } from "@/components/erro-formulario";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +11,6 @@ import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 import { enviarSemResetar } from "@/lib/form";
 import { NOMES_DIAS } from "@/lib/habitos";
 import type { Linha } from "@/lib/tipos";
-import { cn } from "@/lib/utils";
 import { salvarHabito } from "./actions";
 
 type Props = {
@@ -23,7 +24,7 @@ export function HabitoForm({ habito, areas, hoje }: Props) {
   const [frequencia, setFrequencia] = useState(habito?.frequencia ?? "diario");
 
   return (
-    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-xl flex-col gap-6">
+    <form onSubmit={enviarSemResetar(acao)} className="flex max-w-xl flex-col gap-8">
       {habito && <input type="hidden" name="id" value={habito.id} />}
 
       <div className="flex flex-col gap-2">
@@ -52,15 +53,15 @@ export function HabitoForm({ habito, areas, hoje }: Props) {
       </div>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="mb-2 text-sm font-medium">Frequência</legend>
+        <legend className="mb-3 type-title-small text-on-surface">Frequência</legend>
         <div className="grid grid-cols-2 gap-2">
           {[
-            { valor: "diario", nome: "Todos os dias" },
-            { valor: "dias_semana", nome: "Dias específicos" },
+            { valor: "diario", nome: "Todos os dias", Icone: RepeatIcon },
+            { valor: "dias_semana", nome: "Dias específicos", Icone: CalendarDaysIcon },
           ].map((f) => (
             <label
               key={f.valor}
-              className="flex min-h-11 cursor-pointer items-center rounded-lg border px-3 text-sm transition-colors duration-150 has-checked:border-primary has-checked:bg-primary/5 has-checked:font-medium has-focus-visible:ring-3 has-focus-visible:ring-ring/50"
+              className="opcao flex min-h-14 items-center gap-3 px-4 type-title-small"
             >
               <input
                 type="radio"
@@ -70,6 +71,7 @@ export function HabitoForm({ habito, areas, hoje }: Props) {
                 onChange={() => setFrequencia(f.valor)}
                 className="sr-only"
               />
+              <f.Icone className="size-5 shrink-0" aria-hidden />
               {f.nome}
             </label>
           ))}
@@ -80,10 +82,7 @@ export function HabitoForm({ habito, areas, hoje }: Props) {
             {NOMES_DIAS.map((nome, i) => (
               <label
                 key={nome}
-                className={cn(
-                  "flex size-11 cursor-pointer items-center justify-center rounded-full border text-sm transition-colors duration-150",
-                  "has-checked:border-primary has-checked:bg-primary has-checked:font-medium has-checked:text-primary-foreground has-focus-visible:ring-3 has-focus-visible:ring-ring/50",
-                )}
+                className="opcao flex size-12 items-center justify-center rounded-full type-label-large has-checked:bg-primary has-checked:text-on-primary"
               >
                 <input
                   type="checkbox"
@@ -101,23 +100,21 @@ export function HabitoForm({ habito, areas, hoje }: Props) {
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="inicio">Acompanhar desde</Label>
-        <Input id="inicio" name="inicio" type="date" defaultValue={habito?.inicio ?? hoje} className="w-44" required />
-        <p className="text-xs text-muted-foreground">
+        <Input id="inicio" name="inicio" type="date" defaultValue={habito?.inicio ?? hoje} className="w-48" required />
+        <p className="type-body-small text-on-surface-variant">
           Dias antes desta data não contam como falha nem quebram a sequência.
         </p>
       </div>
 
       {estado?.erro && (
-        <p role="alert" className="text-sm text-destructive">
-          {estado.erro}
-        </p>
+        <ErroFormulario>{estado.erro}</ErroFormulario>
       )}
 
       <div className="flex gap-2">
-        <Button type="submit" disabled={pendente} className="min-h-11 sm:min-h-8">
+        <Button type="submit" disabled={pendente}>
           {pendente ? "Salvando…" : habito ? "Salvar" : "Criar hábito"}
         </Button>
-        <Link href="/habitos/gerenciar" className={buttonVariants({ variant: "ghost", className: "min-h-11 sm:min-h-8" })}>
+        <Link href="/habitos/gerenciar" className={buttonVariants({ variant: "text" })}>
           Cancelar
         </Link>
       </div>

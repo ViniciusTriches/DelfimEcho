@@ -10,6 +10,7 @@ import { Cronometro, type EstadoTimer, useAgora } from "@/components/cronometro"
 import { Button } from "@/components/ui/button";
 import { formatarCronometro } from "@/lib/datas";
 import { segundosDoTimer } from "@/lib/pratica";
+import { corArea } from "@/lib/cores-area";
 import { cn } from "@/lib/utils";
 import { descartarTimer, encerrarTimer, pausarTimer, registrarDistracao, retomarTimer } from "./actions";
 
@@ -97,81 +98,73 @@ export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: 
   };
 
   const botoes = (grande: boolean) => (
-    <div className={cn("flex flex-wrap items-center justify-center gap-3", grande && "gap-4")}>
-      <Button
-        variant="outline"
-        size="lg"
-        className={cn("h-12 min-w-36", grande && "h-14 min-w-40 text-base")}
-        onClick={distrair}
-      >
+    <div className={cn("flex w-full max-w-md flex-col gap-3", grande && "max-w-lg")}>
+      <Button variant="secondary" size="lg" className={cn("w-full", grande && "h-14")} onClick={distrair}>
         <ZapIcon />
         Me distraí
-        <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs tabular-nums">{distracoesOtimistas}</span>
+        <span className="numero ml-1 rounded-full bg-on-secondary-container px-2 py-0.5 type-label-medium text-secondary-container">
+          {distracoesOtimistas}
+        </span>
       </Button>
-      <Button
-        variant="outline"
-        size="lg"
-        className={cn("h-12 min-w-32", grande && "h-14 min-w-36 text-base")}
-        onClick={alternarPausa}
-        disabled={pendente}
-      >
-        {pausado ? <PlayIcon /> : <PauseIcon />}
-        {pausado ? "Retomar" : "Pausar"}
-      </Button>
-      <Button
-        size="lg"
-        className={cn("h-12 min-w-32", grande && "h-14 min-w-36 text-base")}
-        onClick={encerrar}
-        disabled={pendente}
-      >
-        <SquareIcon />
-        Encerrar
-      </Button>
+      <div className="grid grid-cols-2 gap-3">
+        <Button variant="outline" size="lg" className={cn(grande && "h-14")} onClick={alternarPausa} disabled={pendente}>
+          {pausado ? <PlayIcon /> : <PauseIcon />}
+          {pausado ? "Retomar" : "Pausar"}
+        </Button>
+        <Button size="lg" className={cn(grande && "h-14")} onClick={encerrar} disabled={pendente}>
+          <SquareIcon />
+          Encerrar
+        </Button>
+      </div>
     </div>
   );
 
   const cabecalho = (
-    <div className="flex flex-col items-center gap-1 text-center">
-      <span className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="size-2 rounded-full" style={{ backgroundColor: cor }} aria-hidden />
+    <div className="flex flex-col items-center gap-2 text-center">
+      <span className="flex items-center gap-2 type-label-large text-on-surface-variant">
+        <span className="size-2.5 rounded-full" style={{ backgroundColor: corArea(cor) }} aria-hidden />
         {area}
       </span>
-      <h1 className="text-2xl font-semibold tracking-tight">{habilidade}</h1>
-      {foco && <p className="max-w-lg text-muted-foreground">{foco}</p>}
+      <h1 className="type-headline-medium text-on-surface">{habilidade}</h1>
+      {foco && <p className="max-w-lg type-body-large text-on-surface-variant">{foco}</p>}
     </div>
   );
 
   const relogio = (classe: string) => (
-    <div className="flex flex-col items-center gap-1">
-      <Cronometro timer={timer} className={cn("font-mono font-semibold tabular-nums", classe, pausado && "opacity-50")} />
-      {pausado && <span className="text-sm font-medium tracking-widest text-muted-foreground uppercase">pausado</span>}
+    <div className="flex flex-col items-center gap-3">
+      <Cronometro
+        timer={timer}
+        className={cn("numero-grande text-on-surface transition-opacity duration-300", classe, pausado && "opacity-40")}
+      />
+      {pausado && (
+        <span className="rounded-sm bg-secondary-container px-3 py-1 type-label-large text-on-secondary-container">
+          Pausado
+        </span>
+      )}
     </div>
   );
 
   return (
-    <div className="flex flex-col items-center gap-8 py-6">
+    <div className="flex flex-col items-center gap-10 py-6">
       {cabecalho}
-      {relogio("text-6xl sm:text-7xl")}
-      {botoes(false)}
+      <div className="flex w-full max-w-md flex-col items-center gap-8 rounded-2xl bg-surface-container-low px-6 py-10">
+        {relogio("text-6xl sm:text-7xl")}
+        {botoes(false)}
+      </div>
 
       <div className="flex flex-wrap items-center justify-center gap-2">
-        <Button variant="ghost" onClick={() => setModoFoco(true)}>
+        <Button variant="text" onClick={() => setModoFoco(true)}>
           <Maximize2Icon />
           Modo foco
         </Button>
-        <ConfirmButton
-          acao={descartarTimer}
-          confirmar="Descartar o timer sem salvar a sessão?"
-          variant="ghost"
-          className="text-muted-foreground"
-        >
+        <ConfirmButton acao={descartarTimer} confirmar="Descartar o timer sem salvar a sessão?" variant="ghost">
           Descartar
         </ConfirmButton>
       </div>
 
       {modoFoco &&
         createPortal(
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-10 bg-background p-6">
+          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-12 bg-surface p-6">
             <Button
               variant="ghost"
               size="icon"
