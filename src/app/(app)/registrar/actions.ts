@@ -4,12 +4,21 @@ import { revalidatePath } from "next/cache";
 import { getUsuario } from "@/lib/auth";
 import { deInputLocal } from "@/lib/datas";
 import { numero, texto, textoOuNulo } from "@/lib/form";
+import { todasAsLinhas } from "@/lib/supabase/paginar";
 import { createClient } from "@/lib/supabase/server";
 import { ehUuid } from "@/lib/uuid";
 
 export type EstadoSessao =
   | { ok: false; erro: string }
-  | { ok: true; skillId: string; habilidade: string; minutos: number; horasEfetivas: number }
+  | {
+      ok: true;
+      skillId: string;
+      habilidade: string;
+      minutos: number;
+      horasEfetivas: number;
+      /** Nível alcançado com esta sessão (para a comemoração), se houver. */
+      nivelNovo: string | null;
+    }
   | null;
 
 const MAX_MINUTOS = 24 * 60;
@@ -56,7 +65,21 @@ export async function salvarSessao(_anterior: EstadoSessao, dados: FormData): Pr
   if (minutos < 1) return erro("A sessão precisa ter pelo menos 1 minuto.");
   if (minutos > MAX_MINUTOS) return erro("Uma sessão pode ter no máximo 24 horas.");
 
-  const { data: skill } = await supabase.from("skills").select("nome").eq("id", skillId).maybeSingle();
+  // Em paralelo: a habilidade, seus níveis e as horas já acumuladas (só leitura, para saber
+  // se esta sessão cruza um nível e comemorar).
+  const [{ data: skill }, { data: niveis }, anteriores] = await Promise.all([
+    supabase.from("skills").select("nome, horas_iniciais, tipo_meta_tempo").eq("id", skillId).maybeSingle(),
+    supabase.from("skill_levels").select("nome_nivel, horas_acumuladas_alvo").eq("skill_id", skillId),
+    todasAsLinhas((de, ate) =>
+      supabase
+        .from("practice_sessions_horas")
+        .select("horas_efetivas")
+        .eq("skill_id", skillId)
+        .order("inicio")
+        .order("id")
+        .range(de, ate),
+    ),
+  ]);
   if (!skill) return erro("Habilidade não encontrada.");
 
   const { data: sessao, error } = await supabase
@@ -87,14 +110,15 @@ export async function salvarSessao(_anterior: EstadoSessao, dados: FormData): Pr
     .eq("id", sessao.id)
     .single();
 
+  const horasEfetivas = Number(horas?.horas_efetivas ?? 0);
+  const antes = Number(skill.horas_iniciais) + anteriores.reduce((t, l) => t + Number(l.horas_efetivas), 0);
+  const nivelNovo =
+    (skill.tipo_meta_tempo === "niveis" ? (niveis ?? []) : [])
+      .filter((n) => antes < n.horas_acumuladas_alvo && antes + horasEfetivas >= n.horas_acumuladas_alvo)
+      .sort((a, b) => b.horas_acumuladas_alvo - a.horas_acumuladas_alvo)[0]?.nome_nivel ?? null;
+
   revalidatePath("/", "layout");
-  return {
-    ok: true,
-    skillId,
-    habilidade: skill.nome,
-    minutos,
-    horasEfetivas: Number(horas?.horas_efetivas ?? 0),
-  };
+  return { ok: true, skillId, habilidade: skill.nome, minutos, horasEfetivas, nivelNovo };
 }
 
 export async function excluirSessao(id: string) {

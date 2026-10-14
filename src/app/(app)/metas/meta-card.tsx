@@ -115,6 +115,7 @@ export function MetaCard({ meta, mostrarArea = true }: { meta: MetaComArea; most
               </ConfirmButton>
               <ConfirmButton
                 acao={alterarStatusMeta.bind(null, meta.id, "concluida")}
+                comemorar={`Meta concluída: ${meta.titulo}`}
                 confirmar={
                   meta.criterio_de_conclusao
                     ? `Marcar como concluída?\n\nCritério: ${meta.criterio_de_conclusao}`

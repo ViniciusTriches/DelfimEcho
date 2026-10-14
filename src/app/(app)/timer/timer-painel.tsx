@@ -1,8 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useOptimistic, useRef, useState, useTransition } from "react";
+import { useEffect, useOptimistic, useRef, useState, useSyncExternalStore, useTransition } from "react";
 import { createPortal } from "react-dom";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
+import { EASE } from "@/components/movimento";
 import { Maximize2Icon, PauseIcon, PlayIcon, SquareIcon, XIcon, ZapIcon } from "lucide-react";
 import { toast } from "sonner";
 import { ConfirmButton } from "@/components/confirm-button";
@@ -13,6 +16,8 @@ import { segundosDoTimer } from "@/lib/pratica";
 import { corArea } from "@/lib/cores-area";
 import { cn } from "@/lib/utils";
 import { descartarTimer, encerrarTimer, pausarTimer, registrarDistracao, retomarTimer } from "./actions";
+
+const semInscricao = () => () => {};
 
 type Props = {
   timer: EstadoTimer;
@@ -64,6 +69,8 @@ function useModoFoco(ativo: boolean) {
 export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: Props) {
   useSincronizar();
   const [modoFoco, setModoFoco] = useState(false);
+  // O portal do modo foco só existe no navegador (fica montado para animar a saída).
+  const noCliente = useSyncExternalStore(semInscricao, () => true, () => false);
   useModoFoco(modoFoco);
   const [pendente, startTransition] = useTransition();
 
@@ -102,9 +109,15 @@ export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: 
       <Button variant="secondary" size="lg" className={cn("w-full", grande && "h-14")} onClick={distrair}>
         <ZapIcon />
         Me distraí
-        <span className="numero ml-1 rounded-full bg-on-secondary-container px-2 py-0.5 type-label-medium text-secondary-container">
+        <m.span
+          key={distracoesOtimistas}
+          className="numero ml-1 rounded-full bg-on-secondary-container px-2 py-0.5 type-label-medium text-secondary-container"
+          initial={distracoesOtimistas > distracoes ? { scale: 1.5 } : false}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 500, damping: 18 }}
+        >
           {distracoesOtimistas}
-        </span>
+        </m.span>
       </Button>
       <div className="grid grid-cols-2 gap-3">
         <Button variant="outline" size="lg" className={cn(grande && "h-14")} onClick={alternarPausa} disabled={pendente}>
@@ -136,9 +149,17 @@ export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: 
         timer={timer}
         className={cn("numero-grande text-on-surface transition-opacity duration-300", classe, pausado && "opacity-40")}
       />
-      {pausado && (
+      {pausado ? (
         <span className="rounded-sm bg-secondary-container px-3 py-1 type-label-large text-on-secondary-container">
           Pausado
+        </span>
+      ) : (
+        <span className="flex items-center gap-2 px-3 py-1 type-label-large text-on-surface-variant">
+          <span className="relative flex size-2.5" aria-hidden>
+            <span className="absolute inset-0 animate-ping rounded-full bg-primary opacity-50 [animation-duration:2s] motion-reduce:hidden" />
+            <span className="relative size-2.5 rounded-full bg-primary" />
+          </span>
+          Contando
         </span>
       )}
     </div>
@@ -162,9 +183,17 @@ export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: 
         </ConfirmButton>
       </div>
 
-      {modoFoco &&
+      {noCliente &&
         createPortal(
-          <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-12 bg-surface p-6">
+        <AnimatePresence>
+          {modoFoco && (
+          <m.div
+            key="foco"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-12 bg-surface p-6"
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1, transition: { duration: 0.3, ease: EASE.desacelera } }}
+            exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.15, ease: EASE.acelera } }}
+          >
             <Button
               variant="ghost"
               size="icon"
@@ -177,9 +206,11 @@ export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: 
             {cabecalho}
             {relogio("text-7xl sm:text-9xl")}
             {botoes(true)}
-          </div>,
-          document.body,
-        )}
+          </m.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 }

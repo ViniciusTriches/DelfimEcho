@@ -163,7 +163,25 @@ Tokens M3 em [globals.css](../src/app/globals.css). Curvas `ease-standard` (0.2,
 - Tudo respeita `prefers-reduced-motion` (sem animação ou só um fade curto).
 - Nenhuma ação espera uma animação terminar.
 
-Os detalhes ficam na etapa de animações.
+**Tese.** O Echo é uma ferramenta (modo Operate): movimento confirma ações, explica mudanças de estado e marca conquistas. Nada de coreografia na abertura das telas — o esqueleto de carregamento já faz a continuidade.
+
+**Infra.** [movimento.tsx](../src/components/movimento.tsx) envolve o app em `MotionConfig reducedMotion="user"` + `LazyMotion` (só `domAnimation`, componentes `m.*` de `motion/react-m`). As curvas M3 ficam em `EASE`.
+
+**Assinatura "Eco"** ([eco.tsx](../src/components/eco.tsx)): três anéis que se expandem e somem a partir de onde algo importante aconteceu. `EcoAneis` (dentro de um pai `relative`) ou `ecoNaTela(rect)` (quando a origem sai da tela). Somem com reduced motion; a confirmação em si continua.
+
+| Momento | O que acontece | Onde |
+|---|---|---|
+| Sessão salva | Ícone entra com mola, check se desenha, eco verde | registro-form |
+| Novo nível | Cartão abre do centro, ondas de eco, troféu e nome do nível sobem (GSAP, importado só nesse momento) | registrar/comemoracao-nivel |
+| Meta concluída | Eco a partir do botão Concluir + aviso | ConfirmButton `comemorar` |
+| Dia de hábitos completo | Selo "Dia completo" entra com eco | habitos/checklist |
+| Marcar hábito | Círculo pulsa, check se desenha (só nos marcados na visita) | habitos/checklist |
+| Navegação | Pílula do destino ativo abre do centro; FAB encolhe/volta ao entrar/sair de Registrar | nav |
+| Barras de progresso | Preenchimento cresce do início ao aparecer | globals.css |
+| Dialogs | Entrada 300ms desacelerando, saída 150ms acelerando | ui/dialog, ui/alert-dialog |
+| Timer | Ponto "Contando" pulsando (para ao pausar); contador de distrações salta; modo foco com fade | timer-painel |
+
+Durações: feedback 100–300ms, entradas de overlay 300ms, comemoração até ~1,6s (sempre em paralelo, nunca bloqueando). Saída mais rápida que entrada.
 
 ## 8. Layout
 

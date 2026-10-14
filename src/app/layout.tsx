@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Roboto_Flex, Roboto_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { EcoRipple } from "@/components/eco-ripple";
+import { Movimento } from "@/components/movimento";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -40,7 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
-          {children}
+          <Movimento>{children}</Movimento>
           <Toaster position="bottom-center" />
           <EcoRipple />
         </ThemeProvider>

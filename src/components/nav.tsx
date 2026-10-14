@@ -5,7 +5,10 @@ import { usePathname } from "next/navigation";
 import { Suspense, useState } from "react";
 import { Menu } from "@base-ui/react/menu";
 import { EllipsisIcon } from "lucide-react";
+import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-m";
 import { Logo } from "@/components/logo";
+import { EASE } from "@/components/movimento";
 import { fabVariants } from "@/components/ui/fab";
 import { type ItemNav, itemAtivo, MAIS, maisAtivo, PRINCIPAIS, REGISTRAR } from "@/lib/navegacao";
 import { cn } from "@/lib/utils";
@@ -70,11 +73,19 @@ function Indicador({ selecionado, icone: Icone }: { selecionado: boolean; icone:
   return (
     <span
       className={cn(
-        "camada-estado flex h-8 w-14 items-center justify-center rounded-full transition-colors duration-200 ease-standard",
+        "camada-estado relative flex h-8 w-14 items-center justify-center rounded-full transition-colors duration-200 ease-standard",
         "group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-primary",
-        selecionado ? "bg-secondary-container text-on-secondary-container" : "text-on-surface-variant",
+        selecionado ? "text-on-secondary-container" : "text-on-surface-variant",
       )}
     >
+      {/* Indicador ativo do M3: a pílula se abre do centro para os lados. */}
+      <span
+        className={cn(
+          "absolute inset-0 -z-10 rounded-full bg-secondary-container transition-[scale,opacity] duration-300 ease-emphasized-decelerate motion-reduce:transition-opacity",
+          selecionado ? "scale-x-100 opacity-100" : "scale-x-40 opacity-0",
+        )}
+        aria-hidden
+      />
       <Icone className="size-6" strokeWidth={selecionado ? 2.25 : 1.75} aria-hidden />
     </span>
   );
@@ -187,20 +198,29 @@ function Barra({ rota }: { rota: Rota }) {
 }
 
 function Fab({ rota }: { rota: Rota }) {
-  // Na tela de registro e no timer o FAB sairia do contexto.
-  if (rota.pathname && itemAtivo(rota.pathname, REGISTRAR)) return null;
+  // Na tela de registro e no timer o FAB sairia do contexto: ele encolhe e some.
+  const visivel = !(rota.pathname && itemAtivo(rota.pathname, REGISTRAR));
   return (
-    <Link
-      href={REGISTRAR.href}
-      onNavigate={() => rota.navegar?.(REGISTRAR.href)}
-      className={cn(
-        fabVariants({ tamanho: "estendido" }),
-        "fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-20 md:hidden",
+    <AnimatePresence initial={false}>
+      {visivel && (
+        <m.div
+          key="fab"
+          className="fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-20 origin-bottom-right md:hidden"
+          initial={{ scale: 0.6, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1, transition: { duration: 0.25, ease: EASE.desacelera } }}
+          exit={{ scale: 0.6, opacity: 0, transition: { duration: 0.15, ease: EASE.acelera } }}
+        >
+          <Link
+            href={REGISTRAR.href}
+            onNavigate={() => rota.navegar?.(REGISTRAR.href)}
+            className={fabVariants({ tamanho: "estendido" })}
+          >
+            <REGISTRAR.icone aria-hidden />
+            Registrar
+          </Link>
+        </m.div>
       )}
-    >
-      <REGISTRAR.icone aria-hidden />
-      Registrar
-    </Link>
+    </AnimatePresence>
   );
 }
 

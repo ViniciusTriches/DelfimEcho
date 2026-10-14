@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import {
   AlertDialog,
@@ -11,6 +11,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { ecoNaTela } from "@/components/eco";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +22,8 @@ type Props = Omit<React.ComponentProps<typeof Button>, "onClick"> & {
   confirmar?: string;
   /** Rótulo do botão que confirma (padrão: o verbo da pergunta, ex.: "Excluir"). */
   rotuloConfirmar?: string;
+  /** Comemoração ao dar certo: eco a partir do botão + aviso com este texto. */
+  comemorar?: string;
 };
 
 const VERBOS = ["Excluir", "Arquivar", "Abandonar", "Pausar", "Descartar", "Restaurar", "Concluir"];
@@ -33,21 +36,29 @@ function separar(texto: string) {
   return { titulo: "Tem certeza?", descricao: texto };
 }
 
-export function ConfirmButton({ acao, confirmar, rotuloConfirmar, children, disabled, variant, ...props }: Props) {
+export function ConfirmButton({ acao, confirmar, rotuloConfirmar, comemorar, children, disabled, variant, ...props }: Props) {
   const [pendente, startTransition] = useTransition();
   const [aberto, setAberto] = useState(false);
+  const ref = useRef<HTMLButtonElement>(null);
 
   // A ação roda em segundo plano: o dialog fecha na hora, nada espera a resposta.
   function executar() {
     setAberto(false);
+    // Posição do botão agora: depois da ação o cartão pode sair da lista.
+    const origem = comemorar ? ref.current?.getBoundingClientRect() : undefined;
     startTransition(async () => {
       const resultado = await acao();
       if (resultado?.erro) toast.error(resultado.erro);
+      else if (comemorar) {
+        if (origem) ecoNaTela(origem, "var(--concluido)");
+        toast.success(comemorar);
+      }
     });
   }
 
   const botao = (
     <Button
+      ref={ref}
       type="button"
       variant={variant}
       disabled={disabled || pendente}

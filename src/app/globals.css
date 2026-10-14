@@ -361,9 +361,24 @@
   }
 }
 
+/* Barra de progresso: ao chegar na tela, o preenchimento cresce a partir do início
+   (mostra o quanto já foi feito). Depois, mudanças de valor usam a transição de largura. */
+[data-slot="progresso-preenchimento"] {
+  transform-origin: left center;
+  animation: progresso-entra 700ms var(--ease-emphasized-decelerate) both;
+}
+@keyframes progresso-entra {
+  from {
+    scale: 0 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .eco-ripple {
     display: none;
+  }
+  [data-slot="progresso-preenchimento"] {
+    animation: none;
   }
 }
 

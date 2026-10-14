@@ -1,6 +1,9 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
+import { useOptimistic, useState, useTransition } from "react";
+import * as m from "motion/react-m";
+import { CheckAnimado } from "@/components/check-animado";
+import { EcoAneis } from "@/components/eco";
 import { CheckIcon, ChevronDownIcon, FlameIcon } from "lucide-react";
 import { Progresso } from "@/components/ui/progresso";
 import { toast } from "sonner";
@@ -34,18 +37,24 @@ export function Checklist({ dia, itens }: { dia: string; itens: ItemChecklist[] 
     },
   );
 
+  const previstos = itens.filter((i) => i.previsto);
+  const outros = itens.filter((i) => !i.previsto);
+  const feitosPrevistos = previstos.filter((i) => feitos.has(i.id)).length;
+
+  // Conta as vezes em que o usuário completou o dia (cada uma dispara o eco).
+  const [completou, setCompletou] = useState(0);
+  const [tocados, setTocados] = useState<Set<string>>(() => new Set());
+
   function marcar(item: ItemChecklist) {
     const feito = !feitos.has(item.id);
+    setTocados((t) => new Set(t).add(item.id));
+    if (feito && item.previsto && feitosPrevistos === previstos.length - 1) setCompletou((c) => c + 1);
     startTransition(async () => {
       alternar(item.id);
       const r = await marcarHabito(item.id, dia, feito);
       if (r?.erro) toast.error(r.erro);
     });
   }
-
-  const previstos = itens.filter((i) => i.previsto);
-  const outros = itens.filter((i) => !i.previsto);
-  const feitosPrevistos = previstos.filter((i) => feitos.has(i.id)).length;
 
   return (
     <div className="flex flex-col gap-4">
@@ -59,10 +68,19 @@ export function Checklist({ dia, itens }: { dia: string; itens: ItemChecklist[] 
               feitos
             </span>
             {feitosPrevistos === previstos.length && (
-              <span className="flex items-center gap-1 type-label-large text-on-surface">
-                <CheckIcon className="size-4 text-concluido" aria-hidden />
+              <m.span
+                key={completou}
+                className="flex items-center gap-1.5 type-label-large text-on-surface"
+                initial={completou ? { opacity: 0, scale: 0.8 } : false}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: "spring", stiffness: 420, damping: 24 }}
+              >
+                <span className="relative flex size-4 items-center justify-center text-concluido">
+                  {completou > 0 && <EcoAneis cor="var(--concluido)" escala={3.4} />}
+                  <CheckIcon className="size-4" aria-hidden />
+                </span>
                 Dia completo
-              </span>
+              </m.span>
             )}
           </div>
           <Progresso
@@ -74,7 +92,7 @@ export function Checklist({ dia, itens }: { dia: string; itens: ItemChecklist[] 
         </div>
       )}
 
-      <Lista itens={previstos} feitos={feitos} marcar={marcar} />
+      <Lista itens={previstos} feitos={feitos} tocados={tocados} marcar={marcar} />
 
       {outros.length > 0 && (
         <details className="group">
@@ -83,7 +101,7 @@ export function Checklist({ dia, itens }: { dia: string; itens: ItemChecklist[] 
             Não previstos neste dia ({outros.length})
           </summary>
           <div className="mt-2">
-            <Lista itens={outros} feitos={feitos} marcar={marcar} />
+            <Lista itens={outros} feitos={feitos} tocados={tocados} marcar={marcar} />
           </div>
         </details>
       )}
@@ -94,10 +112,13 @@ export function Checklist({ dia, itens }: { dia: string; itens: ItemChecklist[] 
 function Lista({
   itens,
   feitos,
+  tocados,
   marcar,
 }: {
   itens: ItemChecklist[];
   feitos: Set<string>;
+  /** Marcados nesta visita: só eles animam (os que vieram marcados aparecem prontos). */
+  tocados: Set<string>;
   marcar: (item: ItemChecklist) => void;
 }) {
   return (
@@ -115,15 +136,18 @@ function Lista({
                 "camada-estado flex min-h-16 w-full cursor-pointer items-center gap-4 rounded-lg bg-surface-container-low px-4 py-2 text-left text-on-surface",
               )}
             >
-              <span
+              <m.span
                 className={cn(
                   "flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-150",
                   feito ? "border-concluido bg-concluido text-surface" : "border-outline",
                 )}
+                initial={false}
+                animate={{ scale: feito ? [1, 1.18, 1] : 1 }}
+                transition={{ duration: 0.3, ease: [0.2, 0, 0, 1] }}
                 aria-hidden
               >
-                {feito && <CheckIcon className="size-4" strokeWidth={3} />}
-              </span>
+                {feito && <CheckAnimado className="size-4" animar={tocados.has(item.id)} />}
+              </m.span>
 
               <span className="min-w-0 flex-1">
                 <span className={cn("block truncate type-body-large", feito && "text-on-surface-variant line-through decoration-on-surface-variant/50")}>

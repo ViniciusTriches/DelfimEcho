@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import { useActionState, useState, useTransition } from "react";
 import { CheckIcon, ChevronDownIcon, CircleAlertIcon, CornerDownRightIcon, TimerIcon } from "lucide-react";
 import { toast } from "sonner";
+import * as m from "motion/react-m";
+import { CheckAnimado } from "@/components/check-animado";
 import { ConfirmButton } from "@/components/confirm-button";
+import { EcoAneis } from "@/components/eco";
 import { Horas } from "@/components/horas";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Chip } from "@/components/ui/chip";
@@ -21,6 +24,7 @@ import { corArea } from "@/lib/cores-area";
 import { cn } from "@/lib/utils";
 import { descartarTimer, iniciarTimer } from "../timer/actions";
 import { salvarSessao } from "./actions";
+import { ComemoracaoNivel } from "./comemoracao-nivel";
 
 type HabilidadeOpcao = { id: string; nome: string; area: string; cor: string; permitePassiva: boolean };
 
@@ -120,9 +124,15 @@ function RegistroForm({
     return (
       <div className="flex max-w-xl flex-col items-start gap-5 rounded-lg bg-surface-container-low p-6">
         <div className="flex items-center gap-3">
-          <span className="flex size-10 items-center justify-center rounded-full bg-concluido text-surface">
-            <CheckIcon className="size-5" strokeWidth={2.5} aria-hidden />
-          </span>
+          <m.span
+            className="relative flex size-10 items-center justify-center rounded-full bg-concluido text-surface"
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 420, damping: 22 }}
+          >
+            <EcoAneis cor="var(--concluido)" />
+            <CheckAnimado className="size-5" strokeWidth={2.5} atraso={0.1} />
+          </m.span>
           <h2 className="type-title-large text-on-surface">Sessão salva</h2>
         </div>
         <p className="type-body-large text-on-surface-variant">
@@ -131,6 +141,7 @@ function RegistroForm({
             <Horas valor={estado.horasEfetivas} /> efetivas
           </span>
         </p>
+        {estado.nivelNovo && <ComemoracaoNivel nivel={estado.nivelNovo} habilidade={estado.habilidade} />}
         <div className="flex flex-wrap gap-2">
           <Button onClick={aoRegistrarOutra}>Registrar outra</Button>
           <Link href={`/habilidades/${estado.skillId}`} className={buttonVariants({ variant: "outline" })}>
