@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
+import { Bloco } from "@/components/esqueleto";
 import { buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 import { LinhaDoTempo } from "../../marcos/linha-do-tempo";
@@ -19,7 +20,7 @@ export async function SecoesDaArea({ areaId }: { areaId: string }) {
       .eq("area_id", areaId)
       .eq("status", "ativa")
       .order("prazo", { ascending: true, nullsFirst: false }),
-    carregarMetricas(areaId),
+    carregarMetricas({ areaId }),
     supabase
       .from("milestones")
       .select("id, titulo, descricao, data, areas(nome, cor), skills(nome)", { count: "exact" })
@@ -108,5 +109,16 @@ function Secao({
       </div>
       {temItens ? children : <p className="text-sm text-muted-foreground">{vazio}</p>}
     </section>
+  );
+}
+
+/** Enquanto metas, métricas e marcos chegam (o resto da área já aparece). */
+export function SecoesCarregando() {
+  return (
+    <div className="mt-10 flex flex-col gap-3" aria-busy="true">
+      <Bloco className="h-6 w-36" />
+      <Bloco className="h-24 rounded-lg" />
+      <Bloco className="h-24 rounded-lg" />
+    </div>
   );
 }

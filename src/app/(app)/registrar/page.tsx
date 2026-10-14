@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
 import { createClient } from "@/lib/supabase/server";
@@ -53,7 +54,9 @@ export default async function RegistrarPage({ searchParams }: PageProps<"/regist
         />
       )}
 
-      <UltimasSessoes />
+      <Suspense fallback={null}>
+        <UltimasSessoes />
+      </Suspense>
     </>
   );
 }

@@ -82,7 +82,7 @@ export async function carregarResumo(tipo: TipoRevisao, p: Periodo) {
         .range(de, ate),
     ),
     supabase.from("reviews").select("*").eq("tipo", tipo).eq("periodo_inicio", p.desde).maybeSingle(),
-    carregarHabitos(hoje, p.desde),
+    carregarHabitos(),
   ]);
 
   const areaDaSkill = new Map((skills ?? []).map((s) => [s.id, s.area_id]));

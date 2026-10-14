@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CheckIcon, PencilIcon, PlusCircleIcon, Trash2Icon } from "lucide-react";
 import { ConfirmButton } from "@/components/confirm-button";
+import { Bloco } from "@/components/esqueleto";
 import { GraficoHoras, GraficoLinha } from "@/components/graficos";
 import { PageHeader } from "@/components/page-header";
 import { Badge } from "@/components/ui/badge";
@@ -276,7 +278,9 @@ export default async function HabilidadePage({ params, searchParams }: PageProps
 
       {/* Sessões e reflexões */}
       <Secao titulo="Sessões e reflexões" descricao="Para reler o que você aprendeu">
-        <SessoesHabilidade skillId={id} todas={todasSessoes} />
+        <Suspense fallback={<Bloco className="h-40 rounded-lg" />}>
+          <SessoesHabilidade skillId={id} todas={todasSessoes} />
+        </Suspense>
       </Secao>
     </>
   );

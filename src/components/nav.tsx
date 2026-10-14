@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { Menu } from "@base-ui/react/menu";
 import { EllipsisIcon } from "lucide-react";
 import { Logo } from "@/components/logo";
@@ -14,10 +14,18 @@ import { cn } from "@/lib/utils";
 // A rota atual só existe em tempo de execução: o fallback (sem destaque) entra no HTML
 // pré-renderizado e o destaque do item ativo aparece em seguida.
 
-type Rota = { pathname: string | null };
+type Rota = { pathname: string | null; navegar?: (href: string) => void };
 
+/**
+ * Rota atual com destaque otimista: ao clicar num destino, ele fica ativo na hora
+ * (antes de a nova tela chegar). Se a rota mudar por outro caminho (voltar, outro link),
+ * o alvo antigo deixa de valer porque foi registrado a partir de outra rota.
+ */
 function useRota(): Rota {
-  return { pathname: usePathname() };
+  const pathname = usePathname();
+  const [alvo, setAlvo] = useState<{ href: string; de: string } | null>(null);
+  const atual = alvo && alvo.de === pathname ? alvo.href : pathname;
+  return { pathname: atual, navegar: (href) => setAlvo({ href, de: pathname }) };
 }
 
 const ativo = (r: Rota, item: ItemNav) => (r.pathname ? itemAtivo(r.pathname, item) : false);
@@ -28,14 +36,17 @@ function Destino({
   item,
   selecionado,
   largura,
+  aoNavegar,
 }: {
   item: ItemNav;
   selecionado: boolean;
   largura: "rail" | "barra";
+  aoNavegar?: (href: string) => void;
 }) {
   return (
     <Link
       href={item.href}
+      onNavigate={() => aoNavegar?.(item.href)}
       aria-current={selecionado ? "page" : undefined}
       className={cn(
         "group flex cursor-pointer flex-col items-center gap-1 outline-none",
@@ -93,7 +104,7 @@ function Rail({ rota }: { rota: Rota }) {
       <ul className="flex flex-col items-center gap-3">
         {PRINCIPAIS.map((item) => (
           <li key={item.href}>
-            <Destino item={item} selecionado={ativo(rota, item)} largura="rail" />
+            <Destino item={item} selecionado={ativo(rota, item)} largura="rail" aoNavegar={rota.navegar} />
           </li>
         ))}
         <li>
@@ -118,7 +129,7 @@ function Rail({ rota }: { rota: Rota }) {
                   {MAIS.map((item) => (
                     <Menu.LinkItem
                       key={item.href}
-                      render={<Link href={item.href} />}
+                      render={<Link href={item.href} onNavigate={() => rota.navegar?.(item.href)} />}
                       className={cn(
                         "flex min-h-12 cursor-pointer items-center gap-3 px-4 type-label-large outline-none data-highlighted:bg-on-surface/8",
                         ativo(rota, item) && "bg-secondary-container text-on-secondary-container",
@@ -164,11 +175,11 @@ function Barra({ rota }: { rota: Rota }) {
       <ul className="mx-auto flex max-w-lg">
         {PRINCIPAIS.map((item) => (
           <li key={item.href} className="flex flex-1">
-            <Destino item={item} selecionado={ativo(rota, item)} largura="barra" />
+            <Destino item={item} selecionado={ativo(rota, item)} largura="barra" aoNavegar={rota.navegar} />
           </li>
         ))}
         <li className="flex flex-1">
-          <Destino item={mais} selecionado={ativoMais(rota)} largura="barra" />
+          <Destino item={mais} selecionado={ativoMais(rota)} largura="barra" aoNavegar={rota.navegar} />
         </li>
       </ul>
     </nav>
@@ -181,6 +192,7 @@ function Fab({ rota }: { rota: Rota }) {
   return (
     <Link
       href={REGISTRAR.href}
+      onNavigate={() => rota.navegar?.(REGISTRAR.href)}
       className={cn(
         fabVariants({ tamanho: "estendido" }),
         "fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-20 md:hidden",

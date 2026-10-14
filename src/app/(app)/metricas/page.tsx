@@ -15,7 +15,7 @@ export default async function MetricasPage({ searchParams }: PageProps<"/metrica
   const area = parametroUuid((await searchParams).area);
   const supabase = await createClient();
   const [metricas, { areas }, { data: arquivadas }] = await Promise.all([
-    carregarMetricas(area),
+    carregarMetricas({ areaId: area }),
     carregarOpcoes(),
     supabase.from("metrics").select("id, nome").eq("arquivada", true).order("nome"),
   ]);

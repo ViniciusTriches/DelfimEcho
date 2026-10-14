@@ -1,35 +1,30 @@
 import "server-only";
-import { todasAsLinhas } from "@/lib/supabase/paginar";
 import { createClient } from "@/lib/supabase/server";
 
-/** Métricas ativas (opcionalmente de uma área) com seus valores em ordem de data. */
-export async function carregarMetricas(areaId?: string | null) {
+/**
+ * Métricas ativas com os dois valores mais recentes (é o que os cartões mostram: último
+ * valor e variação). Uma consulta só: os valores vêm embutidos, limitados por métrica.
+ */
+export async function carregarMetricas(filtro: { areaId?: string | null; soNoInicio?: boolean } = {}) {
   const supabase = await createClient();
   let consulta = supabase
     .from("metrics")
-    .select("*, areas!inner(nome, cor, ordem, arquivada)")
+    .select("*, areas!inner(nome, cor, ordem, arquivada), metric_entries(data, valor)")
     .eq("arquivada", false)
-    .eq("areas.arquivada", false);
-  if (areaId) consulta = consulta.eq("area_id", areaId);
+    .eq("areas.arquivada", false)
+    .order("data", { referencedTable: "metric_entries", ascending: false })
+    .order("id", { referencedTable: "metric_entries", ascending: false })
+    .limit(2, { referencedTable: "metric_entries" });
+  if (filtro.areaId) consulta = consulta.eq("area_id", filtro.areaId);
+  if (filtro.soNoInicio) consulta = consulta.eq("no_dashboard", true);
   const { data: metricas } = await consulta;
-  if (!metricas?.length) return [];
 
-  const ids = metricas.map((m) => m.id);
-  const valores = await todasAsLinhas((de, ate) =>
-    supabase
-      .from("metric_entries")
-      .select("metric_id, data, valor")
-      .in("metric_id", ids)
-      .order("data")
-      .order("id")
-      .range(de, ate),
-  );
-
-  return metricas
+  return (metricas ?? [])
     .sort((a, b) => a.areas.ordem - b.areas.ordem || a.ordem - b.ordem)
-    .map((m) => ({
+    .map(({ metric_entries, ...m }) => ({
       ...m,
-      valores: valores.filter((v) => v.metric_id === m.id).map((v) => ({ data: v.data, valor: Number(v.valor) })),
+      // Em ordem de data (o anterior antes do último), como o cartão espera.
+      valores: [...metric_entries].reverse().map((v) => ({ data: v.data, valor: Number(v.valor) })),
     }));
 }
 

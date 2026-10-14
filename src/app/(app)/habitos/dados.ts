@@ -5,28 +5,31 @@ import { todasAsLinhas } from "@/lib/supabase/paginar";
 import { createClient } from "@/lib/supabase/server";
 import type { ItemChecklist } from "./checklist";
 
-/** Hábitos ativos e os dias feitos de cada um (desde o início mais antigo, ou `desde` se for antes). */
-export async function carregarHabitos(hoje: string, desde?: string) {
+/**
+ * Hábitos ativos e os dias feitos de cada um. As duas consultas saem juntas (uma ida ao
+ * banco): os registros vêm filtrados pelos hábitos ativos via join, sem esperar a lista.
+ * Registros anteriores ao início de um hábito não contam nas regras (lib/habitos).
+ */
+export async function carregarHabitos() {
   const supabase = await createClient();
-  const { data: habitos } = await supabase
-    .from("habits")
-    .select("id, nome, frequencia, dias_semana, inicio, areas(cor)")
-    .eq("ativo", true)
-    .order("ordem");
-  if (!habitos?.length) return { habitos: [], feitos: new Map<string, Set<string>>() };
-
-  const maisAntigo = habitos.reduce((min, h) => (h.inicio < min ? h.inicio : min), hoje);
-  const inicio = desde && desde < maisAntigo ? desde : maisAntigo;
-  const logs = await todasAsLinhas((de, ate) =>
+  const [{ data: habitos }, logs] = await Promise.all([
     supabase
-      .from("habit_logs")
-      .select("habit_id, data")
-      .eq("concluido", true)
-      .gte("data", inicio)
-      .order("data")
-      .order("habit_id")
-      .range(de, ate),
-  );
+      .from("habits")
+      .select("id, nome, frequencia, dias_semana, inicio, areas(cor)")
+      .eq("ativo", true)
+      .order("ordem"),
+    todasAsLinhas((de, ate) =>
+      supabase
+        .from("habit_logs")
+        .select("habit_id, data, habits!inner(ativo)")
+        .eq("concluido", true)
+        .eq("habits.ativo", true)
+        .order("data")
+        .order("habit_id")
+        .range(de, ate),
+    ),
+  ]);
+  if (!habitos?.length) return { habitos: [], feitos: new Map<string, Set<string>>() };
 
   const feitos = new Map<string, Set<string>>(habitos.map((h) => [h.id, new Set()]));
   logs.forEach((l) => feitos.get(l.habit_id)?.add(l.data));

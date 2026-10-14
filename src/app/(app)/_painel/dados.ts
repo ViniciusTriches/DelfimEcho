@@ -51,8 +51,8 @@ export async function carregarPainel() {
       .lte("prazo", somarDias(hoje, DIAS_PRAZO_PROXIMO))
       .order("prazo"),
     supabase.from("active_timer").select("iniciado_em, pausado_em, segundos_pausados, skills(nome)").maybeSingle(),
-    carregarHabitos(hoje),
-    carregarMetricas(),
+    carregarHabitos(),
+    carregarMetricas({ soNoInicio: true }),
     supabase.from("reviews").select("tipo, periodo_inicio").gte("periodo_inicio", somarDias(hoje, -45)),
   ]);
 
@@ -81,7 +81,7 @@ export async function carregarPainel() {
     areas: areas ?? [],
     timer,
     checklist: montarChecklist(habitos, hoje, hoje),
-    metricas: metricas.filter((m) => m.no_dashboard),
+    metricas,
     metasProximas: metas ?? [],
     lembretesRevisao: lembretesPendentes(hoje, revisoes ?? []),
     limiteAlerta,

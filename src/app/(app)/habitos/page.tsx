@@ -23,7 +23,7 @@ export default async function HabitosPage({ searchParams }: PageProps<"/habitos"
   const mes = typeof params.mes === "string" && MES.test(params.mes) && params.mes <= mesDe(hoje) ? params.mes : mesDe(hoje);
   const filtro = typeof params.habito === "string" ? params.habito : null;
 
-  const carregados = await carregarHabitos(hoje, `${mes}-01`);
+  const carregados = await carregarHabitos();
   const { habitos, feitos } = carregados;
 
   if (!habitos.length) {

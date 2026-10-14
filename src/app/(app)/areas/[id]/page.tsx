@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -20,7 +21,7 @@ import { NOMES_PERIODO, type Periodo } from "@/lib/tipos";
 import { ehUuid } from "@/lib/uuid";
 import { arquivarHabilidade, moverHabilidade } from "../../habilidades/actions";
 import { arquivarArea } from "../actions";
-import { SecoesDaArea } from "./secoes";
+import { SecoesCarregando, SecoesDaArea } from "./secoes";
 
 export async function generateMetadata({ params }: PageProps<"/areas/[id]">): Promise<Metadata> {
   const { id } = await params;
@@ -177,7 +178,9 @@ export default async function AreaPage({ params }: PageProps<"/areas/[id]">) {
         )}
       </section>
 
-      <SecoesDaArea areaId={id} />
+      <Suspense fallback={<SecoesCarregando />}>
+        <SecoesDaArea areaId={id} />
+      </Suspense>
     </>
   );
 }
