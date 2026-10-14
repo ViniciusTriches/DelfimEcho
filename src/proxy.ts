@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { variaveisFaltando } from "@/lib/env";
 
 // Rotas acessíveis sem login.
-const PUBLICAS = ["/login", "/api/diag-latencia"]; // diagnóstico TEMPORÁRIO
+const PUBLICAS = ["/login"];
 
 /**
  * Renova a sessão do Supabase a cada requisição e manda para /login quem não
