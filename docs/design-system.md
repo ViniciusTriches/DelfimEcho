@@ -190,6 +190,14 @@ Durações: feedback 100–300ms, entradas de overlay 300ms, comemoração até 
 - **Conteúdo:** até `max-w-5xl`, com 16px de margem no celular e 32px no PC. No PC, o conteúdo começa depois do rail (96px).
 - **Espaço:** grade de 4px. 8px entre itens relacionados, 16 a 24px entre blocos e 32 a 40px entre seções, com mais espaço acima de um título do que abaixo.
 - **Rodapé no celular:** o conteúdo tem margem inferior suficiente para a barra de navegação (80px) e o FAB.
+- **Áreas seguras (app instalado):** `viewport-fit=cover`; barra superior, rail, barra inferior, FAB, snackbar e modo foco usam `env(safe-area-inset-*)` para não ficar sob o notch nem sob a barra inferior do iPhone.
+
+### Ícone e app instalado
+
+- **Ícone:** a marca (ponto que emite + três arcos com 100%, 74% e 50% de opacidade, o eco perdendo força) em creme `#F8F1E8` sobre a primária `#2D6860`. Variantes: *any* (quadrado arredondado), *maskable* (fundo até a borda, marca na zona segura de 40%), iPhone 180 (o iOS arredonda), favicon (ICO 16/32/48 + SVG). Atalhos do Android: glifos Lucide em `on-primary-container` sobre `primary-container`. Tudo gerado por `npm run icones` ([scripts/gerar-icones.mjs](../scripts/gerar-icones.mjs)).
+- **Abertura:** fundo creme com o ícone no centro (Android pelo manifest; iPhone por telas de abertura por aparelho). A cor da barra do sistema acompanha o tema escolhido no app (creme / café).
+- **Snackbar de atualização:** "Nova versão disponível" + **Atualizar**, sem prazo para sumir; nada troca sem o toque.
+- **Offline:** página única no estilo do app (cartão tonal, marca, "Sem conexão", botão pílula), no tema que o usuário escolheu.
 
 ## 9. Regras de UX (mantidas)
 

@@ -24,7 +24,7 @@ export function BarraSuperior({ children }: { children: React.ReactNode }) {
       <div ref={sentinela} aria-hidden className="h-px" />
       <header
         className={cn(
-          "sticky top-0 z-10 transition-colors duration-300 ease-standard",
+          "sticky top-0 z-10 pt-[env(safe-area-inset-top)] transition-colors duration-300 ease-standard",
           rolada ? "bg-surface-container" : "bg-surface",
         )}
       >

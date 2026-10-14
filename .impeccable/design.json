@@ -185,7 +185,7 @@
     }
   ],
   "narrative": {
-    "northStar": "O Instrumento Calmo",
+    "northStar": "Eco",
     "overview": "O Echo é um instrumento de uso diário, não uma vitrine: papel quente e areia sob a gramática do Material 3. A tela clara é creme, os contêineres são camadas de areia e bege um pouco mais escuras que o fundo (o inverso do M3 padrão, que levaria o nível mais baixo ao branco), e a tinta é um marrom-acinzentado. A única voz cromática da interface é o teal suave da primária; as cores terrosas existem para identificar áreas e estados, sempre ao lado de um nome.\n\nA densidade é de ferramenta (modo Operate): cartões preenchidos sem borda nem sombra, títulos discretos em peso 400, números em Roboto Mono como dado. A profundidade vem da troca de tom de superfície, não de sombras. O movimento confirma ações e marca conquistas; nada coreografa a abertura de telas, porque o esqueleto de carregamento já faz a continuidade.\n\nA assinatura é o Eco: o ripple do M3 vira uma onda de ecolocalização. Todo toque em um elemento com camada de estado solta uma onda a partir do ponto tocado; nas ações que importam (salvar sessão, marcar hábito, concluir meta, subir de nível) a onda vira dois ou três anéis concêntricos. O logo e a tela de login usam as mesmas ondas.",
     "keyCharacteristics": [
       "Fundo creme, contêineres em areia, tinta café; nunca branco nem preto puros na interface.",

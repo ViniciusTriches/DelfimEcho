@@ -189,7 +189,7 @@ export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: 
           {modoFoco && (
           <m.div
             key="foco"
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-12 bg-surface p-6"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-12 bg-surface px-[max(1.5rem,env(safe-area-inset-left))] pt-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]"
             initial={{ opacity: 0, scale: 1.04 }}
             animate={{ opacity: 1, scale: 1, transition: { duration: 0.3, ease: EASE.desacelera } }}
             exit={{ opacity: 0, scale: 1.04, transition: { duration: 0.15, ease: EASE.acelera } }}
@@ -197,7 +197,7 @@ export function TimerPainel({ timer, distracoes, habilidade, area, cor, foco }: 
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-4 right-4"
+              className="absolute top-[max(1rem,env(safe-area-inset-top))] right-[max(1rem,env(safe-area-inset-right))]"
               aria-label="Sair do modo foco"
               onClick={() => setModoFoco(false)}
             >

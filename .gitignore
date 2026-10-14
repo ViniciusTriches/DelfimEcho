@@ -52,3 +52,6 @@ next-env.d.ts
 .impeccable/review/
 .impeccable/hook.cache.json
 .impeccable/*.local.json
+
+# PWA: gerado a cada build (scripts/gerar-sw.mjs)
+public/sw.js

@@ -280,7 +280,7 @@ Fontes no código: `src/app/tema.css` (cores `--md-*`, geradas por `scripts/gera
 
 ## Overview
 
-**Creative North Star: "O Instrumento Calmo"**
+**Creative North Star: "Eco"**
 
 O Echo é um instrumento de uso diário, não uma vitrine: papel quente e areia sob a gramática do Material 3. A tela clara é creme, os contêineres são camadas de areia e bege um pouco mais escuras que o fundo (o inverso do M3 padrão, que levaria o nível mais baixo ao branco), e a tinta é um marrom-acinzentado. A única voz cromática da interface é o teal suave da primária; as cores terrosas existem para identificar áreas e estados, sempre ao lado de um nome.
 

@@ -14,7 +14,7 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
     <>
       <NavRail />
 
-      <div className="flex min-h-full flex-1 flex-col md:pl-24">
+      <div className="flex min-h-full flex-1 flex-col pr-[env(safe-area-inset-right)] pl-[env(safe-area-inset-left)] md:pl-[calc(6rem+env(safe-area-inset-left))]">
         <BarraSuperior>
           <div className="mx-auto flex h-16 w-full max-w-5xl items-center gap-2 px-4 md:px-8">
             <Link href="/" className="rounded-md md:hidden" aria-label="Echo, início">

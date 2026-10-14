@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/gerar-sw.mjs && next build",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "tema": "npx --yes tsx scripts/gerar-tema.mjs --relatorio",
+    "icones": "node scripts/gerar-icones.mjs",
     "db:status": "npx --yes supabase@2.120.0 migration list",
     "db:new": "npx --yes supabase@2.120.0 migration new",
     "db:push": "npx --yes supabase@2.120.0 db push",

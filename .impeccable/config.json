@@ -1,0 +1,23 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "flex",
+        "createdAt": "2026-10-14T17:26:27.790Z",
+        "reason": "falso positivo: o detector separa 'Roboto Flex' (fonte declarada no DESIGN.md) e lê 'flex'"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "public/offline.html"
+        ],
+        "createdAt": "2026-10-14T17:26:27.992Z",
+        "reason": "paleta creme definida pelo usuário no briefing da revisão de design (creme, areia, café); a página offline espelha o tema do app"
+      }
+    ]
+  }
+}

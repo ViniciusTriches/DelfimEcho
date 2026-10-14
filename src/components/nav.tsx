@@ -99,7 +99,7 @@ function Rail({ rota }: { rota: Rota }) {
   return (
     <nav
       aria-label="Navegação principal"
-      className="fixed inset-y-0 left-0 z-20 hidden w-24 flex-col items-center gap-3 bg-surface pt-5 pb-6 md:flex"
+      className="fixed inset-y-0 left-0 z-20 hidden w-[calc(6rem+env(safe-area-inset-left))] flex-col items-center gap-3 bg-surface pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pl-[env(safe-area-inset-left)] md:flex"
     >
       <Link href="/" aria-label="Echo, início" className="mb-2 rounded-md p-1">
         <Logo somenteMarca />

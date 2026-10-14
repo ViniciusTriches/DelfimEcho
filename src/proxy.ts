@@ -1,12 +1,12 @@
-﻿import { createServerClient } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { variaveisFaltando } from "@/lib/env";
 
-// Rotas acessÃ­veis sem login.
+// Rotas acessíveis sem login.
 const PUBLICAS = ["/login"];
 
 /**
- * Renova a sessÃ£o do Supabase a cada requisiÃ§Ã£o e manda para /login quem nÃ£o
+ * Renova a sessão do Supabase a cada requisição e manda para /login quem não
  * estiver autenticado.
  */
 export async function proxy(request: NextRequest) {
@@ -35,7 +35,7 @@ export async function proxy(request: NextRequest) {
     },
   );
 
-  // NÃ£o coloque cÃ³digo entre createServerClient e getClaims: Ã© aqui que a sessÃ£o Ã© renovada.
+  // Não coloque código entre createServerClient e getClaims: é aqui que a sessão é renovada.
   const { data } = await supabase.auth.getClaims();
   const logado = Boolean(data?.claims);
 
@@ -60,7 +60,7 @@ export async function proxy(request: NextRequest) {
 }
 
 function paginaErroConfiguracao(faltando: string[]) {
-  console.error(`Echo: variÃ¡veis de ambiente ausentes: ${faltando.join(", ")}`);
+  console.error(`Echo: variáveis de ambiente ausentes: ${faltando.join(", ")}`);
 
   const itens = faltando.map((nome) => `<li><code>${nome}</code></li>`).join("");
   const html = `<!doctype html>
@@ -68,12 +68,12 @@ function paginaErroConfiguracao(faltando: string[]) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ConfiguraÃ§Ã£o incompleta Â· Echo</title>
+<title>Configuração incompleta · Echo</title>
 <style>
   :root { color-scheme: light dark; --bg: #F8F1E8; --fg: #2D2A24; --muted: #514B3D; --code: #EFE6D7; }
   @media (prefers-color-scheme: dark) { :root { --bg: #1D1A15; --fg: #EBE4DB; --muted: #C9C0AF; --code: #29251E; } }
   body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg);
-         color: var(--fg); font: 16px/1.5 Roboto, system-ui, sans-serif; }
+         color: var(--fg); font: 16px/1.5 "Roboto Flex", ui-sans-serif, system-ui, sans-serif; }
   main { max-width: 32rem; padding: 2rem 1rem; }
   h1 { font-size: 1.375rem; line-height: 1.75rem; font-weight: 400; margin: 0 0 .5rem; }
   p { color: var(--muted); }
@@ -82,12 +82,12 @@ function paginaErroConfiguracao(faltando: string[]) {
 </head>
 <body>
 <main>
-  <h1>Echo: configuraÃ§Ã£o incompleta</h1>
-  <p>Faltam estas variÃ¡veis de ambiente:</p>
+  <h1>Echo: configuração incompleta</h1>
+  <p>Faltam estas variáveis de ambiente:</p>
   <ul>${itens}</ul>
   <p>Localmente, preencha o <code>.env.local</code> e reinicie o <code>npm run dev</code>.
-  Na Vercel, cadastre-as em Settings â†’ Environment Variables e faÃ§a um Redeploy
-  (as <code>NEXT_PUBLIC_*</code> sÃ³ entram em um build novo).</p>
+  Na Vercel, cadastre-as em Settings → Environment Variables e faça um Redeploy
+  (as <code>NEXT_PUBLIC_*</code> só entram em um build novo).</p>
 </main>
 </body>
 </html>`;
@@ -100,7 +100,7 @@ function paginaErroConfiguracao(faltando: string[]) {
 
 export const config = {
   matcher: [
-    // Tudo, exceto arquivos estÃ¡ticos, imagens e arquivos do PWA.
-    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|icons/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
+    // Tudo, exceto arquivos estáticos, imagens e arquivos do PWA.
+    "/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|sw.js|offline.html|icons/|splash/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)",
   ],
 };
