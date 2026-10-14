@@ -22,7 +22,7 @@ export function Abas({ rotulo, abas }: { rotulo: string; abas: Aba[] }) {
           {a.contagem !== undefined && (
             <span
               className={cn(
-                "numero min-w-5 rounded-full px-1.5 text-center type-label-small",
+                "numero min-w-5 rounded-full px-1.5 text-center type-label-medium",
                 a.ativa ? "bg-primary text-on-primary" : "bg-surface-container-highest text-on-surface-variant",
               )}
             >

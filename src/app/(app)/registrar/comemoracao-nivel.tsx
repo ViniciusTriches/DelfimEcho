@@ -67,8 +67,8 @@ export function ComemoracaoNivel({ nivel, habilidade }: { nivel: string; habilid
         </span>
       </span>
       <div className="min-w-0 overflow-hidden">
-        <p data-detalhe className="type-label-large">Novo nível em {habilidade}</p>
         <p data-nivel className="type-headline-small">{nivel}</p>
+        <p data-detalhe className="type-body-medium">Novo nível em {habilidade}</p>
       </div>
     </div>
   );

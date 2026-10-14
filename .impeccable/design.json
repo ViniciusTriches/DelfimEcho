@@ -1,0 +1,231 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-14T00:00:00Z",
+  "title": "Design System: Echo",
+  "extensions": {
+    "fonte": "Cores: src/app/tema.css (gerado por scripts/gerar-tema.mjs, npm run tema). Tokens Tailwind, escala, sombras e movimento: src/app/globals.css. Slots de área: src/lib/cores-area.ts.",
+    "colorMeta": {
+      "primary": { "role": "primary", "displayName": "Teal Suave", "canonical": "#2D6860", "tonalRamp": ["#173531", "#004640", "#28635C", "#2D6860", "#528B83", "#77B0A8", "#97D2C9", "#C3E4DD"] },
+      "on-primary": { "role": "primary", "displayName": "Creme Sobre Teal", "canonical": "#FFFAF6" },
+      "primary-container": { "role": "primary", "displayName": "Teal Névoa", "canonical": "#C3E4DD" },
+      "on-primary-container": { "role": "primary", "displayName": "Teal Profundo", "canonical": "#173531" },
+      "secondary-container": { "role": "secondary", "displayName": "Verde-Água Tonal", "canonical": "#D4E6E2", "tonalRamp": ["#233331", "#394A47", "#51625F", "#B8CAC6", "#D4E6E2"] },
+      "on-secondary-container": { "role": "secondary", "displayName": "Verde-Água Escuro", "canonical": "#394A47" },
+      "tertiary": { "role": "tertiary", "displayName": "Terracota Suave", "canonical": "#825339", "tonalRamp": ["#4C270F", "#663C23", "#825339", "#F6B998", "#FFDBC9"] },
+      "tertiary-container": { "role": "tertiary", "displayName": "Pêssego", "canonical": "#FFDBC9" },
+      "on-tertiary-container": { "role": "tertiary", "displayName": "Terracota Escura", "canonical": "#663C23" },
+      "error": { "role": "error", "displayName": "Tijolo", "canonical": "#984635" },
+      "error-container": { "role": "error", "displayName": "Tijolo Claro", "canonical": "#FFDAD3" },
+      "on-error-container": { "role": "error", "displayName": "Tijolo Escuro", "canonical": "#7A2F20" },
+      "surface": { "role": "neutral", "displayName": "Creme", "canonical": "#F8F1E8", "tonalRamp": ["#1D1A15", "#2D2A24", "#514B3D", "#7E7667", "#CFC5B4", "#E3DACB", "#EFE6D7", "#F8F1E8"] },
+      "surface-container-lowest": { "role": "neutral", "displayName": "Creme Claro", "canonical": "#FEF7EE" },
+      "surface-container-low": { "role": "neutral", "displayName": "Areia", "canonical": "#F5EBDC" },
+      "surface-container": { "role": "neutral", "displayName": "Areia Média", "canonical": "#EFE6D7" },
+      "surface-container-high": { "role": "neutral", "displayName": "Areia Funda", "canonical": "#E9E0D1" },
+      "surface-container-highest": { "role": "neutral", "displayName": "Bege", "canonical": "#E3DACB" },
+      "on-surface": { "role": "neutral", "displayName": "Tinta Café", "canonical": "#2D2A24" },
+      "on-surface-variant": { "role": "neutral", "displayName": "Café Médio", "canonical": "#514B3D" },
+      "outline": { "role": "neutral", "displayName": "Contorno", "canonical": "#7E7667" },
+      "outline-variant": { "role": "neutral", "displayName": "Divisória", "canonical": "#CFC5B4" },
+      "inverse-surface": { "role": "neutral", "displayName": "Café Inverso", "canonical": "#38342E" },
+      "inverse-on-surface": { "role": "neutral", "displayName": "Creme Inverso", "canonical": "#F4EDE4" },
+      "scrim": { "role": "neutral", "displayName": "Scrim", "canonical": "#1A1712" },
+      "terra-salvia": { "role": "area", "displayName": "Sálvia", "canonical": "#426534", "tonalRamp": ["#34412D", "#426534", "#A4CC91", "#D2E2C6"] },
+      "terra-terracota": { "role": "area", "displayName": "Terracota", "canonical": "#B05F32", "tonalRamp": ["#52372A", "#B05F32", "#EC8E5E", "#FED4C1"] },
+      "terra-ardosia": { "role": "area", "displayName": "Ardósia", "canonical": "#466890", "tonalRamp": ["#333E4E", "#466890", "#97B9E5", "#D1DEF2"] },
+      "terra-mostarda": { "role": "area", "displayName": "Mostarda", "canonical": "#705200", "tonalRamp": ["#493C21", "#705200", "#F2BF4E", "#EFDAB5"] },
+      "terra-ameixa": { "role": "area", "displayName": "Ameixa", "canonical": "#9C6994", "tonalRamp": ["#4B3847", "#9C6994", "#C68FBC", "#F1D5E9"] },
+      "terra-mar": { "role": "area", "displayName": "Mar", "canonical": "#1D6B6A", "tonalRamp": ["#294241", "#1D6B6A", "#81C8C6", "#C6E2E1"] },
+      "terra-argila": { "role": "area", "displayName": "Argila", "canonical": "#9E5251", "tonalRamp": ["#533635", "#9E5251", "#F69A98", "#FED3D0"] },
+      "terra-oliva": { "role": "area", "displayName": "Oliva", "canonical": "#777525", "tonalRamp": ["#403F24", "#777525", "#AEAC56", "#E1DEB9"] },
+      "viz-efetiva": { "role": "dataviz", "displayName": "Efetiva", "canonical": "#28635C" },
+      "viz-bruta": { "role": "dataviz", "displayName": "Bruta", "canonical": "#72ABA3" },
+      "viz-calor-1": { "role": "dataviz", "displayName": "Calor 1", "canonical": "#77B0A8", "tonalRamp": ["#004640", "#2D6860", "#528B83", "#77B0A8"] },
+      "viz-calor-2": { "role": "dataviz", "displayName": "Calor 2", "canonical": "#528B83" },
+      "viz-calor-3": { "role": "dataviz", "displayName": "Calor 3", "canonical": "#2D6860" },
+      "viz-calor-4": { "role": "dataviz", "displayName": "Calor 4", "canonical": "#004640" },
+      "sequencia": { "role": "state", "displayName": "Sequência (Mostarda)", "canonical": "#705200" },
+      "concluido": { "role": "state", "displayName": "Concluído (Sálvia)", "canonical": "#426534" },
+      "atrasado": { "role": "state", "displayName": "Atrasado (Erro)", "canonical": "#984635" }
+    },
+    "temaEscuro": {
+      "primary": "#97D2C9", "on-primary": "#003732", "primary-container": "#2F4C48", "on-primary-container": "#C8E9E3",
+      "secondary-container": "#394A47", "on-secondary-container": "#D4E6E2",
+      "tertiary": "#F6B998", "tertiary-container": "#663C23", "on-tertiary-container": "#FFDBC9",
+      "error": "#FFB4A5", "error-container": "#7A2F20", "on-error-container": "#FFDAD3",
+      "surface": "#1D1A15", "surface-container-lowest": "#17140F", "surface-container-low": "#232019", "surface-container": "#29251E", "surface-container-high": "#302D25", "surface-container-highest": "#39352E",
+      "on-surface": "#EBE4DB", "on-surface-variant": "#C9C0AF", "outline": "#989080", "outline-variant": "#4C4639",
+      "inverse-surface": "#E8E1D9", "inverse-on-surface": "#33302A", "scrim": "#0D0B06",
+      "terra-salvia": "#A4CC91", "terra-terracota": "#EC8E5E", "terra-ardosia": "#97B9E5", "terra-mostarda": "#F2BF4E", "terra-ameixa": "#C68FBC", "terra-mar": "#81C8C6", "terra-argila": "#F69A98", "terra-oliva": "#AEAC56",
+      "viz-efetiva": "#97D2C9", "viz-bruta": "#28635C", "viz-calor-1": "#256059", "viz-calor-2": "#4A837C", "viz-calor-3": "#6FA8A0", "viz-calor-4": "#9DD7CE",
+      "sequencia": "#F2BF4E", "concluido": "#A4CC91", "atrasado": "#FFB4A5"
+    },
+    "typographyMeta": {
+      "display-small": { "displayName": "Display Small", "purpose": "Números de destaque. Raro." },
+      "headline-large": { "displayName": "Headline Large", "purpose": "Total de horas no resumo da revisão." },
+      "headline-medium": { "displayName": "Headline Medium", "purpose": "Título da página no PC; nome do app no login." },
+      "headline-small": { "displayName": "Headline Small", "purpose": "Título da página no celular, título de dialog, nome do nível na comemoração." },
+      "title-large": { "displayName": "Title Large", "purpose": "Títulos de seção." },
+      "title-medium": { "displayName": "Title Medium", "purpose": "Títulos de cartão e de lista." },
+      "title-small": { "displayName": "Title Small", "purpose": "Abas, título de tooltip, títulos de cartão pequeno." },
+      "body-large": { "displayName": "Body Large", "purpose": "Corpo padrão e texto dos campos." },
+      "body-medium": { "displayName": "Body Medium", "purpose": "Texto de cartão, dialog e descrições. O estilo mais usado." },
+      "body-small": { "displayName": "Body Small", "purpose": "Legendas, rodapés de gráfico, tooltips." },
+      "label-large": { "displayName": "Label Large", "purpose": "Botões, chips, FAB, itens de menu." },
+      "label-medium": { "displayName": "Label Medium", "purpose": "Rótulos da navegação e badges." },
+      "numero": { "displayName": "Número", "purpose": "Horas, contagens e eixos numéricos em Roboto Mono tabular." },
+      "numero-grande": { "displayName": "Número Grande", "purpose": "Números de destaque e cronômetro." }
+    },
+    "shadows": [
+      { "name": "elev-1", "value": "0 1px 2px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent), 0 1px 3px 1px color-mix(in oklab, var(--md-shadow) 8%, transparent)", "purpose": "Hover dos botões preenchido e tonal; FAB de ícone no rail." },
+      { "name": "elev-2", "value": "0 1px 2px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent), 0 2px 6px 2px color-mix(in oklab, var(--md-shadow) 9%, transparent)", "purpose": "Menus e tooltip de gráfico." },
+      { "name": "elev-3", "value": "0 4px 8px 3px color-mix(in oklab, var(--md-shadow) 10%, transparent), 0 1px 3px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent)", "purpose": "FAB estendido, dialogs, snackbar." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.2, 0, 0, 1)", "purpose": "Transições de estado, camada de estado, barra superior." },
+      { "name": "ease-emphasized-decelerate", "value": "cubic-bezier(0.05, 0.7, 0.1, 1)", "purpose": "Entradas: dialog, indicador da navegação, progresso, polegar do switch, anéis Eco." },
+      { "name": "ease-emphasized-accelerate", "value": "cubic-bezier(0.3, 0, 0.8, 0.15)", "purpose": "Saídas: dialog, FAB." },
+      { "name": "ease-standard-decelerate", "value": "cubic-bezier(0, 0, 0, 1)", "purpose": "Ripple Eco." },
+      { "name": "dur-short2", "value": "100ms", "purpose": "Feedback mínimo." },
+      { "name": "dur-short3", "value": "150ms", "purpose": "Camada de estado, chips, campos, saída de dialog." },
+      { "name": "dur-short4", "value": "200ms", "purpose": "Botões, switch, padrão do Motion." },
+      { "name": "dur-medium2", "value": "300ms", "purpose": "Entrada de dialog, indicador ativo, troca de tom da barra superior." },
+      { "name": "dur-medium4", "value": "400ms", "purpose": "Reserva." },
+      { "name": "dur-long2", "value": "500ms", "purpose": "Mudança de valor do progresso." },
+      { "name": "eco-ripple", "value": "450ms ease-standard-decelerate, opacidade 0.14 → 0", "purpose": "Onda de toque em todo elemento com camada de estado." },
+      { "name": "eco-aneis", "value": "3 anéis, 1.1s, 160ms de atraso, ease-emphasized-decelerate", "purpose": "Confirmação de ação importante." },
+      { "name": "progresso-entra", "value": "700ms ease-emphasized-decelerate", "purpose": "Preenchimento cresce do início ao aparecer." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "conteudo-max", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão Filled",
+      "kind": "button",
+      "refersTo": "button-filled",
+      "description": "Ação principal da tela: pílula em primary com camada de estado.",
+      "html": "<button class=\"ds-btn ds-btn-filled\">Salvar sessão</button>",
+      "css": ".ds-btn { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 24px; border: 1px solid transparent; border-radius: 9999px; font-family: var(--font-roboto-flex), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; letter-spacing: 0.00625rem; cursor: pointer; transition: background-color 200ms cubic-bezier(0.2,0,0,1), box-shadow 200ms cubic-bezier(0.2,0,0,1); } .ds-btn::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: currentColor; opacity: 0; transition: opacity 150ms cubic-bezier(0.2,0,0,1); } .ds-btn:hover::after { opacity: 0.08; } .ds-btn:focus-visible::after, .ds-btn:active::after { opacity: 0.1; } .ds-btn:focus-visible { outline: 2px solid var(--md-primary); outline-offset: 2px; } .ds-btn-filled { background: var(--md-primary); color: var(--md-on-primary); } .ds-btn-filled:hover { box-shadow: 0 1px 2px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent), 0 1px 3px 1px color-mix(in oklab, var(--md-shadow) 8%, transparent); }"
+    },
+    {
+      "name": "Botão Tonal",
+      "kind": "button",
+      "refersTo": "button-tonal",
+      "description": "Ação secundária com peso: secondary-container.",
+      "html": "<button class=\"ds-btn-tonal\">Iniciar timer</button>",
+      "css": ".ds-btn-tonal { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; height: 40px; padding: 0 24px; border: 1px solid transparent; border-radius: 9999px; background: var(--md-secondary-container); color: var(--md-on-secondary-container); font-family: var(--font-roboto-flex), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; cursor: pointer; transition: box-shadow 200ms cubic-bezier(0.2,0,0,1); } .ds-btn-tonal::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: currentColor; opacity: 0; transition: opacity 150ms; } .ds-btn-tonal:hover::after { opacity: 0.08; } .ds-btn-tonal:hover { box-shadow: 0 1px 2px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent), 0 1px 3px 1px color-mix(in oklab, var(--md-shadow) 8%, transparent); } .ds-btn-tonal:focus-visible { outline: 2px solid var(--md-primary); outline-offset: 2px; }"
+    },
+    {
+      "name": "Botão Outlined",
+      "kind": "button",
+      "refersTo": "button-outlined",
+      "description": "Ação alternativa: contorno outline, texto primary.",
+      "html": "<button class=\"ds-btn-outlined\">Editar</button>",
+      "css": ".ds-btn-outlined { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; height: 40px; padding: 0 24px; border: 1px solid var(--md-outline); border-radius: 9999px; background: transparent; color: var(--md-primary); font-family: var(--font-roboto-flex), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; cursor: pointer; } .ds-btn-outlined::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: currentColor; opacity: 0; transition: opacity 150ms; } .ds-btn-outlined:hover::after { opacity: 0.08; } .ds-btn-outlined:focus-visible { outline: 2px solid var(--md-primary); outline-offset: 2px; }"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Campo outlined de 48px com rótulo visível acima; foco engrossa a borda sem deslocar o layout.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Duração</span><input class=\"ds-input\" placeholder=\"1h30\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 8px; font-family: var(--font-roboto-flex), system-ui, sans-serif; } .ds-field-label { font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; color: var(--md-on-surface); } .ds-input { height: 48px; padding: 8px 16px; border: 1px solid var(--md-outline); border-radius: 12px; background: var(--md-surface-container-lowest); color: var(--md-on-surface); font: inherit; font-size: 1rem; line-height: 1.5rem; letter-spacing: 0.03125rem; outline: none; transition: border-color 150ms cubic-bezier(0.2,0,0,1), box-shadow 150ms cubic-bezier(0.2,0,0,1); } .ds-input::placeholder { color: color-mix(in oklab, var(--md-on-surface-variant) 80%, transparent); } .ds-input:hover { border-color: var(--md-on-surface); } .ds-input:focus-visible { border-color: var(--md-primary); box-shadow: inset 0 0 0 1px var(--md-primary); }"
+    },
+    {
+      "name": "Chip de filtro",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Desmarcado com divisória; selecionado tonal com check.",
+      "html": "<div style=\"display:flex;gap:8px\"><button class=\"ds-chip\" aria-pressed=\"false\">Inglês</button><button class=\"ds-chip ds-chip-on\" aria-pressed=\"true\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg>Piano</button></div>",
+      "css": ".ds-chip { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 16px; border: 1px solid var(--md-outline-variant); border-radius: 8px; background: transparent; color: var(--md-on-surface-variant); font-family: var(--font-roboto-flex), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; cursor: pointer; transition: background-color 150ms cubic-bezier(0.2,0,0,1); } .ds-chip::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: currentColor; opacity: 0; transition: opacity 150ms; } .ds-chip:hover::after { opacity: 0.08; } .ds-chip:focus-visible { outline: 2px solid var(--md-primary); outline-offset: 2px; } .ds-chip-on { border-color: transparent; background: var(--md-secondary-container); color: var(--md-on-secondary-container); padding-left: 8px; }"
+    },
+    {
+      "name": "Cartão",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Cartão preenchido em areia, 16px, sem borda nem sombra.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Inglês</div><p class=\"ds-card-body\"><span class=\"ds-num\">12,5</span> h efetivas nesta semana</p></div>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 8px; padding: 20px; border-radius: 16px; background: var(--md-surface-container-low); color: var(--md-on-surface); font-family: var(--font-roboto-flex), system-ui, sans-serif; max-width: 320px; } .ds-card-title { font-size: 1rem; line-height: 1.5rem; font-weight: 500; } .ds-card-body { margin: 0; font-size: 0.875rem; line-height: 1.25rem; color: var(--md-on-surface-variant); } .ds-num { font-family: var(--font-roboto-mono), ui-monospace, monospace; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; color: var(--md-on-surface); }"
+    },
+    {
+      "name": "Navigation bar",
+      "kind": "nav",
+      "refersTo": "navigation-bar",
+      "description": "Barra inferior do celular: 4 destinos, indicador em pílula tonal no ativo.",
+      "html": "<nav class=\"ds-navbar\"><a class=\"ds-dest ds-dest-on\" aria-current=\"page\"><span class=\"ds-ind\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.25\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 10a2 2 0 0 1 .7-1.5l7-6a2 2 0 0 1 2.6 0l7 6a2 2 0 0 1 .7 1.5v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/></svg></span><span class=\"ds-lbl\">Início</span></a><a class=\"ds-dest\"><span class=\"ds-ind\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 17 2 2 4-4\"/><path d=\"m3 7 2 2 4-4\"/><path d=\"M13 6h8\"/><path d=\"M13 12h8\"/><path d=\"M13 18h8\"/></svg></span><span class=\"ds-lbl\">Hábitos</span></a><a class=\"ds-dest\"><span class=\"ds-ind\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m12 2 10 5-10 5L2 7z\"/><path d=\"m2 17 10 5 10-5\"/><path d=\"m2 12 10 5 10-5\"/></svg></span><span class=\"ds-lbl\">Áreas</span></a><a class=\"ds-dest\"><span class=\"ds-ind\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\"><circle cx=\"5\" cy=\"12\" r=\"1\"/><circle cx=\"12\" cy=\"12\" r=\"1\"/><circle cx=\"19\" cy=\"12\" r=\"1\"/></svg></span><span class=\"ds-lbl\">Mais</span></a></nav>",
+      "css": ".ds-navbar { display: flex; max-width: 512px; background: var(--md-surface-container); font-family: var(--font-roboto-flex), system-ui, sans-serif; } .ds-dest { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 64px; padding: 12px 0 16px; cursor: pointer; text-decoration: none; outline: none; } .ds-ind { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: center; justify-content: center; width: 56px; height: 32px; border-radius: 9999px; color: var(--md-on-surface-variant); transition: background-color 300ms cubic-bezier(0.05,0.7,0.1,1); } .ds-dest:hover .ds-ind { background: color-mix(in oklab, var(--md-on-surface-variant) 8%, transparent); } .ds-dest:focus-visible .ds-ind { outline: 2px solid var(--md-primary); outline-offset: 2px; } .ds-lbl { font-size: 0.75rem; line-height: 1rem; font-weight: 500; letter-spacing: 0.03125rem; color: var(--md-on-surface-variant); } .ds-dest-on .ds-ind { background: var(--md-secondary-container); color: var(--md-on-secondary-container); } .ds-dest-on .ds-lbl { font-weight: 600; color: var(--md-on-surface); }"
+    },
+    {
+      "name": "FAB estendido",
+      "kind": "button",
+      "refersTo": "fab-extended",
+      "description": "Registrar: primary-container, 16px, Elev 3; acima da navigation bar no celular.",
+      "html": "<a class=\"ds-fab\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg>Registrar</a>",
+      "css": ".ds-fab { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; gap: 12px; height: 56px; padding: 0 20px 0 16px; border-radius: 16px; background: var(--md-primary-container); color: var(--md-on-primary-container); font-family: var(--font-roboto-flex), system-ui, sans-serif; font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; text-decoration: none; cursor: pointer; box-shadow: 0 4px 8px 3px color-mix(in oklab, var(--md-shadow) 10%, transparent), 0 1px 3px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent); } .ds-fab::after { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: currentColor; opacity: 0; transition: opacity 150ms; } .ds-fab:hover::after { opacity: 0.08; } .ds-fab:focus-visible { outline: 2px solid var(--md-primary); outline-offset: 2px; }"
+    },
+    {
+      "name": "Progresso linear",
+      "kind": "custom",
+      "refersTo": "progresso",
+      "description": "Indicador M3: preenchimento primary, vão de 4px, trilho tonal com ponto de parada.",
+      "html": "<div class=\"ds-prog\" role=\"progressbar\" aria-valuenow=\"62\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-label=\"Meta da semana\"><span class=\"ds-prog-fill\" style=\"width:calc(62% - 2px)\"></span><span class=\"ds-prog-track\"><span class=\"ds-prog-stop\"></span></span></div>",
+      "css": ".ds-prog { position: relative; display: flex; align-items: center; gap: 4px; width: 280px; height: 6px; } .ds-prog-fill { height: 100%; border-radius: 9999px; background: var(--md-primary); transform-origin: left center; animation: ds-prog-in 700ms cubic-bezier(0.05,0.7,0.1,1) both; } .ds-prog-track { position: relative; flex: 1; height: 100%; border-radius: 9999px; background: var(--md-secondary-container); } .ds-prog-stop { position: absolute; top: 50%; right: 2px; width: 4px; height: 4px; transform: translateY(-50%); border-radius: 9999px; background: var(--md-primary); } @keyframes ds-prog-in { from { scale: 0 1; } } @media (prefers-reduced-motion: reduce) { .ds-prog-fill { animation: none; } }"
+    },
+    {
+      "name": "Anéis Eco",
+      "kind": "custom",
+      "refersTo": "eco",
+      "description": "Assinatura: três anéis concêntricos que se expandem e somem a partir da ação confirmada.",
+      "html": "<span class=\"ds-eco\"><span class=\"ds-eco-ring\"></span><span class=\"ds-eco-ring\" style=\"animation-delay:160ms\"></span><span class=\"ds-eco-ring\" style=\"animation-delay:320ms\"></span><span class=\"ds-eco-core\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></span></span>",
+      "css": ".ds-eco { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; margin: 48px; } .ds-eco-ring { position: absolute; inset: 0; border: 2px solid var(--md-concluido); border-radius: 9999px; opacity: 0; pointer-events: none; animation: ds-eco 1100ms cubic-bezier(0.05,0.7,0.1,1) infinite; } .ds-eco-core { position: relative; display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 9999px; background: var(--md-terra-salvia-suave); color: var(--md-concluido); } @keyframes ds-eco { from { transform: scale(0.7); opacity: 0.6; } to { transform: scale(2.6); opacity: 0; } } @media (prefers-reduced-motion: reduce) { .ds-eco-ring { display: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "O Instrumento Calmo",
+    "overview": "O Echo é um instrumento de uso diário, não uma vitrine: papel quente e areia sob a gramática do Material 3. A tela clara é creme, os contêineres são camadas de areia e bege um pouco mais escuras que o fundo (o inverso do M3 padrão, que levaria o nível mais baixo ao branco), e a tinta é um marrom-acinzentado. A única voz cromática da interface é o teal suave da primária; as cores terrosas existem para identificar áreas e estados, sempre ao lado de um nome.\n\nA densidade é de ferramenta (modo Operate): cartões preenchidos sem borda nem sombra, títulos discretos em peso 400, números em Roboto Mono como dado. A profundidade vem da troca de tom de superfície, não de sombras. O movimento confirma ações e marca conquistas; nada coreografa a abertura de telas, porque o esqueleto de carregamento já faz a continuidade.\n\nA assinatura é o Eco: o ripple do M3 vira uma onda de ecolocalização. Todo toque em um elemento com camada de estado solta uma onda a partir do ponto tocado; nas ações que importam (salvar sessão, marcar hábito, concluir meta, subir de nível) a onda vira dois ou três anéis concêntricos. O logo e a tela de login usam as mesmas ondas.",
+    "keyCharacteristics": [
+      "Fundo creme, contêineres em areia, tinta café; nunca branco nem preto puros na interface.",
+      "Primária teal suave como único acento de interface; terrosas só para áreas e estados.",
+      "Elevação tonal; sombras raras, suaves e com deslocamento.",
+      "Formas generosas: botões em pílula, cartões de 16px, dialogs de 28px.",
+      "Números em Roboto Mono tabular; texto em Roboto Flex.",
+      "Movimento M3 (Motion por padrão, GSAP só na comemoração de nível), sempre em paralelo à ação."
+    ],
+    "rules": [
+      { "name": "The Paper Rule", "body": "Nenhuma superfície, tinta ou texto da interface é `#FFF` ou `#000`. Toda cor vem de um token `--md-*`; hex solto só existe em `tema.css` (gerado) e no `themeColor` do viewport.", "section": "colors" },
+      { "name": "The Name Beside Color Rule", "body": "Cor terrosa nunca é texto e nunca é o único sinal: a área aparece sempre com o nome; o estado, com ícone e texto. Algumas terrosas ficam entre 3,8 e 4,5:1 no claro, o que serve para gráfico e não para texto.", "section": "colors" },
+      { "name": "The One Hue Chart Rule", "body": "Gráficos usam só a rampa teal (`viz-*`). Cores de área nunca são séries, porque o conjunto terroso reprova como paleta categórica.", "section": "colors" },
+      { "name": "The Mono For Data Rule", "body": "Todo número que é dado (horas, minutos, contagem, valor de métrica) usa `numero` ou `numero-grande`; texto corrido nunca usa Mono.", "section": "typography" },
+      { "name": "The Quiet Headline Rule", "body": "Títulos ficam em peso 400. A hierarquia vem de tamanho e tom (`on-surface` contra `on-surface-variant`), não de negrito. O único semibold do sistema é o rótulo do destino ativo na navegação.", "section": "typography" },
+      { "name": "The 12px Floor Rule", "body": "Nenhum texto abaixo de 12px (`body-small` / `label-medium`).", "section": "typography" },
+      { "name": "The Tone Before Shadow Rule", "body": "Para separar uma camada, troque o tom de superfície. Sombra só para o que flutua sobre o conteúdo (FAB, menu, dialog, snackbar, tooltip) e como resposta de hover. Nada de brilho colorido nem sombra dura.", "section": "elevation" }
+    ],
+    "dos": [
+      "**Do** use só tokens do tema (`--md-*` e as classes do `@theme`); para mudar a paleta, edite as sementes em `scripts/gerar-tema.mjs` e rode `npm run tema`.",
+      "**Do** separe camadas por tom de superfície: cartão em `surface-container-low` sobre `surface`, dialog em `surface-container-high`.",
+      "**Do** ponha `camada-estado` em todo elemento interativo, com foco de 2px em `primary` afastado 2px.",
+      "**Do** garanta 44px de alvo em `pointer: coarse` e 8px ou mais entre alvos.",
+      "**Do** mantenha 4,5:1 para texto e 3:1 para elementos gráficos nos dois temas; quando um tom de gráfico não chega a 3:1, adicione contorno ou textura (como as barras brutas e o nível 1 do heatmap).",
+      "**Do** escreva números em `numero`/`numero-grande` e a unidade em Roboto ao lado.",
+      "**Do** dê a toda rota nova um `loading.tsx` com `EsqueletoPagina` no formato da tela, e busque os dados em paralelo.",
+      "**Do** rode toda animação em paralelo à ação e respeite `prefers-reduced-motion` (sem movimento espacial, no máximo um fade curto).",
+      "**Do** use Motion (`m.*`) para animação de interface; GSAP só quando Motion não servir, importado sob demanda na tela que o usa.",
+      "**Do** mostre sempre o nome da área junto da cor dela, e ícone mais texto junto da cor de estado."
+    ],
+    "donts": [
+      "**Don't** use `#FFF`, `#000`, branco ou preto puros em superfície, texto ou ícone.",
+      "**Don't** use cor terrosa como texto nem como série de gráfico.",
+      "**Don't** ponha mais de 5 itens na navigation bar.",
+      "**Don't** use emoji como ícone; ícones são Lucide de traço único.",
+      "**Don't** faça uma ação (salvar, marcar, navegar) esperar uma animação terminar.",
+      "**Don't** adicione sombra a cartões nem sombra dura ou brilho colorido em qualquer lugar.",
+      "**Don't** coreografe a abertura de telas; o esqueleto já faz a continuidade.",
+      "**Don't** use placeholder no lugar de rótulo visível.",
+      "**Don't** use `@material/web`; o M3 é implementado em Tailwind e shadcn/ui sobre Base UI."
+    ]
+  }
+}

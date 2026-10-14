@@ -134,8 +134,10 @@ function tokens(tema) {
   const s = esquema(tema === "escuro");
   const t = {};
   for (const [nome, cor] of Object.entries(PAPEIS)) t[nome] = cor.getArgb(s);
-  // On-primary no claro: o M3 dá branco puro; usamos o creme mais claro da paleta neutra.
-  if (tema === "claro") t["on-primary"] = N.tone(98.5);
+  // "On" das cores cheias no claro: o M3 dá branco puro; usamos o creme mais claro da paleta neutra.
+  if (tema === "claro") {
+    for (const k of ["on-primary", "on-secondary", "on-tertiary", "on-error"]) t[k] = N.tone(98.5);
+  }
   // Primary-container mais calmo que o tom 90 de croma 28 (menta vivo demais sobre o creme).
   const containerPrimaria = TonalPalette.fromHueAndChroma(teal.hue, 18);
   t["primary-container"] = containerPrimaria.tone(tema === "claro" ? 88 : 30);

@@ -16,6 +16,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useId } from "react";
 import { ChevronDownIcon } from "lucide-react";
 import { formatarHoras } from "@/lib/formato";
 import { formatarValor } from "@/lib/metricas";
@@ -36,13 +37,19 @@ const EIXO = { fontSize: 12, fill: COR.mudo, fontFamily: "var(--font-roboto-mono
 const EIXO_TEXTO = { fontSize: 12, fill: COR.mudo };
 const NUM = new Intl.NumberFormat("pt-BR", { maximumFractionDigits: 1 });
 
-function CaixaTooltip({ titulo, linhas }: { titulo: string; linhas: { cor: string; nome: string; valor: string }[] }) {
+function CaixaTooltip({
+  titulo,
+  linhas,
+}: {
+  titulo: string;
+  linhas: { cor: string; nome: string; valor: string; listrada?: boolean }[];
+}) {
   return (
     <div className="min-w-36 rounded-md bg-surface-container-highest px-3 py-2.5 type-body-small text-on-surface shadow-elev-2">
       <p className="mb-1.5 type-title-small">{titulo}</p>
       {linhas.map((l) => (
         <p key={l.nome} className="flex items-center gap-2">
-          <span className="size-2.5 rounded-full" style={{ backgroundColor: l.cor }} aria-hidden />
+          <Chave cor={l.cor} listrada={l.listrada} />
           <span className="text-on-surface-variant">{l.nome}</span>
           <span className="numero ml-auto pl-3 font-medium">{l.valor}</span>
         </p>
@@ -51,7 +58,24 @@ function CaixaTooltip({ titulo, linhas }: { titulo: string; linhas: { cor: strin
   );
 }
 
-function Legenda({ itens }: { itens: { cor: string; nome: string; linha?: boolean }[] }) {
+// Horas brutas: a cor clara sozinha não chega a 3:1 sobre o cartão, então a barra leva
+// listras a 45° e contorno na cor das efetivas (que passa de 3:1). Identidade sem depender só da cor.
+const LISTRAS = "repeating-linear-gradient(135deg, var(--viz-efetiva) 0 1.5px, transparent 1.5px 4px)";
+
+/** Amostra de série (legenda e tooltip): quadrado; brutas com listras e contorno, como a barra. */
+function Chave({ cor, listrada }: { cor: string; listrada?: boolean }) {
+  return listrada ? (
+    <span
+      className="size-3 shrink-0 rounded-[3px] border"
+      style={{ backgroundColor: cor, backgroundImage: LISTRAS, borderColor: COR.efetiva }}
+      aria-hidden
+    />
+  ) : (
+    <span className="size-3 shrink-0 rounded-[3px]" style={{ backgroundColor: cor }} aria-hidden />
+  );
+}
+
+function Legenda({ itens }: { itens: { cor: string; nome: string; linha?: boolean; listrada?: boolean }[] }) {
   return (
     <ul className="mb-3 flex flex-wrap gap-x-4 gap-y-1 type-label-medium text-on-surface-variant">
       {itens.map((i) => (
@@ -59,7 +83,7 @@ function Legenda({ itens }: { itens: { cor: string; nome: string; linha?: boolea
           {i.linha ? (
             <span className="h-0.5 w-4 rounded-full" style={{ backgroundColor: i.cor }} aria-hidden />
           ) : (
-            <span className="size-2.5 rounded-full" style={{ backgroundColor: i.cor }} aria-hidden />
+            <Chave cor={i.cor} listrada={i.listrada} />
           )}
           {i.nome}
         </li>
@@ -106,12 +130,21 @@ export type PontoHoras = { rotulo: string; titulo: string; efetivas: number; bru
 /** Colunas de horas efetivas e brutas por período, com linha de meta opcional. */
 export function GraficoHoras({ dados, meta }: { dados: PontoHoras[]; meta?: number }) {
   const maximo = Math.max(meta ?? 0, ...dados.map((d) => d.brutas));
+  const idListras = `listras-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   return (
     <div>
+      <svg width="0" height="0" className="absolute" aria-hidden>
+        <defs>
+          <pattern id={idListras} width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="4" height="4" style={{ fill: COR.bruta }} />
+            <rect width="1.5" height="4" style={{ fill: COR.efetiva }} />
+          </pattern>
+        </defs>
+      </svg>
       <Legenda
         itens={[
           { cor: COR.efetiva, nome: "Horas efetivas" },
-          { cor: COR.bruta, nome: "Horas brutas" },
+          { cor: COR.bruta, nome: "Horas brutas", listrada: true },
           ...(meta ? [{ cor: COR.mudo, nome: `Meta (${formatarHoras(meta)})`, linha: true }] : []),
         ]}
       />
@@ -138,14 +171,23 @@ export function GraficoHoras({ dados, meta }: { dados: PontoHoras[]; meta?: numb
                     titulo={p.titulo}
                     linhas={[
                       { cor: COR.efetiva, nome: "Efetivas", valor: formatarHoras(p.efetivas) },
-                      { cor: COR.bruta, nome: "Brutas", valor: formatarHoras(p.brutas) },
+                      { cor: COR.bruta, nome: "Brutas", valor: formatarHoras(p.brutas), listrada: true },
                     ]}
                   />
                 );
               }}
             />
             {meta ? <ReferenceLine y={meta} stroke={COR.mudo} strokeWidth={1.5} strokeDasharray="4 4" ifOverflow="extendDomain" /> : null}
-            <Bar dataKey="brutas" name="Brutas" fill={COR.bruta} radius={[4, 4, 0, 0]} maxBarSize={12} isAnimationActive={false} />
+            <Bar
+              dataKey="brutas"
+              name="Brutas"
+              fill={`url(#${idListras})`}
+              stroke={COR.efetiva}
+              strokeWidth={1}
+              radius={[4, 4, 0, 0]}
+              maxBarSize={12}
+              isAnimationActive={false}
+            />
             <Bar dataKey="efetivas" name="Efetivas" fill={COR.efetiva} radius={[4, 4, 0, 0]} maxBarSize={12} isAnimationActive={false} />
           </BarChart>
         </ResponsiveContainer>

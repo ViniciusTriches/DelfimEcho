@@ -67,7 +67,7 @@ export function RevisaoForm({
                   className="sr-only"
                 />
                 <span className="numero type-title-medium">{n.valor}</span>
-                <span className="type-label-small opacity-80">{n.nome}</span>
+                <span className="type-label-medium opacity-80">{n.nome}</span>
               </label>
             ))}
           </div>

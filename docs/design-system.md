@@ -140,7 +140,7 @@ A barra superior fica sobre `surface` e muda para `surface-container` ao rolar a
 | Componente | Especificação |
 |---|---|
 | **Botões** (`Button`, `buttonVariants`) | pílula, 40px, `type-label-large`. Variantes: `default` = filled (primary), `secondary` = tonal (secondary-container), `outline` = outlined (borda outline, texto primary), `text` (texto primary), `ghost` = padrão para ícones (on-surface-variant), `destructive` (error-container). Tamanhos `sm` 32, `lg` 48, `icon` 40. Em telas de toque: mínimo de 44px. |
-| **FAB** (`fabVariants`) | primary-container, 16px de raio, `shadow-elev-3`. Estendido no celular ("Registrar", acima da barra de navegação); só ícone no topo do rail no PC. |
+| **FAB** (`fabVariants`) | primary-container, 16px de raio. Estendido no celular ("Registrar", acima da barra de navegação, `shadow-elev-3`); só ícone no topo do rail no PC, com `shadow-elev-1` (fica sobre a superfície, não sobre conteúdo). |
 | **Navegação** | Celular: *navigation bar* com 4 destinos (Início, Hábitos, Áreas, Mais) mais o FAB "Registrar". PC (≥768px): *navigation rail* fixo à esquerda (marca, FAB, destinos e "Mais" como menu). Indicador ativo: pílula 56×32 em secondary-container. |
 | **Barra superior** | 64px. No celular: marca. Nos dois: chip do timer ativo, alternar tema, sair. |
 | **Cartões** (`Card`) | filled: `surface-container-low`, 16px de raio, 20px de respiro, sem borda nem sombra. |
@@ -167,7 +167,7 @@ Tokens M3 em [globals.css](../src/app/globals.css). Curvas `ease-standard` (0.2,
 
 **Infra.** [movimento.tsx](../src/components/movimento.tsx) envolve o app em `MotionConfig reducedMotion="user"` + `LazyMotion` (só `domAnimation`, componentes `m.*` de `motion/react-m`). As curvas M3 ficam em `EASE`.
 
-**Assinatura "Eco"** ([eco.tsx](../src/components/eco.tsx)): três anéis que se expandem e somem a partir de onde algo importante aconteceu. `EcoAneis` (dentro de um pai `relative`) ou `ecoNaTela(rect)` (quando a origem sai da tela). Somem com reduced motion; a confirmação em si continua.
+**Assinatura "Eco"** ([eco.tsx](../src/components/eco.tsx)): três anéis que se expandem e somem a partir de onde algo importante aconteceu. Nas confirmações de conquista os anéis usam `--concluido` (sálvia); o padrão do componente é `primary`. `EcoAneis` (dentro de um pai `relative`) ou `ecoNaTela(rect)` (quando a origem sai da tela). Somem com reduced motion; a confirmação em si continua.
 
 | Momento | O que acontece | Onde |
 |---|---|---|

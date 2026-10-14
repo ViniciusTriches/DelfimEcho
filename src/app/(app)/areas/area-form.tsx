@@ -54,7 +54,7 @@ export function AreaForm({ area, cancelarHref }: { area?: Area; cancelarHref: st
               >
                 <CheckIcon className="size-4" strokeWidth={3} aria-hidden />
               </span>
-              <span className="type-label-small">{NOMES_SLOT[slot]}</span>
+              <span className="type-label-medium">{NOMES_SLOT[slot]}</span>
             </label>
           ))}
           {personalizada && (
@@ -66,7 +66,7 @@ export function AreaForm({ area, cancelarHref }: { area?: Area; cancelarHref: st
               >
                 <CheckIcon className="size-4" strokeWidth={3} aria-hidden />
               </span>
-              <span className="type-label-small">Atual</span>
+              <span className="type-label-medium">Atual</span>
             </label>
           )}
         </div>
