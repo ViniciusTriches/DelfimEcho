@@ -1,157 +1,342 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+/* Cores do Material 3 geradas por scripts/gerar-tema.mjs (npm run tema). */
+@import "./tema.css";
 
 @custom-variant dark (&:is(.dark *));
 
+/* -------------------------------------------------------------------------
+   Tokens do Echo (Material 3, paleta quente) expostos ao Tailwind.
+   Papéis M3: bg-surface, bg-surface-container-high, text-on-surface-variant…
+   ------------------------------------------------------------------------- */
 @theme inline {
+  /* Papéis Material 3 */
+  --color-primary-m3: var(--md-primary);
+  --color-on-primary: var(--md-on-primary);
+  --color-primary-container: var(--md-primary-container);
+  --color-on-primary-container: var(--md-on-primary-container);
+  --color-inverse-primary: var(--md-inverse-primary);
+  --color-secondary-m3: var(--md-secondary);
+  --color-on-secondary: var(--md-on-secondary);
+  --color-secondary-container: var(--md-secondary-container);
+  --color-on-secondary-container: var(--md-on-secondary-container);
+  --color-tertiary: var(--md-tertiary);
+  --color-on-tertiary: var(--md-on-tertiary);
+  --color-tertiary-container: var(--md-tertiary-container);
+  --color-on-tertiary-container: var(--md-on-tertiary-container);
+  --color-error: var(--md-error);
+  --color-on-error: var(--md-on-error);
+  --color-error-container: var(--md-error-container);
+  --color-on-error-container: var(--md-on-error-container);
+  --color-surface: var(--md-surface);
+  --color-surface-dim: var(--md-surface-dim);
+  --color-surface-bright: var(--md-surface-bright);
+  --color-surface-container-lowest: var(--md-surface-container-lowest);
+  --color-surface-container-low: var(--md-surface-container-low);
+  --color-surface-container: var(--md-surface-container);
+  --color-surface-container-high: var(--md-surface-container-high);
+  --color-surface-container-highest: var(--md-surface-container-highest);
+  --color-on-surface: var(--md-on-surface);
+  --color-on-surface-variant: var(--md-on-surface-variant);
+  --color-outline: var(--md-outline);
+  --color-outline-variant: var(--md-outline-variant);
+  --color-inverse-surface: var(--md-inverse-surface);
+  --color-inverse-on-surface: var(--md-inverse-on-surface);
+  --color-scrim: var(--md-scrim);
+
+  /* Cores terrosas (áreas, marcas) e estados — sempre com texto/ícone ao lado */
+  --color-terra-salvia: var(--md-terra-salvia);
+  --color-terra-terracota: var(--md-terra-terracota);
+  --color-terra-ardosia: var(--md-terra-ardosia);
+  --color-terra-mostarda: var(--md-terra-mostarda);
+  --color-terra-ameixa: var(--md-terra-ameixa);
+  --color-terra-mar: var(--md-terra-mar);
+  --color-terra-argila: var(--md-terra-argila);
+  --color-terra-oliva: var(--md-terra-oliva);
+  --color-sequencia: var(--md-sequencia);
+  --color-concluido: var(--md-concluido);
+  --color-atrasado: var(--md-atrasado);
+
+  /* shadcn/ui → papéis M3 (os componentes existentes herdam o tema) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--md-viz-calor-1);
+  --color-chart-2: var(--md-viz-calor-2);
+  --color-chart-3: var(--md-viz-calor-3);
+  --color-chart-4: var(--md-viz-calor-4);
+  --color-chart-5: var(--md-viz-efetiva);
+
+  /* Tipografia: Roboto Flex no texto, Roboto Mono em números/horas/cronômetro */
+  --font-sans: var(--font-roboto-flex), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+
+  /* Forma (escala M3, um pouco mais generosa) */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-3xl: 32px;
+
+  /* Elevação M3: tonal primeiro; sombra só suave e com deslocamento */
+  --shadow-elev-1: 0 1px 2px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent), 0 1px 3px 1px color-mix(in oklab, var(--md-shadow) 8%, transparent);
+  --shadow-elev-2: 0 1px 2px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent), 0 2px 6px 2px color-mix(in oklab, var(--md-shadow) 9%, transparent);
+  --shadow-elev-3: 0 4px 8px 3px color-mix(in oklab, var(--md-shadow) 10%, transparent), 0 1px 3px 0 color-mix(in oklab, var(--md-shadow) 14%, transparent);
+
+  /* Movimento M3 (durações e curvas) */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ease-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+  --ease-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.5 0.13 232);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  /* Gráficos: par ordinal azul validado (brutas claro, efetivas forte) e tinta de apoio. */
-  --viz-efetiva: #2a78d6;
-  --viz-bruta: #86b6ef;
-  --viz-grade: #e1e0d9;
-  --viz-eixo: #c3c2b7;
-  --viz-mudo: #898781;
-  --viz-bom: #0ca30c;
-  /* Heatmap: rampa sequencial azul validada (pouco → muito). */
-  --viz-calor-1: #86b6ef;
-  --viz-calor-2: #3987e5;
-  --viz-calor-3: #1c5cab;
-  --viz-calor-4: #0d366b;
-  /* Design system (docs/design-system.md): estados de hábito. Só ícones/marcas no claro (~3:1). */
-  --sequencia: #d97706;
-  --concluido: #059669;
-}
-
+/* Papéis do shadcn apontando para o esquema M3 (claro e escuro vêm do tema.css).
+   Declarado também em .dark para que os aliases se resolvam onde o tema escuro for aplicado. */
+:root,
 .dark {
-  --viz-calor-1: #184f95;
-  --viz-calor-2: #2a78d6;
-  --viz-calor-3: #6da7ec;
-  --viz-calor-4: #b7d3f6;
-  --sequencia: #f59e0b;
-  --concluido: #10b981;
-  --viz-efetiva: #3987e5;
-  --viz-bruta: #184f95;
-  --viz-grade: #2c2c2a;
-  --viz-eixo: #383835;
-  --viz-mudo: #898781;
-  --viz-bom: #0ca30c;
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.74 0.12 225);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: var(--md-surface);
+  --foreground: var(--md-on-surface);
+  --card: var(--md-surface-container-low);
+  --card-foreground: var(--md-on-surface);
+  --popover: var(--md-surface-container);
+  --popover-foreground: var(--md-on-surface);
+  --primary: var(--md-primary);
+  --primary-foreground: var(--md-on-primary);
+  --secondary: var(--md-secondary-container);
+  --secondary-foreground: var(--md-on-secondary-container);
+  --muted: var(--md-surface-container-high);
+  --muted-foreground: var(--md-on-surface-variant);
+  --accent: var(--md-secondary-container);
+  --accent-foreground: var(--md-on-secondary-container);
+  --destructive: var(--md-error);
+  --border: var(--md-outline-variant);
+  --input: var(--md-outline);
+  --ring: var(--md-primary);
+  --radius: 16px;
+
+  /* Nomes usados pelos gráficos e estados desde as fases anteriores */
+  --viz-efetiva: var(--md-viz-efetiva);
+  --viz-bruta: var(--md-viz-bruta);
+  --viz-grade: var(--md-outline-variant);
+  --viz-eixo: var(--md-outline);
+  --viz-mudo: var(--md-on-surface-variant);
+  --viz-bom: var(--md-concluido);
+  --viz-calor-1: var(--md-viz-calor-1);
+  --viz-calor-2: var(--md-viz-calor-2);
+  --viz-calor-3: var(--md-viz-calor-3);
+  --viz-calor-4: var(--md-viz-calor-4);
+  --sequencia: var(--md-sequencia);
+  --concluido: var(--md-concluido);
+  --atrasado: var(--md-atrasado);
+
+  /* Durações M3 (para CSS e para o Motion/GSAP via lib/movimento.ts) */
+  --md-dur-short2: 100ms;
+  --md-dur-short3: 150ms;
+  --md-dur-short4: 200ms;
+  --md-dur-medium2: 300ms;
+  --md-dur-medium4: 400ms;
+  --md-dur-long2: 500ms;
 }
 
+/* -------------------------------------------------------------------------
+   Escala tipográfica Material 3
+   ------------------------------------------------------------------------- */
+@utility type-display-small {
+  font-size: 2.25rem;
+  line-height: 2.75rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-headline-large {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-headline-medium {
+  font-size: 1.75rem;
+  line-height: 2.25rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-headline-small {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-title-large {
+  font-size: 1.375rem;
+  line-height: 1.75rem;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+@utility type-title-medium {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.009375rem;
+}
+@utility type-title-small {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.00625rem;
+}
+@utility type-body-large {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.03125rem;
+}
+@utility type-body-medium {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  letter-spacing: 0.015625rem;
+}
+@utility type-body-small {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.025rem;
+}
+@utility type-label-large {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.00625rem;
+}
+@utility type-label-medium {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.03125rem;
+}
+
+/* Números como dado: Roboto Mono. Em tamanhos grandes o espaçamento fecha um pouco
+   (a vírgula do mono ocupa uma casa inteira); a unidade ("h", "kg") fica em Roboto. */
+@utility numero {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+@utility numero-grande {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+/* -------------------------------------------------------------------------
+   Camada de estado M3 (hover 8%, foco e pressionado 10%) + ripple "Eco"
+   Use em elementos interativos: class="camada-estado" e data-ripple.
+   ------------------------------------------------------------------------- */
+@utility camada-estado {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--md-dur-short3) var(--ease-standard);
+  }
+  @media (hover: hover) {
+    &:hover::after {
+      opacity: 0.08;
+    }
+  }
+  &:focus-visible::after,
+  &:active::after {
+    opacity: 0.1;
+  }
+  &:disabled::after,
+  &[aria-disabled="true"]::after {
+    opacity: 0;
+  }
+}
+
+.eco-ripple {
+  position: absolute;
+  z-index: -1; /* atrás do texto e do ícone, como a camada de estado */
+  border-radius: 9999px;
+  background: currentColor;
+  pointer-events: none;
+  transform: scale(0);
+  opacity: 0.14;
+  animation: eco-ripple 450ms var(--ease-standard-decelerate) forwards;
+}
+@keyframes eco-ripple {
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eco-ripple {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-  }
   html {
     @apply font-sans;
+    accent-color: var(--md-primary);
+    scrollbar-color: var(--md-outline-variant) transparent;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground type-body-large;
+    caret-color: var(--md-primary);
+  }
+  ::selection {
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+  :focus-visible {
+    outline: 2px solid var(--md-primary);
+    outline-offset: 2px;
+  }
+  a {
+    text-underline-offset: 0.2em;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
   }
 }

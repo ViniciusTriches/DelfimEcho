@@ -47,3 +47,8 @@ supabase/signing_keys.json
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Impeccable: capturas e cache locais
+.impeccable/review/
+.impeccable/hook.cache.json
+.impeccable/*.local.json

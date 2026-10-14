@@ -30,15 +30,17 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
+          // Snackbar do Material 3: superfície inversa, cantos de 8px.
+          "--normal-bg": "var(--md-inverse-surface)",
+          "--normal-text": "var(--md-inverse-on-surface)",
+          "--normal-border": "transparent",
+          "--border-radius": "8px",
         } as React.CSSProperties
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          toast: "cn-toast type-body-medium shadow-elev-3",
+          description: "opacity-80",
         },
       }}
       {...props}

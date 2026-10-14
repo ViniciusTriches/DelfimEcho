@@ -7,16 +7,23 @@ import {
   type LucideIcon,
   MilestoneIcon,
   NotebookPenIcon,
-  PlusCircleIcon,
+  PlusIcon,
   SettingsIcon,
 } from "lucide-react";
 
 export type ItemNav = { href: string; nome: string; icone: LucideIcon; descricao?: string; tambem?: string[] };
 
-// Uso diário: um toque no celular (barra inferior com no máximo 5 itens, contando o "Mais").
+// Ação principal (FAB): um toque no celular e no PC.
+export const REGISTRAR: ItemNav = {
+  href: "/registrar",
+  nome: "Registrar sessão",
+  icone: PlusIcon,
+  tambem: ["/timer"],
+};
+
+// Destinos de uso diário (navigation bar no celular, rail no PC). "Mais" entra por último.
 export const PRINCIPAIS: ItemNav[] = [
-  { href: "/", nome: "Início", icone: HomeIcon },
-  { href: "/registrar", nome: "Registrar", icone: PlusCircleIcon, tambem: ["/timer"] },
+  { href: "/", nome: "Início", icone: HomeIcon, tambem: ["/plano"] },
   { href: "/habitos", nome: "Hábitos", icone: ListChecksIcon },
   { href: "/areas", nome: "Áreas", icone: LayersIcon, tambem: ["/habilidades"] },
 ];
@@ -31,6 +38,15 @@ export const MAIS: ItemNav[] = [
     href: "/configuracoes",
     nome: "Configurações",
     icone: SettingsIcon,
-    descricao: "Fatores de qualidade e prática passiva",
+    descricao: "Fatores de qualidade, prática passiva e alertas",
   },
 ];
+
+/** O item está ativo na rota atual? */
+export function itemAtivo(pathname: string, item: ItemNav): boolean {
+  return [item.href, ...(item.tambem ?? [])].some((p) => (p === "/" ? pathname === "/" : pathname.startsWith(p)));
+}
+
+export function maisAtivo(pathname: string): boolean {
+  return pathname.startsWith("/mais") || MAIS.some((i) => itemAtivo(pathname, i));
+}

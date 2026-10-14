@@ -3,7 +3,7 @@ import { Cronometro } from "@/components/cronometro";
 import { createClient } from "@/lib/supabase/server";
 import { cn } from "@/lib/utils";
 
-/** Atalho para o timer ativo, no cabeçalho. Não renderiza nada sem timer. */
+/** Atalho para o timer ativo, na barra superior (chip). Não renderiza nada sem timer. */
 export async function TimerBadge() {
   const supabase = await createClient();
   const { data: timer } = await supabase
@@ -15,15 +15,18 @@ export async function TimerBadge() {
   return (
     <Link
       href="/timer"
-      className="flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-sm font-medium text-primary"
-      title="Abrir o timer"
+      className="camada-estado inline-flex h-8 items-center gap-2 rounded-sm bg-primary-container px-3 type-label-large text-on-primary-container pointer-coarse:min-h-11"
+      title={timer.pausado_em ? "Timer pausado: abrir" : "Timer rodando: abrir"}
     >
       <span
-        className={cn("size-2 rounded-full bg-primary", !timer.pausado_em && "animate-pulse")}
+        className={cn(
+          "size-2 rounded-full bg-on-primary-container",
+          timer.pausado_em ? "opacity-40" : "animate-pulse motion-reduce:animate-none",
+        )}
         aria-hidden
       />
-      <Cronometro timer={timer} className="font-mono tabular-nums" />
-      <span className="hidden max-w-32 truncate sm:inline">{timer.skills?.nome}</span>
+      <Cronometro timer={timer} className="numero" />
+      <span className="hidden max-w-36 truncate sm:inline">{timer.skills?.nome}</span>
     </Link>
   );
 }

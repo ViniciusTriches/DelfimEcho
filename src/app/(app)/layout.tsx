@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { LogOutIcon } from "lucide-react";
+import { BarraSuperior } from "@/components/barra-superior";
 import { Logo } from "@/components/logo";
-import { NavRodape, NavTopo } from "@/components/nav";
+import { NavBarra, NavRail } from "@/components/nav";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { TimerBadge } from "@/components/timer-badge";
 import { Button } from "@/components/ui/button";
@@ -11,34 +12,37 @@ import { sair } from "./actions";
 export default function AppLayout({ children }: LayoutProps<"/">) {
   return (
     <>
-      <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-5xl items-center gap-4 px-4">
-          <Link href="/">
-            <Logo />
-          </Link>
-          <NavTopo />
-          <div className="ml-auto flex items-center gap-1">
-            <Suspense fallback={null}>
-              <TimerBadge />
-            </Suspense>
-            <ThemeToggle />
-            <form action={sair}>
-              <Button variant="ghost" type="submit" aria-label="Sair">
-                <LogOutIcon />
-                <span className="hidden sm:inline">Sair</span>
-              </Button>
-            </form>
+      <NavRail />
+
+      <div className="flex min-h-full flex-1 flex-col md:pl-24">
+        <BarraSuperior>
+          <div className="mx-auto flex h-16 w-full max-w-5xl items-center gap-2 px-4 md:px-8">
+            <Link href="/" className="rounded-md md:hidden" aria-label="Echo, início">
+              <Logo />
+            </Link>
+            <div className="ml-auto flex items-center gap-1">
+              <Suspense fallback={null}>
+                <TimerBadge />
+              </Suspense>
+              <ThemeToggle />
+              <form action={sair}>
+                <Button variant="ghost" size="icon" type="submit" aria-label="Sair" title="Sair">
+                  <LogOutIcon />
+                </Button>
+              </form>
+            </div>
           </div>
-        </div>
-      </header>
+        </BarraSuperior>
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-6 pb-24 md:pb-10">
-        <Suspense fallback={<p className="text-sm text-muted-foreground">Carregando…</p>}>
-          {children}
-        </Suspense>
-      </main>
+        {/* pb: espaço para a navigation bar (80px) + FAB no celular */}
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pt-2 pb-40 md:px-8 md:pb-16">
+          <Suspense fallback={<p className="type-body-medium text-on-surface-variant">Carregando…</p>}>
+            {children}
+          </Suspense>
+        </main>
+      </div>
 
-      <NavRodape />
+      <NavBarra />
     </>
   );
 }

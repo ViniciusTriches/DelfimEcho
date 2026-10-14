@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRightIcon } from "lucide-react";
-import { MAIS } from "@/lib/navegacao";
 import { PageHeader } from "@/components/page-header";
+import { MAIS } from "@/lib/navegacao";
 
 export const metadata: Metadata = { title: "Mais" };
 
@@ -10,19 +10,21 @@ export default function MaisPage() {
   return (
     <>
       <PageHeader titulo="Mais" />
-      <ul className="flex max-w-xl flex-col divide-y rounded-xl border bg-card">
-        {MAIS.map((item) => (
-          <li key={item.href}>
+      <ul className="flex max-w-xl flex-col overflow-hidden rounded-lg bg-surface-container-low">
+        {MAIS.map((item, i) => (
+          <li key={item.href} className={i > 0 ? "border-t border-outline-variant" : undefined}>
             <Link
               href={item.href}
-              className="flex min-h-16 cursor-pointer items-center gap-3 px-4 py-3 transition-colors duration-150 hover:bg-muted/60"
+              className="camada-estado flex min-h-18 cursor-pointer items-center gap-4 px-4 py-3 text-on-surface"
             >
-              <item.icone className="size-5 shrink-0 text-muted-foreground" aria-hidden />
-              <span className="min-w-0 flex-1">
-                <span className="block font-medium">{item.nome}</span>
-                {item.descricao && <span className="block text-sm text-muted-foreground">{item.descricao}</span>}
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-secondary-container text-on-secondary-container">
+                <item.icone className="size-5" aria-hidden />
               </span>
-              <ChevronRightIcon className="size-4 text-muted-foreground" aria-hidden />
+              <span className="min-w-0 flex-1">
+                <span className="block type-title-medium">{item.nome}</span>
+                {item.descricao && <span className="block type-body-medium text-on-surface-variant">{item.descricao}</span>}
+              </span>
+              <ChevronRightIcon className="size-5 text-on-surface-variant" aria-hidden />
             </Link>
           </li>
         ))}

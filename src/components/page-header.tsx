@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ChevronLeftIcon } from "lucide-react";
+import { buttonVariants } from "@/components/ui/button";
 
 export function PageHeader({
   titulo,
@@ -15,22 +16,22 @@ export function PageHeader({
   icone?: React.ReactNode;
 }) {
   return (
-    <div className="mb-6 flex flex-col gap-3">
+    <div className="mb-8 flex flex-col gap-2">
       {voltar && (
         <Link
           href={voltar.href}
-          className="inline-flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          className={buttonVariants({ variant: "text", size: "sm", className: "-ml-3 w-fit pl-2 has-[>svg:first-child]:pl-2" })}
         >
-          <ChevronLeftIcon className="size-4" aria-hidden />
+          <ChevronLeftIcon aria-hidden />
           {voltar.nome}
         </Link>
       )}
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-3">
+      <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+        <div className="flex min-w-0 items-center gap-4">
           {icone}
           <div className="min-w-0">
-            <h1 className="truncate text-2xl font-semibold tracking-tight">{titulo}</h1>
-            {descricao && <p className="text-sm text-muted-foreground">{descricao}</p>}
+            <h1 className="type-headline-small text-on-surface md:type-headline-medium">{titulo}</h1>
+            {descricao && <p className="mt-1 type-body-medium text-on-surface-variant first-letter:uppercase">{descricao}</p>}
           </div>
         </div>
         {acoes && <div className="flex flex-wrap items-center gap-2">{acoes}</div>}

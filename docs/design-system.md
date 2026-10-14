@@ -1,139 +1,194 @@
 # Echo — Design System
 
-Gerado em 2026-10-12 com o plugin **ui-ux-pro-max** (v2.15.0) e adaptado ao Echo: app pessoal de progresso em habilidades, uso diário no PC e no celular, tema claro e escuro, família da marca Delfim. Stack: Next.js + Tailwind CSS 4 + shadcn/ui.
+**Direção (out/2026):** Material Design 3 como linguagem, com paleta **quente** (creme, areia, café) e primária **teal suave**. Implementado nos componentes do projeto (Tailwind CSS 4 + shadcn/ui sobre Base UI). **Não** usamos `@material/web`, que está em modo de manutenção e é baseado em web components.
 
-**Como foi gerado:** duas execuções do gerador (`--design-system`, dials: variação 3, movimento 3, densidade 6), com as buscas "personal productivity habit tracker dashboard" e "personal progress tracking dashboard app". Depois, buscas por domínio para cor, tipografia, produto e UX. Cada seção abaixo diz de onde veio a recomendação e onde ela foi adaptada. As saídas brutas estão no [Apêndice](#apêndice-saídas-brutas-do-gerador).
+Sensação: clara, quente e acolhedora, confortável para uso diário. Nunca branco puro nem preto puro.
 
-**Aplicação:**
-- **Telas novas (a partir da Fase 5):** seguem as regras de estilo, layout, componentes e UX deste documento e usam os tokens semânticos novos (sequência e concluído).
-- **Troca global de paleta e fontes:** acontece na fase de revisão de design (depois da Fase 8, antes do PWA). Trocar agora mudaria as telas existentes, e isso ficou para essa fase. Até lá, as telas novas usam os tokens atuais do shadcn (`primary`, `muted`, `border`…), então ficam consistentes com o resto e herdam a paleta nova automaticamente.
+Este documento substitui a versão anterior, gerada com o ui-ux-pro-max (Minimalism & Swiss, Fira Sans/Code, paleta "Productivity Tool"). Dessa versão continuam valendo as **regras de UX** (seção 9). Paleta, tipografia e estilo foram substituídos.
+
+Fontes da verdade no código:
+
+| O quê | Onde |
+|---|---|
+| Esquema de cores (gerado) | [src/app/tema.css](../src/app/tema.css), por [scripts/gerar-tema.mjs](../scripts/gerar-tema.mjs) (`npm run tema`) |
+| Tokens do Tailwind, tipografia, forma, elevação, movimento, camada de estado | [src/app/globals.css](../src/app/globals.css) |
+| Componentes base | [src/components/ui/](../src/components/ui/) |
+| Cores das áreas | [src/lib/cores-area.ts](../src/lib/cores-area.ts) |
 
 ---
 
-## 1. Estilo — Minimalism & Swiss Style
+## 1. Cor
 
-*Fonte: as duas execuções do gerador escolheram este estilo, indicado para "dashboards, SaaS, ferramentas profissionais".*
+### Como é gerada
 
-- Limpo, funcional, muito espaço em branco, alto contraste, grade, sans-serif, só o essencial.
-- Claro e escuro com suporte completo.
-- Efeitos: hover sutil (150–250 ms), transições suaves, sombras discretas ou nenhuma, hierarquia tipográfica clara.
-- O dado é o protagonista. Cor só onde carrega significado (área, estado, progresso).
+O `@material/material-color-utilities` (`DynamicScheme`, variante Tonal Spot) recebe duas fontes:
 
-**Descartado:** o perfil "Habit Tracker" do plugin sugere *Claymorphism + Vibrant & Block-based*. Faz sentido num app só de hábitos; o Echo é um painel de progresso, e o Swiss combina melhor com os gráficos e números. Do perfil de hábitos aproveitamos só o foco de cor (âmbar para sequência, verde para progresso).
+- **Primária:** teal `#2F7D74`, com croma levemente reduzido (28) para containers calmos.
+- **Neutro quente:** areia `#E8DFD0`, no lugar do neutro padrão. O fundo e a tinta usam croma 4 (as referências creme e café têm croma entre 2,4 e 3,7). Os containers usam a própria areia (croma 6,6 no claro e 5 no escuro).
 
-## 2. Paleta
+As superfícies seguem a direção do Echo, não o padrão M3. No tema claro, os containers são **um pouco mais escuros** que o fundo, o que cria camadas de areia e bege. O padrão M3 faz o inverso, e o nível mais baixo dele seria branco puro.
 
-*Fonte: perfil exato **"Productivity Tool"** do plugin (domínio `color`): teal de foco + laranja de ação. O teal fica perto do azul-oceano da família Delfim.*
+Para mudar a paleta, edite as fontes no script e rode `npm run tema`. O relatório imprime os contrastes de todos os pares.
 
-### Claro (valores do plugin)
+### Paleta principal
 
-| Papel | Hex | Uso |
+| Papel (token `--md-*`) | Claro | Escuro |
 |---|---|---|
-| Primary | `#0D9488` | botões principais, links, foco, item ativo |
-| On Primary | `#000000` | texto sobre o primary (preto: 5,6:1; branco não passa 4,5:1) |
-| Secondary | `#14B8A6` | apoio, realces suaves |
-| Accent / CTA | `#EA580C` | ação de destaque pontual (ex.: "Registrar sessão") |
-| Background | `#F0FDFA` | fundo da página |
-| Foreground | `#134E4A` | texto principal |
-| Card | `#FFFFFF` | cartões |
-| Muted | `#E8F1F4` | fundos neutros, trilhas de barra |
-| Muted Foreground | `#475569` | texto secundário |
-| Border | `#99F6E4` | bordas (avaliar suavizar na revisão) |
-| Destructive | `#DC2626` | excluir, erro |
-| Ring | `#0D9488` | anel de foco |
+| `surface` / `background` | `#F8F1E8` creme | `#1D1A15` café |
+| `surface-container-lowest` (campos) | `#FEF7EE` | `#17140F` |
+| `surface-container-low` (cartões) | `#F5EBDC` areia | `#232019` |
+| `surface-container` (barra de navegação, menus) | `#EFE6D7` | `#29251E` |
+| `surface-container-high` (dialogs) | `#E9E0D1` | `#302D25` |
+| `surface-container-highest` | `#E3DACB` bege | `#39352E` |
+| `on-surface` (texto) | `#2D2A24` | `#EBE4DB` creme |
+| `on-surface-variant` (texto secundário) | 7,7:1 sobre o fundo | 9,6:1 sobre o fundo |
+| `outline` / `outline-variant` | bordas de campo / divisórias | idem |
+| `primary` | `#2D6860` | `#97D2C9` |
+| `on-primary` | `#FFFAF6` (creme, não branco) | `#003732` |
+| `primary-container` | `#C3E4DD` | `#2F4C48` |
+| `on-primary-container` | `#173531` | `#C8E9E3` |
+| `secondary-container` (indicador ativo, chips selecionados) | `#D4E6E2` | `#394A47` |
+| `tertiary` (terracota suave) | `#825339` | `#F6B998` |
+| `error` | `#984635` | `#FFB4A5` |
+| `inverse-surface` (snackbar) | escuro quente | creme |
 
-### Escuro (derivado — o plugin entregou só o claro)
+**Contraste (todos medidos):**
+- Texto principal: 12,8:1 no claro e 13,8:1 no escuro.
+- Primária sobre o fundo: 5,8:1 no claro e 10,2:1 no escuro.
+- Todos os pares "on-X sobre X" ficam acima de 6:1.
 
-Proposta para validar na fase de revisão, mesma família de matiz: background `#0B1514`, card `#122120`, foreground `#E6F4F1`, muted `#1C2B2A`, muted-foreground `#94A3B8`, border `#1F3A37`, primary `#2DD4BF` (texto preto por cima), accent `#FB923C`, destructive `#EF4444`. Precisa de checagem de contraste 4,5:1 antes de aplicar.
+### Cores terrosas (áreas e estados)
 
-### Tokens semânticos (já valem para telas novas)
+Ordem de atribuição: vizinhos têm matizes opostas e luminosidade alternada.
 
-*Fonte: notas do gerador ("Streak amber + habit green") e foco de cor do perfil "Habit Tracker".*
-
-| Token | Claro | Escuro | Uso |
+| Slot | Claro | Escuro | Uso |
 |---|---|---|---|
-| `--sequencia` | `#D97706` | `#F59E0B` | sequência (streak): ícone de chama, contador |
-| `--concluido` | `#059669` | `#10B981` | hábito feito, meta batida |
+| Sálvia | `#426534` | `#A4CC91` | áreas · **concluído** |
+| Terracota | `#B05F32` | `#EC8E5E` | áreas |
+| Ardósia (azul acinzentado) | `#466890` | `#97B9E5` | áreas |
+| Mostarda | `#705200` | `#F2BF4E` | áreas · **sequência** |
+| Ameixa | `#9C6994` | `#C68FBC` | áreas |
+| Mar | `#1D6B6A` | `#81C8C6` | áreas |
+| Argila (rosa) | `#9E5251` | `#F69A98` | áreas |
+| Oliva | `#777525` | `#AEAC56` | áreas |
 
-Sempre com ícone + texto. A cor nunca é o único sinal. No tema claro esses tons têm 3,2:1 (`#D97706`) e 3,8:1 (`#059669`) sobre branco: servem para **ícones e marcas** (mínimo 3:1), não para texto — o texto ao lado fica em `foreground`/`muted-foreground`. No escuro passam de 7:1.
+- Todas ficam acima de **3:1** sobre o fundo e todos os containers, nos dois temas (requisito para elementos gráficos).
+- **Nunca são usadas como texto.** No claro, algumas ficam entre 3,8 e 4,5:1, abaixo do mínimo para texto. O texto ao lado fica em `on-surface`/`on-surface-variant`.
+- Cada slot tem uma versão `-suave`, usada como fundo de ícones e chips de área.
+- **Atrasado** usa `error`.
+- O validador de paletas da skill de dataviz **reprova este conjunto como série categórica de gráfico**: são tons suaves, de luminosidade parecida, e alguns pares ficam próximos para daltônicos. Por isso a regra é:
+  - A cor de área sempre aparece junto do **nome** da área. Essa é a codificação secundária.
+  - Os gráficos **não** usam essas cores como séries.
+- **Áreas existentes:** o banco guarda um hex por área. O [cores-area.ts](../src/lib/cores-area.ts) converte cada hex conhecido (da paleta antiga e da nova) para o token do tema, então a cor acompanha o claro e o escuro sem mudar dados. Uma cor personalizada (hex desconhecido) aparece como foi gravada.
 
 ### Gráficos
 
-Continuam com o par ordinal azul **já validado** na Fase 4 (`--viz-efetiva` / `--viz-bruta`, skill de dataviz). Dados ≠ marca: o azul dos gráficos não precisa seguir o teal.
+Rampas tiradas da própria paleta da primária: uma matiz, do claro para o escuro, validadas como ordinais nos dois temas (skill de dataviz):
 
-## 3. Tipografia
+| Token | Claro | Escuro |
+|---|---|---|
+| `--md-viz-efetiva` / `--md-viz-bruta` (par efetivas × brutas) | `#28635C` / `#72ABA3` | `#97D2C9` / `#28635C` |
+| `--md-viz-calor-1…4` (heatmap, pouco → muito) | `#77B0A8` → `#004640` | `#256059` → `#9DD7CE` |
 
-*Fonte: par **"Dashboard Data"** do plugin (apareceu no gerador e na busca de tipografia): Fira Sans + Fira Code.*
+Grade em `outline-variant`, eixos em `outline` e rótulos em `on-surface-variant`.
 
-- **Fira Sans** — todo o texto da interface, inclusive títulos (pesos 400, 500, 600).
-- **Fira Code** — números que precisam alinhar ou "ler como dado": cronômetro, horas, contadores, tabelas. A nota do plugin: "Code for data, Sans for labels".
-- Adaptação: o plugin põe Fira Code também nos títulos; no Echo os títulos ficam em Fira Sans (mais legível em pt-BR, menos "técnico").
-- Corpo 16px, line-height 1.5; nada de texto de corpo abaixo de 12px.
-- Hoje o app usa Geist; a troca para Fira entra na fase de revisão (via `next/font/google`, sem `@import`).
+## 2. Tipografia
 
-**Descartado:** a primeira execução sugeriu Caveat + Quicksand (manuscrita, "blogs pessoais") — ruim para números e tabelas.
+- **Roboto Flex** em todo o texto. **Roboto Mono** em números, horas e cronômetro (utilitário `numero`; `numero-grande` em números de destaque). Unidades como "h" e "kg" ficam em Roboto, ao lado do número em Mono.
+- Escala M3 como utilitários `type-*`:
 
-## 4. Layout e espaçamento
+| Utilitário | Tamanho/linha | Peso | Uso |
+|---|---|---|---|
+| `type-display-small` | 36/44 | 400 | números de destaque |
+| `type-headline-medium` / `-small` | 28/36 · 24/32 | 400 | título da página (PC / celular) |
+| `type-title-large` | 22/28 | 400 | títulos de seção, marca |
+| `type-title-medium` / `-small` | 16/24 · 14/20 | 500 | títulos de cartão e de lista |
+| `type-body-large` | 16/24 | 400 | texto padrão (corpo) |
+| `type-body-medium` / `-small` | 14/20 · 12/16 | 400 | texto secundário, legendas |
+| `type-label-large` / `-medium` | 14/20 · 12/16 | 500 | botões, chips, navegação |
 
-*Fonte: dials do gerador (densidade 6 = padrão) e regras de layout do plugin.*
+Nada de texto de corpo abaixo de 12px.
 
-- Mobile-first; conferir em 375, 768, 1024 e 1440 px. Nunca rolagem horizontal.
-- Escala de espaço de 4 px (Tailwind): 8 entre itens relacionados, 16–24 entre blocos, 32–40 entre seções.
-- Largura de leitura: formulários até ~36rem (`max-w-xl`); páginas até `max-w-5xl`.
-- Navegação: cabeçalho no PC, barra inferior no celular com **no máximo 5 itens**; o conteúdo não pode ficar escondido atrás de barras fixas (padding equivalente).
+## 3. Forma
 
-## 5. Componentes
+Escala M3, um pouco mais generosa:
 
-- shadcn/ui como base (Button, Input, Card, Badge, NativeSelect, Textarea…), sem estilos soltos com hex direto: sempre tokens.
-- Ícones Lucide (SVG). **Nunca emoji como ícone.**
-- Listas de itens tocáveis: linha inteira clicável, alvo ≥ 44 px de altura no celular.
-- Estados vazios com uma frase do que fazer e o botão para fazer.
+| Raio | Uso |
+|---|---|
+| `rounded-xs` 4px | — |
+| `rounded-sm` 8px | chips, snackbar, badges |
+| `rounded-md` 12px | campos, menus, ícones de área |
+| `rounded-lg` 16px | cartões, FAB |
+| `rounded-2xl` 28px | dialogs, cartão de login |
+| `rounded-full` | botões, indicadores de navegação, switch |
 
-## 6. Regras de UX (as que mais pesam no Echo)
+## 4. Elevação
 
-*Fonte: domínio `ux` do plugin e tabela de prioridades da skill.*
+**Tonal primeiro:** a camada vem da troca de superfície (`surface`, `surface-container-low`, `surface-container`, `surface-container-high`). Sombra é rara e sempre suave, com deslocamento: `shadow-elev-1` (hover de botão), `shadow-elev-2` (menus) e `shadow-elev-3` (FAB, dialogs, snackbar). Nada de brilho colorido nem de sombra dura.
 
-1. **Acessibilidade (crítico):** contraste de texto ≥ 4,5:1; foco visível em tudo que é clicável; `aria-label` em botões só com ícone; nunca remover o anel de foco.
-2. **Toque (crítico):** alvos ≥ 44×44 px no celular (WCAG 2.2 exige no mínimo 24 px na web; usamos 44 para uso com o polegar); 8 px+ entre alvos.
-3. **Feedback:** toda ação assíncrona mostra estado (botão "Salvando…", desabilitado); ações de toque rápido (marcar hábito, "me distraí") são **otimistas**, sem esperar o servidor.
-4. **Formulários:** rótulo visível (nunca só placeholder); erro perto do campo; campos opcionais recolhidos (divulgação progressiva).
-5. **Movimento:** sutil (150–300 ms), no máximo 1–2 elementos animados por tela, e respeitar `prefers-reduced-motion`.
-6. **Navegação:** "voltar" previsível; toda tela tem URL própria (deep link).
-7. **Gráficos:** legenda quando há 2+ séries, tooltip, tabela alternativa, cor nunca sozinha.
-8. **Interação:** `cursor-pointer` em clicáveis; estados de hover com transição.
+A barra superior fica sobre `surface` e muda para `surface-container` ao rolar a página, em vez de ganhar sombra.
 
-## 7. Checklist antes de entregar uma tela
+## 5. Estados e ripple "Eco"
 
-- [ ] Sem emoji como ícone (Lucide)
-- [ ] Clicáveis com `cursor-pointer` e hover suave (150–300 ms)
-- [ ] Contraste 4,5:1 nos dois temas
-- [ ] Foco visível para teclado
+- **Camada de estado M3** (`camada-estado`): sobreposição na cor do texto, com 8% no hover (só em dispositivos com mouse) e 10% no foco e ao pressionar.
+- **Foco:** contorno de 2px em `primary`, com 2px de afastamento, em todo elemento focável.
+- **Ripple "Eco", o movimento assinatura do Echo:** ao tocar em qualquer elemento com camada de estado, uma onda se expande do ponto tocado e some (450ms, desaceleração). É um único listener global em [eco-ripple.tsx](../src/components/eco-ripple.tsx). Não bloqueia o clique e não roda com `prefers-reduced-motion`. Nas ações que importam (salvar sessão, marcar hábito, concluir meta, subir de nível), o eco vira um pulso de 2 a 3 anéis concêntricos (etapa de animações). O logo e a tela de login usam as mesmas ondas.
+- **Superfícies do navegador** também seguem o tema: seleção de texto em `primary-container`, cursor de texto em `primary`, barra de rolagem em `outline-variant` e `accent-color` em `primary`.
+
+## 6. Componentes
+
+| Componente | Especificação |
+|---|---|
+| **Botões** (`Button`, `buttonVariants`) | pílula, 40px, `type-label-large`. Variantes: `default` = filled (primary), `secondary` = tonal (secondary-container), `outline` = outlined (borda outline, texto primary), `text` (texto primary), `ghost` = padrão para ícones (on-surface-variant), `destructive` (error-container). Tamanhos `sm` 32, `lg` 48, `icon` 40. Em telas de toque: mínimo de 44px. |
+| **FAB** (`fabVariants`) | primary-container, 16px de raio, `shadow-elev-3`. Estendido no celular ("Registrar", acima da barra de navegação); só ícone no topo do rail no PC. |
+| **Navegação** | Celular: *navigation bar* com 4 destinos (Início, Hábitos, Áreas, Mais) mais o FAB "Registrar". PC (≥768px): *navigation rail* fixo à esquerda (marca, FAB, destinos e "Mais" como menu). Indicador ativo: pílula 56×32 em secondary-container. |
+| **Barra superior** | 64px. No celular: marca. Nos dois: chip do timer ativo, alternar tema, sair. |
+| **Cartões** (`Card`) | filled: `surface-container-low`, 16px de raio, 20px de respiro, sem borda nem sombra. |
+| **Campos** (`Input`, `Textarea`, `NativeSelect`) | outlined: 48px, 12px de raio, fundo `surface-container-lowest`, borda `outline`; no foco, borda `primary` de 2px sem deslocar o layout. Rótulo sempre visível acima (`type-label-large`). |
+| **Chips** (`Chip`, `chipVariants`) | 32px, 8px de raio. Desmarcado: borda `outline-variant`. Selecionado: `secondary-container` com check. |
+| **Switch** | trilho 52×32. Desligado: contorno com polegar de 16px. Ligado: primary com polegar de 24px. |
+| **Dialogs** (`Dialog`, `AlertDialog`) | `surface-container-high`, 28px de raio, 24px de respiro, título em `type-headline-small`, ações em botões de texto à direita, scrim do tema (sem desfoque). |
+| **Menus** (`DropdownMenu`, menu do rail) | `surface-container`, 12px de raio, `shadow-elev-2`, itens de 44 a 48px. |
+| **Progresso** (`Progresso`) | linear M3: preenchimento primary, vão de 4px, trilho `secondary-container` e ponto de parada no fim. |
+| **Snackbar** (toasts) | `inverse-surface`, 8px de raio, embaixo e ao centro. |
+| **Badges** | 24px, 8px de raio, `type-label-medium`, em container tonal. |
+| **Ícones** | Lucide, traço único. Nunca emoji. |
+
+## 7. Movimento
+
+Tokens M3 em [globals.css](../src/app/globals.css). Curvas `ease-standard` (0.2, 0, 0, 1), `ease-emphasized-decelerate` (0.05, 0.7, 0.1, 1) e `ease-emphasized-accelerate` (0.3, 0, 0.8, 0.15). Durações `--md-dur-short2…long2` (100 a 500ms).
+
+- **Motion** é o padrão para animações de interface.
+- **GSAP** só onde Motion não serve bem, e só carregado nas telas que o usam.
+- Tudo respeita `prefers-reduced-motion` (sem animação ou só um fade curto).
+- Nenhuma ação espera uma animação terminar.
+
+Os detalhes ficam na etapa de animações.
+
+## 8. Layout
+
+- **Mobile-first.** Conferir em 375/390, 768, 1024 e 1440px. Sem rolagem horizontal.
+- **Conteúdo:** até `max-w-5xl`, com 16px de margem no celular e 32px no PC. No PC, o conteúdo começa depois do rail (96px).
+- **Espaço:** grade de 4px. 8px entre itens relacionados, 16 a 24px entre blocos e 32 a 40px entre seções, com mais espaço acima de um título do que abaixo.
+- **Rodapé no celular:** o conteúdo tem margem inferior suficiente para a barra de navegação (80px) e o FAB.
+
+## 9. Regras de UX (mantidas)
+
+1. **Contraste:** 4,5:1 para texto e 3:1 para elementos gráficos, nos dois temas.
+2. **Foco** visível em tudo que é clicável. `aria-label` em botões só com ícone.
+3. **Alvos de toque** de 44px no celular (`pointer-coarse`). 8px ou mais entre alvos.
+4. **Feedback:** toda ação assíncrona mostra estado. Ações rápidas (marcar hábito, "me distraí") são otimistas.
+5. **Formulários:** rótulo visível, erro perto do campo, campos opcionais recolhidos.
+6. **Navegação:** barra inferior com no máximo 5 itens, "voltar" previsível, URL própria para cada tela.
+7. **Gráficos:** legenda quando há 2 ou mais séries, tooltip, tabela alternativa e cor nunca como único sinal.
+8. **Cor de estado** sempre com ícone e texto.
+
+## Checklist antes de entregar uma tela
+
+- [ ] Só tokens do tema: nada de hex solto, branco ou preto puros
+- [ ] Contraste conferido no claro **e** no escuro
+- [ ] Escala tipográfica `type-*`; números em `numero`
+- [ ] Interativos com `camada-estado` (ripple), foco visível e 44px no toque
+- [ ] Sem emoji como ícone
+- [ ] Responsivo em 390 / 768 / 1440px
 - [ ] `prefers-reduced-motion` respeitado
-- [ ] Responsivo em 375 / 768 / 1024 / 1440 px
-- [ ] Alvos de toque ≥ 44 px no celular
-- [ ] Cor de estado sempre acompanhada de ícone + texto
-
----
-
-## Apêndice: saídas brutas do gerador
-
-O padrão de página que o gerador escolheu nas duas execuções ("Product Demo + Features" e "Enterprise Gateway") é de **landing page** e não se aplica a um app logado; foi descartado. Os trechos de animação GSAP de scroll também não se aplicam (o Echo não usa GSAP).
-
-### Execução 1 — "personal productivity habit tracker dashboard"
-
-- Estilo: Minimalism & Swiss Style (claro e escuro).
-- Cores: primary `#D97706`, secondary `#F59E0B`, accent `#059669`, background `#FFFBEB`, foreground `#0F172A`, card `#FFFFFF`, muted `#FCF6F0`, muted-fg `#475569`, border `#FAEEE1`, destructive `#DC2626`, ring `#D97706`. Nota: "Streak amber + habit green".
-- Tipografia: Caveat + Quicksand ("handwritten, personal… personal blogs").
-- Efeitos: hover sutil 200–250 ms, transições suaves, sombras nítidas se houver, hierarquia clara.
-- Evitar: cores apagadas, baixa energia.
-
-### Execução 2 — "personal progress tracking dashboard app"
-
-- Estilo: Minimalism & Swiss Style (claro e escuro).
-- Cores: primary `#FF4D4D`, secondary `#4D94FF`, accent `#059669`, background `#F5F5F7`, foreground `#1C1C1E`, card `#FFFFFF`, muted `#F2EEF2`, muted-fg `#475569`, border `#E5E5EA`, destructive `#DC2626`, ring `#FF4D4D`. Nota: "Bio red/blue + vitality green" (perfil de saúde).
-- Tipografia: Fira Code + Fira Sans ("dashboard, data, analytics").
-- Evitar: app de saúde genérico, falta de privacidade.
-
-### Checklist do gerador (igual nas duas)
-
-Sem emoji como ícone · cursor-pointer · hover 150–300 ms · contraste 4,5:1 · foco visível · prefers-reduced-motion · responsivo 375/768/1024/1440.

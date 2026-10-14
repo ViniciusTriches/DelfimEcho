@@ -14,7 +14,7 @@ function NativeSelect({
   return (
     <div
       className={cn(
-        "group/native-select relative w-fit has-[select:disabled]:opacity-50",
+        "group/native-select relative w-fit has-[select:disabled]:opacity-40",
         className
       )}
       data-slot="native-select-wrapper"
@@ -23,10 +23,10 @@ function NativeSelect({
       <select
         data-slot="native-select"
         data-size={size}
-        className="h-8 w-full min-w-0 appearance-none rounded-lg border border-input bg-transparent py-1 pr-8 pl-2.5 text-sm transition-colors outline-none select-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=sm]:h-7 data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-[size=sm]:py-0.5 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+        className="w-full min-w-0 appearance-none rounded-md border border-outline bg-surface-container-lowest pr-10 pl-4 type-body-large text-on-surface transition-[border-color,box-shadow] duration-150 ease-standard outline-none select-none hover:border-on-surface focus-visible:border-primary focus-visible:shadow-[inset_0_0_0_1px_var(--md-primary)] disabled:pointer-events-none disabled:cursor-not-allowed aria-invalid:border-error h-12 data-[size=sm]:h-9 data-[size=sm]:pl-3 data-[size=sm]:type-body-medium cursor-pointer"
         {...props}
       />
-      <ChevronDownIcon className="pointer-events-none absolute top-1/2 right-2.5 size-4 -translate-y-1/2 text-muted-foreground select-none" aria-hidden="true" data-slot="native-select-icon" />
+      <ChevronDownIcon className="pointer-events-none absolute top-1/2 right-3 size-5 -translate-y-1/2 text-on-surface-variant select-none" aria-hidden="true" data-slot="native-select-icon" />
     </div>
   )
 }
@@ -38,7 +38,7 @@ function NativeSelectOption({
   return (
     <option
       data-slot="native-select-option"
-      className={cn("bg-[Canvas] text-[CanvasText]", className)}
+      className={cn("bg-surface-container text-on-surface", className)}
       {...props}
     />
   )
@@ -51,7 +51,7 @@ function NativeSelectOptGroup({
   return (
     <optgroup
       data-slot="native-select-optgroup"
-      className={cn("bg-[Canvas] text-[CanvasText]", className)}
+      className={cn("bg-surface-container text-on-surface", className)}
       {...props}
     />
   )
