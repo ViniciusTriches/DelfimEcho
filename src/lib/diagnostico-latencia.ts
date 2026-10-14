@@ -22,7 +22,7 @@ export async function medirLatencia(url: string, chave: string) {
     revisoes: () => db.from("reviews").select("tipo, periodo_inicio").limit(20),
   };
 
-  async function tempo(fn: () => Promise<unknown>) {
+  async function tempo(fn: () => PromiseLike<unknown>) {
     const t = agora();
     await fn();
     return Math.round(agora() - t);
