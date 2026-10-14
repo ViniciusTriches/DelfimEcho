@@ -5,6 +5,7 @@ import { abandonadas, DIAS_ALERTA_PADRAO, heatmap, horasPorArea, horasPorSkill, 
 import { lembretesPendentes } from "@/lib/revisoes";
 import { todasAsLinhas } from "@/lib/supabase/paginar";
 import { createClient } from "@/lib/supabase/server";
+import { carregarBlocos } from "../calendario/dados";
 import { carregarHabitos, montarChecklist } from "../habitos/dados";
 import { carregarMetricas } from "../metricas/dados";
 
@@ -29,6 +30,7 @@ export async function carregarPainel() {
     habitos,
     metricas,
     { data: revisoes },
+    blocosHoje,
   ] = await Promise.all([
     supabase.from("areas").select("id, nome, cor, icone").eq("arquivada", false).order("ordem"),
     supabase.from("skills").select("id, nome, area_id, arquivada, destaque_dashboard, criado_em, areas(nome, cor, arquivada)"),
@@ -54,6 +56,7 @@ export async function carregarPainel() {
     carregarHabitos(),
     carregarMetricas({ soNoInicio: true }),
     supabase.from("reviews").select("tipo, periodo_inicio").gte("periodo_inicio", somarDias(hoje, -45)),
+    carregarBlocos(hoje, hoje),
   ]);
 
   const sessoes: SessaoArea[] = sessoesBrutas.map((s) => ({
@@ -105,5 +108,15 @@ export async function carregarPainel() {
       .filter((s) => s.destaque_dashboard)
       .map((s) => ({ id: s.id, nome: s.nome, horas: semanaPorSkill.get(s.id) ?? { efetivas: 0, brutas: 0 } })),
     heatmap: heatmap(sessoes, hoje, SEMANAS_HEATMAP),
+    // Calendário: blocos de hoje que ainda não terminaram.
+    blocosHoje: blocosHoje
+      .filter((b) => new Date(b.fim).getTime() > Date.now())
+      .flatMap((b) => {
+        const s = ativas.find((x) => x.id === b.skillId);
+        return s
+          ? [{ ...b, habilidade: s.nome, cor: s.areas?.cor ?? null, emAndamento: new Date(b.inicio).getTime() <= Date.now() }]
+          : [];
+      }),
+    temBlocosHoje: blocosHoje.length > 0,
   };
 }

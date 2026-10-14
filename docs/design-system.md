@@ -79,6 +79,7 @@ Ordem de atribuição: vizinhos têm matizes opostas e luminosidade alternada.
 - O validador de paletas da skill de dataviz **reprova este conjunto como série categórica de gráfico**: são tons suaves, de luminosidade parecida, e alguns pares ficam próximos para daltônicos. Por isso a regra é:
   - A cor de área sempre aparece junto do **nome** da área. Essa é a codificação secundária.
   - Os gráficos **não** usam essas cores como séries.
+- **Calendário** (blocos e sessões): fundo `-suave` da área, texto sempre em `on-surface` (8,5:1 ou mais em todos os slots, nos dois temas) e borda na cor da área (3:1 ou mais sobre o cartão). Não é gráfico: cada bloco leva o nome da habilidade (ou a sigla, na semana compacta do celular, com o nome no rótulo acessível e nos detalhes). Planejado × feito não depende da cor: borda **tracejada** = planejado, borda lateral **cheia** = feito. A visão Mês usa a rampa `viz-calor` (um tom só) para a intensidade das horas, nunca cores de área.
 - **Áreas existentes:** o banco guarda um hex por área. O [cores-area.ts](../src/lib/cores-area.ts) converte cada hex conhecido (da paleta antiga e da nova) para o token do tema, então a cor acompanha o claro e o escuro sem mudar dados. Uma cor personalizada (hex desconhecido) aparece como foi gravada.
 
 ### Gráficos

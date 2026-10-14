@@ -47,6 +47,9 @@ type Props = {
   timer: DadosTimer | null;
   timerAtivo: boolean;
   skillInicial?: string;
+  /** "AAAA-MM-DDTHH:mm" (São Paulo): abre no modo início e fim já preenchido. */
+  intervaloInicial?: { inicio: string; fim: string };
+  focoInicial?: string;
 };
 
 const DURACOES_RAPIDAS = [15, 25, 30, 45, 60, 90];
@@ -76,6 +79,8 @@ function RegistroForm({
   timer,
   timerAtivo,
   skillInicial,
+  intervaloInicial,
+  focoInicial,
   aoRegistrarOutra,
 }: Props & { aoRegistrarOutra: () => void }) {
   const [estado, acao, salvando] = useActionState(salvarSessao, null);
@@ -83,10 +88,10 @@ function RegistroForm({
 
   const skillPadrao = timer?.skillId ?? skillInicial ?? maisUsadas[0] ?? "";
   const [skillId, setSkillId] = useState(skillPadrao);
-  const [foco, setFoco] = useState(timer?.foco || proximosPassos[skillPadrao] || "");
-  const [modo, setModo] = useState<"duracao" | "intervalo">("duracao");
+  const [foco, setFoco] = useState(timer?.foco || focoInicial || proximosPassos[skillPadrao] || "");
+  const [modo, setModo] = useState<"duracao" | "intervalo">(intervaloInicial ? "intervalo" : "duracao");
   const [duracao, setDuracao] = useState(timer ? String(timer.minutos) : "");
-  const [intervalo, setIntervalo] = useState({ inicio: "", fim: "" });
+  const [intervalo, setIntervalo] = useState(intervaloInicial ?? { inicio: "", fim: "" });
   const notaSugerida = timer ? sugerirNota(timer.distracoes, timer.minutos) : null;
   const [nota, setNota] = useState<number | null>(notaSugerida);
   const [tipo, setTipo] = useState<TipoPratica>("ativa");

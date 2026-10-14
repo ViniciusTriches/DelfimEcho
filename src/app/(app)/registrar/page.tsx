@@ -16,6 +16,13 @@ const QTD_MAIS_USADAS = 6;
 export default async function RegistrarPage({ searchParams }: PageProps<"/registrar">) {
   const params = await searchParams;
   const habilidadeParam = typeof params.habilidade === "string" ? params.habilidade : undefined;
+  // Vindo de um bloco do calendário ("Registrar como feito"): horário e foco do bloco.
+  const HORARIO = /^d{4}-d{2}-d{2}Td{2}:d{2}$/;
+  const intervaloInicial =
+    typeof params.inicio === "string" && typeof params.fim === "string" && HORARIO.test(params.inicio) && HORARIO.test(params.fim)
+      ? { inicio: params.inicio, fim: params.fim }
+      : undefined;
+  const focoInicial = typeof params.foco === "string" ? params.foco.slice(0, 200) : undefined;
   const { habilidades, ativas, maisUsadas, proximosPassos, fatores, config, timer, dadosTimer } =
     await carregarDados(params.timer === "1");
 
@@ -51,6 +58,8 @@ export default async function RegistrarPage({ searchParams }: PageProps<"/regist
           timer={dadosTimer}
           timerAtivo={Boolean(timer)}
           skillInicial={ehUuid(habilidadeParam) && ativas.has(habilidadeParam) ? habilidadeParam : undefined}
+          intervaloInicial={dadosTimer ? undefined : intervaloInicial}
+          focoInicial={dadosTimer ? undefined : focoInicial}
         />
       )}
 

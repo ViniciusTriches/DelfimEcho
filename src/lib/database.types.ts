@@ -380,6 +380,53 @@ export type Database = {
           },
         ]
       }
+      planned_blocks: {
+        Row: {
+          criado_em: string
+          datas_excluidas: string[]
+          fim: string
+          id: string
+          inicio: string
+          observacao: string | null
+          repete_ate: string | null
+          repete_dias: number[] | null
+          skill_id: string
+          user_id: string
+        }
+        Insert: {
+          criado_em?: string
+          datas_excluidas?: string[]
+          fim: string
+          id?: string
+          inicio: string
+          observacao?: string | null
+          repete_ate?: string | null
+          repete_dias?: number[] | null
+          skill_id: string
+          user_id?: string
+        }
+        Update: {
+          criado_em?: string
+          datas_excluidas?: string[]
+          fim?: string
+          id?: string
+          inicio?: string
+          observacao?: string | null
+          repete_ate?: string | null
+          repete_dias?: number[] | null
+          skill_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planned_blocks_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "skills"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       practice_sessions: {
         Row: {
           aprendizado: string | null
@@ -633,16 +680,22 @@ export type Database = {
       }
       user_settings: {
         Row: {
+          calendario_hora_fim: number
+          calendario_hora_inicio: number
           dias_alerta_abandono: number
           fator_pratica_passiva: number
           user_id: string
         }
         Insert: {
+          calendario_hora_fim?: number
+          calendario_hora_inicio?: number
           dias_alerta_abandono?: number
           fator_pratica_passiva?: number
           user_id?: string
         }
         Update: {
+          calendario_hora_fim?: number
+          calendario_hora_inicio?: number
           dias_alerta_abandono?: number
           fator_pratica_passiva?: number
           user_id?: string

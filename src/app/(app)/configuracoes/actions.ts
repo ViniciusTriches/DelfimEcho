@@ -52,3 +52,23 @@ export async function salvarAlerta(_anterior: EstadoFatores, dados: FormData): P
   revalidatePath("/", "layout");
   return { ok: true, mensagem: "Alerta atualizado." };
 }
+
+export async function salvarFaixaCalendario(_anterior: EstadoFatores, dados: FormData): Promise<EstadoFatores> {
+  const usuario = await getUsuario();
+  const supabase = await createClient();
+  const inicio = numero(dados, "calendario_hora_inicio");
+  const fim = numero(dados, "calendario_hora_fim");
+  if (!Number.isInteger(inicio) || !Number.isInteger(fim) || inicio < 0 || fim > 24 || fim <= inicio)
+    return { ok: false, mensagem: "O fim precisa ser depois do início." };
+
+  const { error } = await supabase
+    .from("user_settings")
+    .upsert(
+      { user_id: usuario.id, calendario_hora_inicio: inicio, calendario_hora_fim: fim },
+      { onConflict: "user_id" },
+    );
+  if (error) return { ok: false, mensagem: `Não foi possível salvar. (${error.code})` };
+
+  revalidatePath("/", "layout");
+  return { ok: true, mensagem: "Faixa do calendário atualizada." };
+}

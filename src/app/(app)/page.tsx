@@ -17,7 +17,9 @@ import { PageHeader } from "@/components/page-header";
 import { buttonVariants } from "@/components/ui/button";
 import { chipVariants } from "@/components/ui/chip";
 import { Progresso } from "@/components/ui/progresso";
-import { corArea } from "@/lib/cores-area";
+import { BotaoIniciarTimer } from "@/components/botao-iniciar-timer";
+import { formatarMinuto, localSP } from "@/lib/calendario";
+import { corArea, corAreaSuave } from "@/lib/cores-area";
 import { formatarDia, formatarDiaMes, formatarDiaSemana, formatarMesAno, somarDias } from "@/lib/datas";
 import { formatarHoras } from "@/lib/formato";
 import { descreverPrazo } from "@/lib/metas";
@@ -61,6 +63,49 @@ export default async function DashboardPage() {
       <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[minmax(0,1fr)_22rem]">
         {/* Coluna lateral (primeiro no celular): hoje, atenção, registro rápido */}
         <div className="flex flex-col gap-12 lg:order-2">
+          <Secao titulo="Hoje no calendário" link={{ href: "/calendario", nome: "Abrir calendário" }}>
+            {d.blocosHoje.length === 0 ? (
+              <p className="rounded-lg border border-dashed border-outline-variant px-4 py-4 type-body-medium text-on-surface-variant">
+                {d.temBlocosHoje ? "Os blocos de hoje já passaram." : "Nada planejado para hoje."}{" "}
+                <Link href="/calendario" className="font-medium text-primary underline-offset-4 hover:underline">
+                  Planejar
+                </Link>
+              </p>
+            ) : (
+              <ul className="flex flex-col gap-2">
+                {d.blocosHoje.slice(0, 3).map((b, i) => {
+                  const ini = localSP(b.inicio).minuto;
+                  const fim = localSP(b.fim).minuto;
+                  return (
+                    <li
+                      key={b.chave}
+                      className="flex min-h-16 items-center gap-3 rounded-lg border-[1.5px] border-dashed py-2 pr-2 pl-3"
+                      style={{ borderColor: corArea(b.cor), backgroundColor: corAreaSuave(b.cor) }}
+                    >
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate type-title-small text-on-surface">{b.habilidade}</span>
+                        <span className="numero block type-label-medium text-on-surface">
+                          {formatarMinuto(ini)}–{formatarMinuto(fim < ini ? 1440 : fim)}
+                          {b.emAndamento && <span className="ml-1.5 font-sans">· agora</span>}
+                        </span>
+                      </span>
+                      {!d.timer && (
+                        <BotaoIniciarTimer
+                          skillId={b.skillId}
+                          foco={b.observacao ?? ""}
+                          size="sm"
+                          variant={i === 0 ? "default" : "secondary"}
+                        >
+                          Iniciar
+                        </BotaoIniciarTimer>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </Secao>
+
           {d.checklist.length > 0 && (
             <Secao titulo="Hábitos de hoje" link={{ href: "/habitos", nome: "Ver hábitos" }}>
               <Checklist dia={d.hoje} itens={d.checklist} />

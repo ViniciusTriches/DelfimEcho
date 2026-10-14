@@ -1,4 +1,5 @@
 import {
+  CalendarDaysIcon,
   FlagIcon,
   HomeIcon,
   LayersIcon,
@@ -24,6 +25,7 @@ export const REGISTRAR: ItemNav = {
 // Destinos de uso diário (navigation bar no celular, rail no PC). "Mais" entra por último.
 export const PRINCIPAIS: ItemNav[] = [
   { href: "/", nome: "Início", icone: HomeIcon, tambem: ["/plano"] },
+  { href: "/calendario", nome: "Calendário", icone: CalendarDaysIcon },
   { href: "/habitos", nome: "Hábitos", icone: ListChecksIcon },
   { href: "/areas", nome: "Áreas", icone: LayersIcon, tambem: ["/habilidades"] },
 ];
@@ -38,7 +40,7 @@ export const MAIS: ItemNav[] = [
     href: "/configuracoes",
     nome: "Configurações",
     icone: SettingsIcon,
-    descricao: "Fatores de qualidade, prática passiva e alertas",
+    descricao: "Fatores de qualidade, prática passiva, alertas e calendário",
   },
 ];
 
